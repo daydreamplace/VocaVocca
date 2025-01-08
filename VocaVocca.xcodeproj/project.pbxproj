@@ -6,15 +6,24 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F2ED388C2D2E111F005B7BC0 /* .gitignore */; };
+		F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38962D2E13A8005B7BC0 /* SnapKit */; };
+		F2ED389A2D2E16AF005B7BC0 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38992D2E16AF005B7BC0 /* RxSwift */; };
+		F2ED389D2D2E16E7005B7BC0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		F2ED38442D2E10D8005B7BC0 /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaVocca.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2ED388C2D2E111F005B7BC0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		F2ED38912D2E121A005B7BC0 /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = VocaVocca.app; path = "/Users/eden/Desktop/iOS/VocaVocca/build/Debug-iphoneos/VocaVocca.app"; sourceTree = "<absolute>"; };
+		F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		F2ED38562D2E10D8005B7BC0 /* Exceptions for "VocaVocca" folder in "VocaVocca" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resource/Info.plist,
 			);
 			target = F2ED38432D2E10D8005B7BC0 /* VocaVocca */;
 		};
@@ -36,6 +45,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2ED389A2D2E16AF005B7BC0 /* RxSwift in Frameworks */,
+				F2ED389D2D2E16E7005B7BC0 /* CoreData.framework in Frameworks */,
+				F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,16 +58,17 @@
 			isa = PBXGroup;
 			children = (
 				F2ED38462D2E10D8005B7BC0 /* VocaVocca */,
-				F2ED38452D2E10D8005B7BC0 /* Products */,
+				F2ED388C2D2E111F005B7BC0 /* .gitignore */,
+				F2ED389B2D2E16E7005B7BC0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		F2ED38452D2E10D8005B7BC0 /* Products */ = {
+		F2ED389B2D2E16E7005B7BC0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F2ED38442D2E10D8005B7BC0 /* VocaVocca.app */,
+				F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */,
 			);
-			name = Products;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,9 +91,11 @@
 			);
 			name = VocaVocca;
 			packageProductDependencies = (
+				F2ED38962D2E13A8005B7BC0 /* SnapKit */,
+				F2ED38992D2E16AF005B7BC0 /* RxSwift */,
 			);
 			productName = VocaVocca;
-			productReference = F2ED38442D2E10D8005B7BC0 /* VocaVocca.app */;
+			productReference = F2ED38912D2E121A005B7BC0 /* VocaVocca.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -107,8 +122,12 @@
 			);
 			mainGroup = F2ED383B2D2E10D8005B7BC0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F2ED38952D2E13A8005B7BC0 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				F2ED38982D2E16AE005B7BC0 /* XCRemoteSwiftPackageReference "RxSwift" */,
+			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = F2ED38452D2E10D8005B7BC0 /* Products */;
+			productRefGroup = F2ED383B2D2E10D8005B7BC0;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -122,6 +141,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,12 +166,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VocaVocca/Info.plist;
+				INFOPLIST_FILE = VocaVocca/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -173,12 +193,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VocaVocca/Info.plist;
+				INFOPLIST_FILE = VocaVocca/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -333,6 +353,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F2ED38952D2E13A8005B7BC0 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		F2ED38982D2E16AE005B7BC0 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F2ED38962D2E13A8005B7BC0 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2ED38952D2E13A8005B7BC0 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		F2ED38992D2E16AF005B7BC0 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2ED38982D2E16AE005B7BC0 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F2ED383C2D2E10D8005B7BC0 /* Project object */;
 }
