@@ -21,14 +21,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             // iOS 12 이하에서는 AppDelegate에서 UIWindow 설정
             window = UIWindow(frame: UIScreen.main.bounds)
-            let navigationController = UINavigationController(rootViewController: MainViewController())
+            let navigationController = UINavigationController(rootViewController: VocaMainViewController())
             window?.rootViewController = navigationController
             window?.makeKeyAndVisible()
         }
         return true
     }
 
-    // MARK: UISceneSession Lifecycle
+    // MARK: - UISceneSession Lifecycle
+    
     @available(iOS 13.0, *)
     func application(
         _ application: UIApplication,
@@ -37,14 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> UISceneConfiguration {
         // SceneDelegate에서 사용할 기본 설정 반환
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
-
-    @available(iOS 13.0, *)
-    func application(
-        _ application: UIApplication,
-        didDiscardSceneSessions sceneSessions: Set<UISceneSession>
-    ) {
-        // 사용되지 않는 세션 정리
     }
 }
 

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class VocaMainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
