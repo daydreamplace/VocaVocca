@@ -61,18 +61,18 @@ final class LearningViewCell: UICollectionViewCell {
         
         contentView.addSubviews(tagView, vocaBookLabel, vocaCountLabel)
         
-        tagView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(8)
-            make.height.equalTo(20)
-            make.width.equalTo(40)
+        tagView.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().inset(8)
+            $0.height.equalTo(20)
+            $0.width.equalTo(40)
         }
         
-        vocaBookLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        vocaBookLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
         
-        vocaCountLabel.snp.makeConstraints { make in
-            make.bottom.trailing.equalToSuperview().inset(8)
+        vocaCountLabel.snp.makeConstraints {
+            $0.bottom.trailing.equalToSuperview().inset(8)
         }
     }
 }
