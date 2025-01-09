@@ -15,7 +15,6 @@ class NetworkManager {
 
     func fetch<T: Decodable>(customURLComponents: CustomURLComponents) -> Single<T> {
         return Single.create { [weak self] single in
-
             guard let self = self,
                   let url = self.createURL(customURLComponents) else {
                 single(.failure(NetworkError.invalidURL)) // URL 에러 전달
@@ -55,7 +54,6 @@ class NetworkManager {
 
     // URL 생성 메서드
     private func createURL(_ customURLComponents: CustomURLComponents) -> URL? {
-
         var urlComponents = URLComponents()
         var queryItems = [URLQueryItem]()
 
