@@ -32,14 +32,30 @@ class CustomModalView: UIView {
         return button
     }()
     
+    // MARK: - Action Closures
+    
+    var onCloseButtonTapped: (() -> Void)?
+    var onConfirmButtonTapped: (() -> Void)?
+    
     // MARK: - Initialization
     
     init(title: String, buttonTitle: String) {
         super.init(frame: .zero)
         self.titleLabel.text = title
+        self.confirmButton.setTitle(buttonTitle, for: .normal)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Button Actions
+    
+    @objc private func handleCloseButtonTapped() {
+        onCloseButtonTapped?()
+    }
+    
+    @objc private func handleConfirmButtonTapped() {
+        onConfirmButtonTapped?()
     }
 }
