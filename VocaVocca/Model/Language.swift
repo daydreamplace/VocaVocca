@@ -5,9 +5,9 @@
 //  Created by mun on 1/9/25.
 //
 
-enum Language {
-    case english
-    case chinese
+enum Language: Int {
+    case english = 0
+    case chinese // 중국어(번체)
     case japanese
     case german
     case spanish
@@ -15,10 +15,10 @@ enum Language {
     var title: String {
         switch self {
         case .english: return "EN"
-        case .chinese: return "CH"
+        case .chinese: return "ZH"
         case .japanese: return "JA"
-        case .german: return "GE"
-        case .spanish: return "SP"
+        case .german: return "DE"
+        case .spanish: return "ES"
         }
     }
 }
