@@ -14,7 +14,7 @@ class CustomModalView: UIView {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
@@ -89,7 +89,6 @@ class CustomModalView: UIView {
         }
     }
 
-    
     // MARK: - Button Actions
     
     @objc private func handleCloseButtonTapped() {
