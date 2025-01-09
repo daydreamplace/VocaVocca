@@ -28,6 +28,11 @@ final class LearningViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var startButton: CustomButton = {
+        let button = CustomButton(title: "시작하기", action: startButtonTapped)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -35,11 +40,24 @@ final class LearningViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .white
-        view.addSubview(collectionView)
+        view.addSubviews(collectionView, startButton)
         
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+        collectionView.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-100)
         }
+        
+        startButton.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            $0.horizontalEdges.equalToSuperview().inset(40)
+            $0.height.equalTo(50)
+            $0.centerX.equalToSuperview()
+        }
+    }
+    
+    @objc private func startButtonTapped() {
+        print(#function)
     }
 }
 
