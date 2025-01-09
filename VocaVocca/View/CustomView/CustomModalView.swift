@@ -11,32 +11,20 @@ import SnapKit
 class CustomModalView: UIView {
     
     // MARK: - UI Components
-    
-    private let headerStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.spacing = 8
-        return stackView
-    }()
-    
-    private let spacerView: UIView = {
-        let view = UIView()
-        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        return view
-    }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textAlignment = .left
+        label.textAlignment = .center
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
-    private let closeButton: UIButton = {
+    private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle("✕", for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(handleCloseButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -51,7 +39,7 @@ class CustomModalView: UIView {
     
     private let confirmButton: CustomButton
     
-    // MARK: - Action
+    // MARK: - Actions
     
     var onCloseButtonTapped: (() -> Void)?
     var onConfirmButtonTapped: (() -> Void)?
@@ -75,17 +63,21 @@ class CustomModalView: UIView {
         self.backgroundColor = .white
         self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.layer.cornerRadius = 20
+
+        addSubviews(titleLabel, closeButton, contentStackView, confirmButton)
         
-        headerStackView.addArrangedSubviews(titleLabel, spacerView, closeButton)
-        addSubviews(headerStackView, contentStackView, confirmButton)
-        
-        headerStackView.snp.makeConstraints {
+        titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.centerX.equalToSuperview()
+        }
+        
+        closeButton.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel)
+            $0.trailing.equalToSuperview().offset(-16)
         }
         
         contentStackView.snp.makeConstraints {
-            $0.top.equalTo(headerStackView.snp.bottom).offset(16)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
         }
         
@@ -93,17 +85,14 @@ class CustomModalView: UIView {
             $0.top.equalTo(contentStackView.snp.bottom).offset(32)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(50)
-            $0.bottom.equalToSuperview().offset(-32)
+            $0.bottom.equalToSuperview().offset(-48)
         }
     }
+
     
     // MARK: - Button Actions
     
     @objc private func handleCloseButtonTapped() {
         onCloseButtonTapped?()
-    }
-    
-    @objc private func handleConfirmButtonTapped() {
-        onConfirmButtonTapped?()
     }
 }
