@@ -9,9 +9,6 @@ import UIKit
 
 class UserDefaultsManager: NSObject {
 
-    static let shared = UserDefaultsManager()
-    private override init() {}
-
     private let key = "isCoachMarkEnabled"
 
     // 코치마크를 비활성화로 설정
