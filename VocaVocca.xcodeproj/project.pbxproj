@@ -14,8 +14,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CC76B11E2D2E67AB009EA1B7 /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaVocca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2ED388C2D2E111F005B7BC0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		F2ED38912D2E121A005B7BC0 /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = VocaVocca.app; path = "/Users/eden/Desktop/iOS/VocaVocca/build/Debug-iphoneos/VocaVocca.app"; sourceTree = "<absolute>"; };
 		F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -60,6 +60,7 @@
 				F2ED38462D2E10D8005B7BC0 /* VocaVocca */,
 				F2ED388C2D2E111F005B7BC0 /* .gitignore */,
 				F2ED389B2D2E16E7005B7BC0 /* Frameworks */,
+				CC76B11E2D2E67AB009EA1B7 /* VocaVocca.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,7 +96,7 @@
 				F2ED38992D2E16AF005B7BC0 /* RxSwift */,
 			);
 			productName = VocaVocca;
-			productReference = F2ED38912D2E121A005B7BC0 /* VocaVocca.app */;
+			productReference = CC76B11E2D2E67AB009EA1B7 /* VocaVocca.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
