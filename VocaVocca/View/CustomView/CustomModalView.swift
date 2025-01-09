@@ -22,24 +22,22 @@ class CustomModalView: UIView {
         return button
     }()
     
-    let contenStackView: UIStackView = {
+    let contentStackView: UIStackView = {
         let stackView = UIStackView()
         return stackView
     }()
     
-    private let confirmButton: UIButton = {
-        let button = UIButton()
-        return button
-    }()
+    private let confirmButton: CustomButton
     
-    // MARK: - Action Closures
+    // MARK: - Action
     
     var onCloseButtonTapped: (() -> Void)?
     var onConfirmButtonTapped: (() -> Void)?
     
     // MARK: - Initialization
     
-    init(title: String, buttonTitle: String) {
+    init(title: String, buttonTitle: String, action: (() -> Void)? = nil) {
+        self.confirmButton = CustomButton(title: buttonTitle, action: action)
         super.init(frame: .zero)
         self.titleLabel.text = title
         self.confirmButton.setTitle(buttonTitle, for: .normal)
@@ -47,6 +45,12 @@ class CustomModalView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Setup
+    
+    private func setupUI() {
+        
     }
     
     // MARK: - Button Actions
