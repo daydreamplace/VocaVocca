@@ -34,7 +34,7 @@ class CustomCardView: UIView {
     }()
     
     let removeButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.tintColor = .gray
         return button
