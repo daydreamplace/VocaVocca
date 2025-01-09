@@ -5,4 +5,10 @@
 //  Created by Eden on 1/8/25.
 //
 
-import Foundation
+import UIKit
+import SnapKit
+
+class CustomModalView: UIView {
+    
+    
+}
