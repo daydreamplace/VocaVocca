@@ -21,7 +21,6 @@ class CustomCardView: UIView {
     
     let wordLabel: UILabel = {
         let label = UILabel()
-        label.text = "black"
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .black
         return label
@@ -29,7 +28,6 @@ class CustomCardView: UIView {
     
     let meanLabel: UILabel = {
         let label = UILabel()
-        label.text = "검정색"
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .black
         return label
@@ -52,11 +50,9 @@ class CustomCardView: UIView {
     }
     
     private func setupUI() {
-
-        [wordLabel, meanLabel, removeButton].forEach { cardBackgroundView.addSubview($0) }
-        
-        addSubviews(cardBackgroundView)
-        
+        cardBackgroundView.addSubviews(wordLabel, meanLabel, removeButton)
+        addSubview(cardBackgroundView)
+                
         cardBackgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
