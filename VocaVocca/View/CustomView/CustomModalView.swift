@@ -12,6 +12,20 @@ class CustomModalView: UIView {
     
     // MARK: - UI Components
     
+    private let headerStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    private let spacerView: UIView = {
+        let view = UIView()
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return view
+    }()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
@@ -59,32 +73,27 @@ class CustomModalView: UIView {
     
     private func setupUI() {
         self.backgroundColor = .white
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.layer.cornerRadius = 20
         
-        addSubviews(titleLabel, closeButton, contentStackView, confirmButton)
+        headerStackView.addArrangedSubviews(titleLabel, spacerView, closeButton)
+        addSubviews(headerStackView, contentStackView, confirmButton)
         
-        titleLabel.snp.makeConstraints{
+        headerStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalTo(closeButton.snp.leading).offset(-8)
-        }
-        
-        closeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-            $0.width.height.equalTo(30)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
         
         contentStackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
+            $0.top.equalTo(headerStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
         }
         
         confirmButton.snp.makeConstraints {
-            $0.top.equalTo(contentStackView.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalTo(contentStackView.snp.bottom).offset(32)
+            $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(50)
-            $0.bottom.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview().offset(-32)
         }
     }
     
