@@ -31,4 +31,15 @@ class CustomModalView: UIView {
         let button = UIButton()
         return button
     }()
+    
+    // MARK: - Initialization
+    
+    init(title: String, buttonTitle: String) {
+        super.init(frame: .zero)
+        self.titleLabel.text = title
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
