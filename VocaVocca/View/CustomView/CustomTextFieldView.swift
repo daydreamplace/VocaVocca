@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class CustomTextFieldView: UIView, UITextFieldDelegate {
+class CustomTextFieldView: UIView {
     
     // MARK: - UI Components
     
@@ -68,5 +68,18 @@ class CustomTextFieldView: UIView, UITextFieldDelegate {
         self.snp.makeConstraints {
             $0.height.greaterThanOrEqualTo(60)
         }
+    }
+
+}
+
+// MARK: - UITextFieldDelegate
+
+extension CustomTextFieldView: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.customDarkerBrown.cgColor
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.lightGray.cgColor
     }
 }
