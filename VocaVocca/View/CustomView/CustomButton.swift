@@ -9,8 +9,6 @@ import UIKit
 
 class CustomButton: UIButton {
     
-    private var action: (() -> Void)?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -22,11 +20,6 @@ class CustomButton: UIButton {
         setTitleColor(.white, for: .normal)
         backgroundColor = .customDarkerBrown
         translatesAutoresizingMaskIntoConstraints = false
-        
-        self.action = action
-        if let action = action {
-            addAction(UIAction { _ in action() }, for: .touchUpInside)
-        }
     }
     
     override func layoutSubviews() {
