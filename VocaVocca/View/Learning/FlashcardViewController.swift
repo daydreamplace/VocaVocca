@@ -17,7 +17,6 @@ class FlashcardViewController: UIViewController {
     // MARK: - 생명주기 메서드
 
     override func loadView() {
-        super.loadView()
         view = flashcardView
     }
 
