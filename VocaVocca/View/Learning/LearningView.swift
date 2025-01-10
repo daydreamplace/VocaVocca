@@ -55,7 +55,7 @@ final class LearningView: UIView {
     private func setupUI() {
         addSubviews(titleLabel, collectionView, startButton)
         
-        // 타이틀 네비바로 할지 고민
+        ///TODO - 타이틀 네비바로 할지 고민
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(60)
             $0.centerX.equalToSuperview()

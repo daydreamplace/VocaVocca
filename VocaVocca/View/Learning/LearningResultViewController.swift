@@ -21,6 +21,7 @@ final class LearningResultViewController: UIViewController {
         setupButton()
     }
     
+    ///TODO - 뷰에 있는 버튼 로직 처리
     private func setupButton() {
         learningResultView.closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }

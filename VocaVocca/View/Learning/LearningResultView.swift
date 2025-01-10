@@ -26,7 +26,7 @@ final class LearningResultView: UIView {
         return label
     }()
     
-    // 숫자 관련 색상, 로직 필요
+    ///TODO - 숫자 관련 색상, 로직 필요
     private let correctCountLabel: UILabel = {
         let label = UILabel()
         label.text = "정답 16"
@@ -74,7 +74,7 @@ final class LearningResultView: UIView {
         return label
     }()
     
-    // 현재 비어있음 - 커피콩 이미지, 로직 추가구현 필요
+    ///TODO - (현재 비어있음) 커피콩 이미지, 로직 추가구현 필요
     private lazy var coffeeStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical

@@ -27,6 +27,7 @@ final class VocaBookSelectViewController: UIViewController {
         vocaBookSelectView.collectionView.delegate = self
     }
     
+    ///TODO - 네비바 세팅 위치 고민
     private func setUpNaviBar() {
         title = "단어장 선택"
         
@@ -44,6 +45,7 @@ final class VocaBookSelectViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = .customBrown
     }
     
+    ///TODO - 네비바버튼 관련 로직
     @objc private func doneButtonTapped() {
         print(#function)
         dismiss(animated: true)

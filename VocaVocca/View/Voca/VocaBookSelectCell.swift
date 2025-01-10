@@ -42,6 +42,7 @@ final class VocaBookSelectCell: UICollectionViewCell {
         return stackView
     }()
     
+    ///TODO - 버튼 액션, 로직처리
     private let deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "trash"), for: .normal)

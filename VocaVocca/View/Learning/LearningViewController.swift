@@ -27,6 +27,7 @@ final class LearningViewController: UIViewController {
         learningView.collectionView.delegate = self
     }
     
+    ///TODO - 뷰에 있는 버튼 로직 처리
     private func setupActions() {
         learningView.startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
     }
