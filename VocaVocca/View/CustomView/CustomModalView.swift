@@ -48,7 +48,6 @@ class CustomModalView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        
         self.confirmButton = CustomButton(title: "Confirm")
         super.init(coder: coder)
         setupUI()
@@ -75,8 +74,8 @@ class CustomModalView: UIView {
         }
         
         contentStackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(48)
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
         
         confirmButton.snp.makeConstraints {

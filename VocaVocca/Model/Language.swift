@@ -11,7 +11,7 @@ enum Language: Int {
     case japanese
     case german
     case spanish
-
+    
     var title: String {
         switch self {
         case .english: return "EN"
@@ -19,6 +19,17 @@ enum Language: Int {
         case .japanese: return "JA"
         case .german: return "DE"
         case .spanish: return "ES"
+        }
+    }
+    
+    // 한글 이름
+    var koreanTitle: String {
+        switch self {
+        case .english: return "영어"
+        case .chinese: return "중국어"
+        case .japanese: return "일본어"
+        case .german: return "독일어"
+        case .spanish: return "스페인어"
         }
     }
 }
