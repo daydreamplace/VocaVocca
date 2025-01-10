@@ -21,7 +21,7 @@ class FlashcardView: UIView {
     }()
 
     // 진행된 숫자 표시 라벨
-    let numberLabel: UILabel = {
+    private let numberLabel: UILabel = {
         let label = UILabel()
         label.text = "1 / 10"
         label.textColor = .customBlack
@@ -31,7 +31,7 @@ class FlashcardView: UIView {
     }()
 
     // 플래시카드 뷰
-    let flashcardView: UIView = {
+    private let flashcardView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 30
@@ -39,7 +39,7 @@ class FlashcardView: UIView {
     }()
 
     // 단어 라벨
-    let wordLabel: UILabel = {
+    private let wordLabel: UILabel = {
         let label = UILabel()
         label.text = "test"
         label.textColor = .customBlack
@@ -49,7 +49,7 @@ class FlashcardView: UIView {
     }()
 
     // 버튼 스택뷰
-    let buttonStackView: UIStackView = {
+    private let buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 20
