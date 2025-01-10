@@ -16,10 +16,10 @@ extension RecordData {
         return NSFetchRequest<RecordData>(entityName: "RecordData")
     }
 
-    @NSManaged public var correctWords: NSObject?
     @NSManaged public var date: Date?
     @NSManaged public var id: UUID?
-    @NSManaged public var wrongWords: NSObject?
+    @NSManaged public var iscorrected: Bool
+    @NSManaged public var voca: VocaData?
 
 }
 
