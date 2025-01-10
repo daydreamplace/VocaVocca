@@ -24,7 +24,6 @@ class CustomModalView: UIView {
         let button = UIButton()
         button.setTitle("✕", for: .normal)
         button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(handleCloseButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -39,15 +38,10 @@ class CustomModalView: UIView {
     
     private let confirmButton: CustomButton
     
-    // MARK: - Actions
-    
-    var onCloseButtonTapped: (() -> Void)?
-    var onConfirmButtonTapped: (() -> Void)?
-    
     // MARK: - Initialization
     
-    init(title: String, buttonTitle: String, action: (() -> Void)? = nil) {
-        self.confirmButton = CustomButton(title: buttonTitle, action: action)
+    init(title: String, buttonTitle: String) {
+        self.confirmButton = CustomButton(title: buttonTitle)
         super.init(frame: .zero)
         self.titleLabel.text = title
         setupUI()
@@ -87,11 +81,5 @@ class CustomModalView: UIView {
             $0.height.equalTo(50)
             $0.bottom.equalToSuperview().offset(-48)
         }
-    }
-
-    // MARK: - Button Actions
-    
-    @objc private func handleCloseButtonTapped() {
-        onCloseButtonTapped?()
     }
 }
