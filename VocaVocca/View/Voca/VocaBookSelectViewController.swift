@@ -50,6 +50,8 @@ final class VocaBookSelectViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension VocaBookSelectViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 20
@@ -61,6 +63,8 @@ extension VocaBookSelectViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension VocaBookSelectViewController: UICollectionViewDelegate {
     
