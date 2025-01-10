@@ -14,10 +14,11 @@ class CustomTextFieldView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .customDarkBrown
         return label
     }()
+    
     private let textField: UITextField = {
         let field = UITextField()
         field.borderStyle = .none
