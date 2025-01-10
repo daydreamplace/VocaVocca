@@ -28,14 +28,14 @@ final class CustomTagView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configureUI()
+        setupUI()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureUI() {
+    private func setupUI() {
         addSubview(tagBackgroundView)
         tagBackgroundView.addSubview(tagLabel)
         
