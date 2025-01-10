@@ -10,15 +10,27 @@ import UIKit
 class VocaBookModalViewController: UIViewController {
     
     // MARK: - Properties
-    private let customModalView : CustomModalView
     
-    // MARK: - Initializer
-    init(title: String, buttonTitle: String) {
-        self.customModalView = CustomModalView(title: title, buttonTitle: buttonTitle)
-        super.init(nibName: nil, bundle: nil)
+    private let modalView = CustomModalView(title: "새로운 단어장 만들기", buttonTitle: "생성하기")
+    
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    // MARK: - Setup
+    
+    private func setupView() {
+        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.addSubview(modalView)
+        
+        modalView.snp.makeConstraints {
+           $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalToSuperview().multipliedBy(0.85)
+            $0.bottom.equalToSuperview()
+        }
     }
 }
