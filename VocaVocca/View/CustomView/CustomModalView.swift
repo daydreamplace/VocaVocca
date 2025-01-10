@@ -30,9 +30,10 @@ class CustomModalView: UIView {
     let contentStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 16
+        stackView.spacing = 24
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .equalSpacing
+        stackView.backgroundColor = .white
         return stackView
     }()
     
@@ -53,7 +54,6 @@ class CustomModalView: UIView {
         setupUI()
     }
     
-    
     // MARK: - Setup
     
     private func setupUI() {
@@ -66,6 +66,7 @@ class CustomModalView: UIView {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(contentStackView.snp.top).offset(-16)
         }
         
         closeButton.snp.makeConstraints {
@@ -74,15 +75,16 @@ class CustomModalView: UIView {
         }
         
         contentStackView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(48)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview().inset(24)
         }
         
         confirmButton.snp.makeConstraints {
-            $0.top.equalTo(contentStackView.snp.bottom).offset(32)
+            $0.top.greaterThanOrEqualTo(contentStackView.snp.bottom).offset(32)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.height.equalTo(50)
             $0.bottom.equalToSuperview().offset(-48)
         }
     }
 }
+
