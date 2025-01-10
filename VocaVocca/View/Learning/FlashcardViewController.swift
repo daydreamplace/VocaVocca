@@ -25,4 +25,11 @@ class FlashcardViewController: UIViewController {
         tabBarController?.tabBar.isHidden = true
         navigationController?.navigationBar.isHidden = true
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        let coachmarkVC = CoachmarkViewController()
+        coachmarkVC.modalPresentationStyle = .overFullScreen
+        present(coachmarkVC, animated: false)
+    }
 }
