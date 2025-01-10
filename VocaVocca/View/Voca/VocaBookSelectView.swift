@@ -24,7 +24,7 @@ final class VocaBookSelectView: UIView {
     }()
     
     private lazy var createButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setTitle("+", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 36)
         button.setTitleColor(.white, for: .normal)

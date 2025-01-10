@@ -43,7 +43,7 @@ final class VocaBookSelectCell: UICollectionViewCell {
     }()
     
     private let deleteButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.tintColor = .gray
         return button
