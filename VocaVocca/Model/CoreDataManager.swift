@@ -54,7 +54,7 @@ class CoreDataManager {
     // MARK: - CRUD for VocaData
     
     // 새로운 VocaData를 생성하는 메서드
-    func createVocaData(word: String, meaning: String, language: String, book: VocaBookData?) -> Completable {
+    func createVocaData(word: String, meaning: String, language: String, book: VocaBookData) -> Completable {
         return Completable.create { [weak self] completable in
             guard let self = self else {
                 completable(.error(NSError(domain: "CoreDataManager", code: -1, userInfo: nil)))
@@ -67,7 +67,7 @@ class CoreDataManager {
             voca.meaning = meaning
             voca.language = language
             voca.books = book
-            book?.addToWords(voca)
+            book.addToWords(voca)
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 생성 후 변경사항 저장.
