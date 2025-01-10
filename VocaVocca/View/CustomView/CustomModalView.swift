@@ -30,7 +30,7 @@ class CustomModalView: UIView {
     let contentStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 24
+        stackView.spacing = 80
         stackView.alignment = .fill
         stackView.distribution = .equalSpacing
         stackView.backgroundColor = .white
