@@ -12,9 +12,23 @@ class CustomTextFieldView: UIView, UITextFieldDelegate {
     
     // MARK: - UI Components
     
-    private let titleLabel = UILabel()
-    private let textField = UITextField()
-    private let borderView = UIView()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .customDarkBrown
+        return label
+    }()
+    private let textField: UITextField = {
+        let field = UITextField()
+        field.borderStyle = .none
+        field.font = UIFont.systemFont(ofSize: 14)
+        field.textColor = .black
+        field.layer.borderWidth = 1
+        field.layer.cornerRadius = 8
+        field.layer.borderColor = UIColor.lightGray.cgColor
+        field.isUserInteractionEnabled = true
+        return field
+    }()
     
     var text: String? {
         get { return textField.text }
@@ -36,6 +50,23 @@ class CustomTextFieldView: UIView, UITextFieldDelegate {
     // MARK: - UI Setup
     
     private func setupUI(title: String, placeholder: String) {
-     
+        titleLabel.text = title
+        textField.placeholder = placeholder
+        
+        addSubviews(titleLabel, textField)
+        
+        titleLabel.snp.makeConstraints{
+            $0.top.leading.trailing.equalToSuperview()
         }
+        
+        textField.snp.makeConstraints{
+            $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(40)
+        }
+        
+        self.snp.makeConstraints {
+            $0.height.greaterThanOrEqualTo(60)
+        }
+    }
 }
