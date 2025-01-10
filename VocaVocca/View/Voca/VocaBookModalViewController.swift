@@ -43,6 +43,8 @@ class VocaBookModalViewController: UIViewController {
         stackView.distribution = .fillEqually
         return stackView
     }()
+    
+    // TODO: - ViewModel로 이동
 
     private let availableLanguages: [Language] = [.english, .chinese, .japanese, .german, .spanish]
     private var selectedLanguage: Language = .english
@@ -75,12 +77,16 @@ class VocaBookModalViewController: UIViewController {
         modalView.contentStackView.addArrangedSubviews(textFieldView, languageContainerStackView)
     }
 
+    // TODO: - ViewModel 구현 후 수정 예정
+    
     private func setupLanguageStackview() {
         for language in availableLanguages {
             let button = createLanguageButton(for: language)
             languageStackView.addArrangedSubview(button)
         }
     }
+
+    // TODO: - ViewModel 구현 후 수정 예정
 
     private func createLanguageButton(for language: Language) -> UIButton {
         let button = UIButton(type: .system)
