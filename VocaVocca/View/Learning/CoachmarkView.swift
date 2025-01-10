@@ -54,7 +54,7 @@ class CoachmarkView: UIView {
     }()
 
     // 다시보지않음 라벨
-    let skipInstructionLabel: UILabel = {
+    private let skipInstructionLabel: UILabel = {
         let label = UILabel()
         label.text = "다시 보지 않음"
         label.textColor = .white
