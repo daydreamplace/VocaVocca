@@ -6,51 +6,44 @@
 //
 
 import UIKit
+import RxSwift
 
 class VocaMainViewController: UIViewController {
     
-    // MARK: - Properties
-    private let showModalButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("모달 열기", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 10
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        return button
-    }()
+    private let vocaMainView = VocaMainView()
     
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        setupUI()
-        setupActions()
+        // Do any additional setup after loading the view.
+        setup()
     }
     
-    // MARK: - Setup
-    private func setupUI() {
-        view.addSubview(showModalButton)
+    private func setup() {
+        view = vocaMainView
+        vocaMainView.vocaTableView.register(VocaMainTableViewCell.self, forCellReuseIdentifier: "VocaMainTableViewCell")
+        vocaMainView.vocaTableView.dataSource = self
+        vocaMainView.vocaTableView.rowHeight = 160
+        vocaMainView.vocaTableView.separatorStyle = .none
         
-        showModalButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            showModalButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            showModalButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            showModalButton.widthAnchor.constraint(equalToConstant: 120),
-            showModalButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
     }
     
-    private func setupActions() {
-        showModalButton.addTarget(self, action: #selector(showModalButtonTapped), for: .touchUpInside)
+}
+
+//TODO: MVVM에 맞게 로직 변경
+extension VocaMainViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
     }
     
-    // MARK: - Actions
-    @objc private func showModalButtonTapped() {
-        let modalViewController = VocaBookModalViewController()
-        modalViewController.modalPresentationStyle = .overFullScreen
-        modalViewController.modalTransitionStyle = .crossDissolve
-        present(modalViewController, animated: true, completion: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "VocaMainTableViewCell") as? VocaMainTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        cell.configureCell()
+        return cell
     }
 }
 

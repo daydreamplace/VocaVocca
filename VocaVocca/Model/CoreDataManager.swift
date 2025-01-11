@@ -54,7 +54,7 @@ class CoreDataManager {
     // MARK: - CRUD for VocaData
     
     // 새로운 VocaData를 생성하는 메서드
-    func createVocaData(word: String, meaning: String, language: String) -> Completable {
+    func createVocaData(word: String, meaning: String, language: String, book: VocaBookData) -> Completable {
         return Completable.create { [weak self] completable in
             guard let self = self else {
                 completable(.error(NSError(domain: "CoreDataManager", code: -1, userInfo: nil)))
@@ -66,6 +66,8 @@ class CoreDataManager {
             voca.word = word
             voca.meaning = meaning
             voca.language = language
+            voca.books = book
+            book.addToWords(voca)
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 생성 후 변경사항 저장.
@@ -118,7 +120,7 @@ class CoreDataManager {
     // MARK: - CRUD for VocaBookData
     
     // 새로운 VocaBookData를 생성하는 메서드.
-    func createVocaBookData(title: String, words: [VocaData]) -> Completable {
+    func createVocaBookData(title: String) -> Completable {
         return Completable.create { [weak self] completable in
             guard let self = self else {
                 completable(.error(NSError(domain: "CoreDataManager", code: -1, userInfo: nil)))
@@ -128,8 +130,6 @@ class CoreDataManager {
             let vocaBook = VocaBookData(context: self.context)
             vocaBook.id = UUID()
             vocaBook.title = title
-            // words 배열을 Data로 변환하여 저장.
-            vocaBook.words = try? NSKeyedArchiver.archivedData(withRootObject: words, requiringSecureCoding: false) as NSObject
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 생성 후 변경사항 저장.
@@ -155,10 +155,9 @@ class CoreDataManager {
     }
     
     // VocaBookData를 업데이트하는 메서드.
-    func updateVocaBookData(vocaBook: VocaBookData, newTitle: String, newWords: [VocaData]) -> Completable {
+    func updateVocaBookData(vocaBook: VocaBookData, newTitle: String) -> Completable {
         return Completable.create { completable in
             vocaBook.title = newTitle
-            vocaBook.words = try? NSKeyedArchiver.archivedData(withRootObject: newWords, requiringSecureCoding: false) as NSObject
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 변경사항 저장.
@@ -180,7 +179,7 @@ class CoreDataManager {
     // MARK: - CRUD for RecordData
     
     // 새로운 RecordData를 생성하는 메서드.
-    func createRecordData(correctWords: [VocaData], wrongWords: [VocaData], date: Date) -> Completable {
+    func createRecordData(voca: VocaData, isCorrected: Bool, date: Date) -> Completable {
         return Completable.create { [weak self] completable in
             guard let self = self else {
                 completable(.error(NSError(domain: "CoreDataManager", code: -1, userInfo: nil)))
@@ -190,8 +189,8 @@ class CoreDataManager {
             let record = RecordData(context: self.context)
             record.id = UUID()
             record.date = date
-            record.correctWords = try? NSKeyedArchiver.archivedData(withRootObject: correctWords, requiringSecureCoding: false) as NSObject
-            record.wrongWords = try? NSKeyedArchiver.archivedData(withRootObject: wrongWords, requiringSecureCoding: false) as NSObject
+            record.iscorrected = isCorrected
+            record.voca = voca
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext())
@@ -217,10 +216,9 @@ class CoreDataManager {
     }
     
     // RecordData를 업데이트하는 메서드.
-    func updateRecordData(record: RecordData, correctWords: [VocaData], wrongWords: [VocaData]) -> Completable {
+    func updateRecordData(record: RecordData, isCorrected: Bool) -> Completable {
         return Completable.create { completable in
-            record.correctWords = try? NSKeyedArchiver.archivedData(withRootObject: correctWords, requiringSecureCoding: false) as NSObject
-            record.wrongWords = try? NSKeyedArchiver.archivedData(withRootObject: wrongWords, requiringSecureCoding: false) as NSObject
+            record.iscorrected = isCorrected
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext())

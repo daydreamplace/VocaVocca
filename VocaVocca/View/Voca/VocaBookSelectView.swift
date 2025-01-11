@@ -12,10 +12,10 @@ final class VocaBookSelectView: UIView {
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 60, height: 90)
+        layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 20
         layout.sectionInset = UIEdgeInsets(top: 20, left: 30, bottom: 0, right: 30)
-        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 60, height: 90)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(VocaBookSelectCell.self, forCellWithReuseIdentifier: VocaBookSelectCell.id)
@@ -23,6 +23,7 @@ final class VocaBookSelectView: UIView {
         return collectionView
     }()
     
+    ///TODO - 버튼액션, 로직 처리
     private lazy var createButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("+", for: .normal)
