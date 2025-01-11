@@ -5,17 +5,15 @@
 //  Created by Eden on 1/8/25.
 //
 
-import Foundation
 import UIKit
 import SnapKit
 
 class VocaBookModalViewController: UIViewController {
-    
-    // MARK: - Properties
-    
-    private let modalView = CustomModalView(title: "새로운 단어장 만들기", buttonTitle: "추가하기")
 
-    private let textFieldView = CustomTextFieldView(title: "단어장 이름", placeholder: "단어장 이름을 지어주세요")
+    // MARK: - Properties
+
+    private let modalView = CustomModalView(title: "", buttonTitle: "")
+    private let textFieldView = CustomTextFieldView(title: "단어장 이름", placeholder: "입력해주세요.")
 
     private let languageContainerStackView: UIStackView = {
         let stackView = UIStackView()
@@ -31,7 +29,6 @@ class VocaBookModalViewController: UIViewController {
         label.text = "언어"
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .brown
-        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
 
@@ -43,19 +40,26 @@ class VocaBookModalViewController: UIViewController {
         stackView.distribution = .fillEqually
         return stackView
     }()
-    
-    // TODO: - ViewModel로 이동
 
     private let availableLanguages: [Language] = [.english, .chinese, .japanese, .german, .spanish]
-    private var selectedLanguage: Language = .english
+
+    // MARK: - Initialization
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupElementsInModalContent()
-        setupLanguageStackview()
+        setupLanguageButtons()
+        configureUI()
     }
 
     // MARK: - Setup
@@ -65,34 +69,31 @@ class VocaBookModalViewController: UIViewController {
         view.addSubview(modalView)
 
         modalView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalToSuperview().multipliedBy(0.85)
             $0.bottom.equalToSuperview()
         }
-    }
 
-    private func setupElementsInModalContent() {
         languageContainerStackView.addArrangedSubviews(languageTitleLabel, languageStackView)
         modalView.contentStackView.addArrangedSubviews(textFieldView, languageContainerStackView)
     }
 
-    // TODO: - ViewModel 구현 후 수정 예정
-    
-    private func setupLanguageStackview() {
+    private func setupLanguageButtons() {
         for language in availableLanguages {
             let button = createLanguageButton(for: language)
             languageStackView.addArrangedSubview(button)
         }
     }
 
-    // TODO: - ViewModel 구현 후 수정 예정
+    private func configureUI() {
+        modalView.update(title: "단어장 만들기", buttonTitle: "추가하기")
+    }
 
     private func createLanguageButton(for language: Language) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(language.koreanTitle, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = (language == selectedLanguage) ? .brown : .lightGray
+        button.backgroundColor = .lightGray
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.tag = language.rawValue
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -107,18 +108,9 @@ class VocaBookModalViewController: UIViewController {
         button.addTarget(self, action: #selector(languageButtonTapped(_:)), for: .touchUpInside)
         return button
     }
-
+    
+    // TODO: - 언어 선택 UI 변경 구현
+    
     @objc private func languageButtonTapped(_ sender: UIButton) {
-        guard let language = Language(rawValue: sender.tag) else { return }
-        selectedLanguage = language
-        updateLanguageButtons()
-    }
-
-    private func updateLanguageButtons() {
-        for button in languageStackView.arrangedSubviews {
-            guard let button = button as? UIButton else { continue }
-            guard let language = Language(rawValue: button.tag) else { continue }
-            button.backgroundColor = (language == selectedLanguage) ? .brown : .lightGray
-        }
     }
 }

@@ -33,7 +33,6 @@ class CustomModalView: UIView {
         stackView.spacing = 80
         stackView.alignment = .fill
         stackView.distribution = .equalSpacing
-        stackView.backgroundColor = .white
         return stackView
     }()
     
@@ -66,7 +65,6 @@ class CustomModalView: UIView {
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(contentStackView.snp.top).offset(-16)
         }
         
         closeButton.snp.makeConstraints {
@@ -86,5 +84,12 @@ class CustomModalView: UIView {
             $0.bottom.equalToSuperview().offset(-48)
         }
     }
+    
+    // MARK: - Public Methods
+    
+    /// 제목과 버튼 텍스트 업데이트
+    func update(title: String, buttonTitle: String) {
+        self.titleLabel.text = title
+        self.confirmButton.setTitle(buttonTitle, for: .normal)
+    }
 }
-

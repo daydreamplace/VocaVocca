@@ -56,11 +56,11 @@ class CustomTextFieldView: UIView {
         
         addSubviews(titleLabel, textField)
         
-        titleLabel.snp.makeConstraints{
+        titleLabel.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
         }
         
-        textField.snp.makeConstraints{
+        textField.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(40)
@@ -70,7 +70,14 @@ class CustomTextFieldView: UIView {
             $0.height.greaterThanOrEqualTo(60)
         }
     }
-
+    
+    // MARK: - Update Method
+    
+    /// 텍스트 필드의 제목 및 플레이스홀더를 동적으로 업데이트
+    func update(title: String, placeholder: String) {
+        titleLabel.text = title
+        textField.placeholder = placeholder
+    }
 }
 
 // MARK: - UITextFieldDelegate
