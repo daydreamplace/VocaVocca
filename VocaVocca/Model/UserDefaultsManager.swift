@@ -17,7 +17,7 @@ class UserDefaultsManager: NSObject {
     }
 
     // 코치마크가 활성화 되어 있는지 확인
-    func isCoachMarkEnabled() -> Bool {
+    func isCoachMarkDisabled() -> Bool {
         return UserDefaults.standard.bool(forKey: key)
     }
 }
