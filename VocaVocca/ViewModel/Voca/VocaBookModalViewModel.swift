@@ -55,6 +55,11 @@ class VocaBookModalViewModel {
         buttonTitle = Observable.just(mode == .create ? "추가하기": "수정하기")
     }
     
+    // selected language
+    func selectedLanguage(_ language: Language) {
+        selectedLanguage.accept(language)
+    }
+    
     // save edit
     func handleSaveOrEdit() {
         
