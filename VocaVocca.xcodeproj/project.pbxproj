@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F2116B652D33F0BE00B786B8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F2116B642D33F0BE00B786B8 /* RxCocoa */; };
 		F262F0342D2FF35400B3DFDB /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = F262F0332D2FF35400B3DFDB /* Config.xcconfig */; };
 		F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F2ED388C2D2E111F005B7BC0 /* .gitignore */; };
 		F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38962D2E13A8005B7BC0 /* SnapKit */; };
@@ -49,6 +50,7 @@
 			files = (
 				F2ED389A2D2E16AF005B7BC0 /* RxSwift in Frameworks */,
 				F2ED389D2D2E16E7005B7BC0 /* CoreData.framework in Frameworks */,
+				F2116B652D33F0BE00B786B8 /* RxCocoa in Frameworks */,
 				F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,6 +99,7 @@
 			packageProductDependencies = (
 				F2ED38962D2E13A8005B7BC0 /* SnapKit */,
 				F2ED38992D2E16AF005B7BC0 /* RxSwift */,
+				F2116B642D33F0BE00B786B8 /* RxCocoa */,
 			);
 			productName = VocaVocca;
 			productReference = BAB189962D2E7D4300E4DF7C /* VocaVocca.app */;
@@ -380,6 +383,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F2116B642D33F0BE00B786B8 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2ED38982D2E16AE005B7BC0 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
 		F2ED38962D2E13A8005B7BC0 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F2ED38952D2E13A8005B7BC0 /* XCRemoteSwiftPackageReference "SnapKit" */;

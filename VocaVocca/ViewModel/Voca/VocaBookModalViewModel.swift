@@ -6,3 +6,14 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
+
+enum Mode {
+    case create
+    case edit
+}
+
+class VocaBookModalViewModel {
+    
+}
