@@ -42,16 +42,19 @@ class FlashcardViewController: UIViewController {
         flashcardViewModel.subject
             .filter { $0 == false }
             .subscribe(onNext: { [weak self] _ in
-                self?.connectModal()
+                guard let self = self else { return }
+                self.connectModal()
                 
             })
             .disposed(by: disposeBag)
         flashcardViewModel.isCoachMarkDisabled()
         
         flashcardView.closeButton.rx.tap
-            .bind { [weak self] in
-                self?.closeButtonTapped()
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                self.closeButtonTapped()
             }
+            .disposed(by: disposeBag)
     }
     
     private func connectModal() {
