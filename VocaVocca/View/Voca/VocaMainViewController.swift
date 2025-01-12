@@ -9,24 +9,24 @@ import UIKit
 import RxSwift
 
 class VocaMainViewController: UIViewController {
-
+    
     private let vocaMainView = VocaMainView()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setup()
     }
-
+    
     private func setup() {
         view = vocaMainView
         vocaMainView.vocaTableView.register(VocaMainTableViewCell.self, forCellReuseIdentifier: "VocaMainTableViewCell")
         vocaMainView.vocaTableView.dataSource = self
         vocaMainView.vocaTableView.rowHeight = 160
         vocaMainView.vocaTableView.separatorStyle = .none
-
+        
     }
-
+    
 }
 
 //TODO: MVVM에 맞게 로직 변경
@@ -46,4 +46,5 @@ extension VocaMainViewController: UITableViewDataSource {
         return cell
     }
 }
+
 
