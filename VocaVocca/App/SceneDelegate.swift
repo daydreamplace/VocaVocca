@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let firstViewController = UINavigationController(rootViewController: VocaMainViewController())
         let secondViewController = UINavigationController(rootViewController: LearningViewController())
-        let thirdViewController = UINavigationController(rootViewController: RecordViewController())
+        let thirdViewController = UINavigationController(rootViewController: RecordResultViewController())
         let tabBarController = UITabBarController()
         tabBarController.setViewControllers([firstViewController, secondViewController, thirdViewController], animated: true)
         
