@@ -11,11 +11,12 @@ import RxSwift
 class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setup()
+        bindActions()
     }
     
     private func setup() {
@@ -24,9 +25,22 @@ class VocaMainViewController: UIViewController {
         vocaMainView.vocaTableView.dataSource = self
         vocaMainView.vocaTableView.rowHeight = 160
         vocaMainView.vocaTableView.separatorStyle = .none
-        
     }
     
+    private func bindActions() {
+        vocaMainView.openModalButton.rx.tap
+            .bind { [weak self] in
+                self?.openVocaModal()
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func openVocaModal() {
+        let vocaModalViewModel = VocaModalViewModel()
+        let vocaModalVC = VocaModalViewController(viewModel: vocaModalViewModel)
+        vocaModalVC.modalPresentationStyle = .overFullScreen
+        self.present(vocaModalVC, animated: true, completion: nil)
+    }
 }
 
 //TODO: MVVM에 맞게 로직 변경

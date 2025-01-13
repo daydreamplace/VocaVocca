@@ -25,7 +25,6 @@ class VocaModalViewModel {
     let word = BehaviorRelay<String>(value: "")
     let meaning = BehaviorRelay<String>(value: "")
     
-    
     // MARK: - Output
     
     let isSaveEnabled: Observable<Bool>
