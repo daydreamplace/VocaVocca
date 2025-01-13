@@ -14,10 +14,9 @@ class LearningViewModel {
     private let disposeBag = DisposeBag()
     
     let vocaBookSubject = BehaviorSubject(value: [VocaBookData]())
-    let selectedVocaBook = BehaviorSubject<VocaBookData?>(value: nil)
+    var selectedVocaBook: VocaBookData?
     
     var data = [VocaBookData]()
-    var index = 0
     
     init () {
         fetchVocaBookFromCoreData()
@@ -28,7 +27,6 @@ class LearningViewModel {
             .subscribe(onNext: { [weak self] vocaBookData in
                 self?.vocaBookSubject.onNext(vocaBookData)
                 self?.data = vocaBookData
-                print(vocaBookData)
             }, onError: { error in
                 self.vocaBookSubject.onError(error)
             }).disposed(by: disposeBag)
@@ -38,29 +36,39 @@ class LearningViewModel {
     
     func addTestVocaBooks() {
         createTestVocaBookData()
-            .subscribe(onCompleted: { [weak self] in
-                self?.fetchVocaBookFromCoreData()
+            .andThen(fetchVocaBookFromCoreDataCompletable())
+            .andThen(addTestVocaData())
+            .subscribe(onCompleted: {
+                print("테스트 단어장 및 단어 생성 완료")
             })
             .disposed(by: disposeBag)
     }
-    
+
+    // 테스트 단어장 생성
     private func createTestVocaBookData() -> Completable {
+        return CoreDataManager.shared.createVocaBookData(title: "테스트 단어장")
+    }
+
+    // 테스트 단어 추가
+    private func addTestVocaData() -> Completable {
+        guard let firstBook = data.first else {
+            return Completable.error(NSError(domain: "단어장을 찾을 수 없습니다.", code: -1, userInfo: nil))
+        }
         
         return Completable.zip(
-            CoreDataManager.shared.createVocaBookData(title: "단어장"),
-            CoreDataManager.shared.createVocaData(word: "hssss", meaning: "텍스트", language: Language.english.koreanTitle, book: data.last!),
-            CoreDataManager.shared.createVocaData(word: "hssss", meaning: "테스트", language: Language.english.koreanTitle, book: data.last!),
-            CoreDataManager.shared.createVocaData(word: "tdfas", meaning: "테스트2", language: Language.english.koreanTitle, book: data.last!),
-            CoreDataManager.shared.createVocaData(word: "asfda", meaning: "테스트3", language: Language.english.koreanTitle, book: data.last!),
-            CoreDataManager.shared.createVocaData(word: "asdf", meaning: "테스트4", language: Language.english.koreanTitle, book: data.last!)
+            CoreDataManager.shared.createVocaData(word: "apple", meaning: "사과", language: Language.english.koreanTitle, book: firstBook),
+            CoreDataManager.shared.createVocaData(word: "banana", meaning: "바나나", language: Language.english.koreanTitle, book: firstBook),
+            CoreDataManager.shared.createVocaData(word: "cat", meaning: "고양이", language: Language.english.koreanTitle, book: firstBook),
+            CoreDataManager.shared.createVocaData(word: "dog", meaning: "개", language: Language.english.koreanTitle, book: firstBook)
         )
     }
     
-    func changeIndex(_ index: Int) {
-        self.index = index
-    }
-    
-    func getData() -> VocaBookData {
-        return data.first!
+    // Core Data 동기화
+    private func fetchVocaBookFromCoreDataCompletable() -> Completable {
+        return Completable.create { [weak self] completable in
+            self?.fetchVocaBookFromCoreData()
+            completable(.completed)
+            return Disposables.create()
+        }
     }
 }
