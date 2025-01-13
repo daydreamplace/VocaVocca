@@ -11,8 +11,8 @@ import SnapKit
 
 final class RecordResultViewController: UIViewController {
     
-    private let correctWordsView = RecordCorrectView()
-    private let incorrectWordsView = RecordIncorrectView()
+    private let correctWordsView = RecordResultView()
+    private let incorrectWordsView = RecordResultView()
     
     override func viewDidLoad() {
         super.viewDidLoad()

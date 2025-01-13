@@ -1,5 +1,5 @@
 //
-//  RecordIncorrectView.swift
+//  RecordCorrectView.swift
 //  VocaVocca
 //
 //  Created by 강민성 on 1/13/25.
@@ -8,8 +8,7 @@
 import UIKit
 import SnapKit
 
-class RecordIncorrectView: UIView {
-    
+class RecordResultView: UIView {
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .white
