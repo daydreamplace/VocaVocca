@@ -129,8 +129,13 @@ class VocaBookModalViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    // TODO: - 언어 선택 UI 변경 구현
-    
     @objc private func languageButtonTapped(_ sender: UIButton) {
+        guard let language = Language(rawValue: sender.tag) else { return }
+        viewModel.selectedLanguage(language)
+        
+        for button in languageStackView.arrangedSubviews.compactMap({ $0 as? UIButton }) {
+            button.backgroundColor = .lightGray
+        }
+        sender.backgroundColor = .customDarkBrown
     }
 }
