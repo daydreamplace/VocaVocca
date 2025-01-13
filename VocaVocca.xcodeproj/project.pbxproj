@@ -17,7 +17,6 @@
 
 /* Begin PBXFileReference section */
 		BAB189962D2E7D4300E4DF7C /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaVocca.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F262F0332D2FF35400B3DFDB /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		F2ED388C2D2E111F005B7BC0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
