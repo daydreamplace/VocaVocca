@@ -60,9 +60,10 @@ final class LearningViewController: UIViewController {
                 cell.vocaCountLabel.text = "\(item.words?.count ?? 0) 개"
             }.disposed(by: disposeBag)
         
-        // 선택된 셀 바인딩
-        learningView.collectionView.rx.modelSelected(VocaBookData.self)
-            .bind(to: viewModel.selectedVocaBook)
+        learningView.collectionView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                self?.viewModel.changeIndex(indexPath.item)
+            })
             .disposed(by: disposeBag)
         
         // 버튼 액션 바인딩
@@ -70,20 +71,15 @@ final class LearningViewController: UIViewController {
             .subscribe(onNext: { [weak self] in
                 self?.navigateToFlashCard()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: disposeBag)///ㅇ
     }
     
     private func navigateToFlashCard() {
-          guard let selectedBook = viewModel.selectedVocaBook.value else {
-              // 선택된 단어장이 없는 경우 알럿
-              let alert = UIAlertController(title: "단어장 선택", message: "시작할 단어장을 선택해주세요.", preferredStyle: .alert)
-              alert.addAction(UIAlertAction(title: "확인", style: .default))
-              present(alert, animated: true)
-              return
-          }
-          
-          let flashCardVM = FlashCardViewModel(data: selectedBook)
-          let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
-          navigationController?.pushViewController(flashcardVC, animated: true)
+        viewModel.addTestVocaBooks()
+        let data = viewModel.getData()
+        
+        let flashCardVM = FlashcardViewModel(data: data)
+        let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
+        navigationController?.pushViewController(flashcardVC, animated: true)
       }
 }
