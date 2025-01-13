@@ -48,6 +48,8 @@ class VocaModalViewController: UIViewController {
         setupView()
         bindViewModel()
         setupActions()
+        
+        viewModel.fetchVocaBookFromCoreData()
     }
     
     // MARK: - Setup
@@ -69,29 +71,17 @@ class VocaModalViewController: UIViewController {
         // 단어 입력 텍스트 필드 바인딩
         wordTextFieldView.didEndEditing = { [weak self] text in
             self?.viewModel.word.accept(text)
-            self?.viewModel.fetchTranslation(for: text)
-                .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { [weak self] translation in
-                    self?.meaningTextFieldView.textField.placeholder = translation
-                })
-                .disposed(by: self?.disposeBag ?? DisposeBag())
         }
         
-        // 뜻 텍스트 필드의 플레이스홀더 업데이트
-        viewModel.meaning
-            .bind { [weak self] meaning in
-                self?.meaningTextFieldView.updatePlaceholder(meaning)
-            }
-            .disposed(by: disposeBag)
-        
-        // 저장 버튼 활성화 상태
-        viewModel.isSaveEnabled
-            .bind(to: modalView.confirmButton.rx.isEnabled)
-            .disposed(by: disposeBag)
+        // 뜻 입력 텍스트 필드 바인딩
+        meaningTextFieldView.didEndEditing = { [weak self] text in
+            self?.viewModel.meaning.accept(text)
+        }
         
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
+                print("Confirm button tapped")
                 self?.viewModel.handleSave()
             }
             .disposed(by: disposeBag)

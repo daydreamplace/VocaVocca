@@ -9,6 +9,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+
+// TODO: - 삭제
 struct TranslationResponse: Decodable {
     let translations: [Translation]
     
@@ -34,6 +36,8 @@ class VocaModalViewModel {
     private let coreDataManager = CoreDataManager.shared
     private let networkManager = NetworkManager.shared
     private let disposeBag = DisposeBag()
+    
+    var testData = [VocaBookData]()
     
     // Initialization
     init() {
@@ -77,14 +81,37 @@ class VocaModalViewModel {
     }
     
     // CoreData 단어 업데이트
+    func testVocaBook () -> Completable {
+        coreDataManager.createVocaBookData(title: "토익")
+    }
+    
+    func fetchVocaBookFromCoreData () {
+        testVocaBook()
+            .subscribe(onCompleted: {
+                print("444")
+            }, onError: { error in
+                print(error)
+            }).disposed(by: disposeBag)
+        coreDataManager.fetchVocaBookData()
+            .subscribe(onNext: { [weak self] vocaBookData in
+                self?.testData = vocaBookData
+                print("222", vocaBookData)
+            }, onError: { error in
+                print(error)
+            }).disposed(by: disposeBag)
+    }
+    
     func handleSave() {
-        guard let vocaBook = selectedVocaBook.value, !word.value.isEmpty, !meaning.value.isEmpty else {
-            print("입력값이 부족합니다.")
-            return
-        }
+        //        guard let vocaBook = selectedVocaBook.value, !word.value.isEmpty, !meaning.value.isEmpty else {
+        //            print("입력값이 부족합니다.")
+        //            return
+        //        }
         
-        print("단어 추가: \(word.value), 뜻: \(meaning.value), 단어장: \(vocaBook.title ?? "알 수 없음")")
-        coreDataManager.createVocaData(word: word.value, meaning: meaning.value, language: "EN", book: vocaBook)
+        print("111", testData)
+        guard let vocaBooktestData = testData.first else { return }
+        
+        print("단어 추가: \(word.value), 뜻: \(meaning.value), 단어장: \(vocaBooktestData)")
+        coreDataManager.createVocaData(word: word.value, meaning: meaning.value, language: "EN", book: vocaBooktestData)
             .subscribe(
                 onCompleted: {
                     print("단어가 성공적으로 추가되었습니다.")
