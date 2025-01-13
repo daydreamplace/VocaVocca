@@ -60,28 +60,30 @@ final class LearningViewController: UIViewController {
                 cell.vocaCountLabel.text = "\(item.words?.count ?? 0) 개"
             }.disposed(by: disposeBag)
         
+        // 선택된 셀 바인딩
+        learningView.collectionView.rx.modelSelected(VocaBookData.self)
+            .bind(to: viewModel.selectedVocaBook)
+            .disposed(by: disposeBag)
+        
         // 버튼 액션 바인딩
         learningView.startButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                self?.startButtonTapped()
+                self?.navigateToFlashCard()
             })
             .disposed(by: disposeBag)
     }
     
-    @objc private func startButtonTapped() {
-        // 테스트 데이터 생성
-        viewModel.addTestVocaBooks()
-        // 플래시카드뷰 띄우기
-        let flashcardVC = FlashcardViewController()
-        navigationController?.pushViewController(flashcardVC, animated: true)
-    }
-}
-
-// MARK: - UICollectionViewDelegate
-
-extension LearningViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        /// TODO - 선택된 셀 (단어장) 데이터 flashCardVM 으로 넘기기
-    }
+    private func navigateToFlashCard() {
+          guard let selectedBook = viewModel.selectedVocaBook.value else {
+              // 선택된 단어장이 없는 경우 알럿
+              let alert = UIAlertController(title: "단어장 선택", message: "시작할 단어장을 선택해주세요.", preferredStyle: .alert)
+              alert.addAction(UIAlertAction(title: "확인", style: .default))
+              present(alert, animated: true)
+              return
+          }
+          
+          let flashCardVM = FlashCardViewModel(data: selectedBook)
+          let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
+          navigationController?.pushViewController(flashcardVC, animated: true)
+      }
 }

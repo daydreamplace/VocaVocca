@@ -14,6 +14,7 @@ class LearningViewModel {
     private let disposeBag = DisposeBag()
     
     let vocaBookSubject = BehaviorSubject(value: [VocaBookData]())
+    let selectedVocaBook = BehaviorSubject<VocaBookData?>(value: nil)
     
     init () {
         fetchVocaBookFromCoreData()
