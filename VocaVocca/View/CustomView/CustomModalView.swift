@@ -7,12 +7,19 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class CustomModalView: UIView {
     
+    // MARK: - Properties
+    
+    private let disposeBag = DisposeBag()
+    var vocaBookViewModel: VocaBookModalViewModel?
+    
     // MARK: - UI Components
     
-    private let titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textAlignment = .center
@@ -20,7 +27,7 @@ class CustomModalView: UIView {
         return label
     }()
     
-    private lazy var closeButton: UIButton = {
+    lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle("✕", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -36,7 +43,7 @@ class CustomModalView: UIView {
         return stackView
     }()
     
-    private let confirmButton: CustomButton
+    let confirmButton: CustomButton
     
     // MARK: - Initialization
     

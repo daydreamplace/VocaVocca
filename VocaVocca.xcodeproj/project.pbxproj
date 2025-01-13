@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BA8F05E12D33B9C500B57B90 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = BA8F05E02D33B9C500B57B90 /* Config.xcconfig */; };
-		BA8F05E32D33CD4800B57B90 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BA8F05E22D33CD4800B57B90 /* RxCocoa */; };
+		F2116B652D33F0BE00B786B8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F2116B642D33F0BE00B786B8 /* RxCocoa */; };
+		F262F0342D2FF35400B3DFDB /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = F262F0332D2FF35400B3DFDB /* Config.xcconfig */; };
 		F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F2ED388C2D2E111F005B7BC0 /* .gitignore */; };
 		F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38962D2E13A8005B7BC0 /* SnapKit */; };
 		F2ED389A2D2E16AF005B7BC0 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38992D2E16AF005B7BC0 /* RxSwift */; };
@@ -16,7 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BA8F05E02D33B9C500B57B90 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		BAB189962D2E7D4300E4DF7C /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaVocca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2ED388C2D2E111F005B7BC0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -50,7 +49,7 @@
 			files = (
 				F2ED389A2D2E16AF005B7BC0 /* RxSwift in Frameworks */,
 				F2ED389D2D2E16E7005B7BC0 /* CoreData.framework in Frameworks */,
-				BA8F05E32D33CD4800B57B90 /* RxCocoa in Frameworks */,
+				F2116B652D33F0BE00B786B8 /* RxCocoa in Frameworks */,
 				F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,7 +60,7 @@
 		F2ED383B2D2E10D8005B7BC0 = {
 			isa = PBXGroup;
 			children = (
-				BA8F05E02D33B9C500B57B90 /* Config.xcconfig */,
+				F262F0332D2FF35400B3DFDB /* Config.xcconfig */,
 				F2ED38462D2E10D8005B7BC0 /* VocaVocca */,
 				F2ED388C2D2E111F005B7BC0 /* .gitignore */,
 				F2ED389B2D2E16E7005B7BC0 /* Frameworks */,
@@ -99,7 +98,7 @@
 			packageProductDependencies = (
 				F2ED38962D2E13A8005B7BC0 /* SnapKit */,
 				F2ED38992D2E16AF005B7BC0 /* RxSwift */,
-				BA8F05E22D33CD4800B57B90 /* RxCocoa */,
+				F2116B642D33F0BE00B786B8 /* RxCocoa */,
 			);
 			productName = VocaVocca;
 			productReference = BAB189962D2E7D4300E4DF7C /* VocaVocca.app */;
@@ -148,7 +147,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA8F05E12D33B9C500B57B90 /* Config.xcconfig in Resources */,
+				F262F0342D2FF35400B3DFDB /* Config.xcconfig in Resources */,
 				F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -168,7 +167,7 @@
 /* Begin XCBuildConfiguration section */
 		F2ED38582D2E10D8005B7BC0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA8F05E02D33B9C500B57B90 /* Config.xcconfig */;
+			baseConfigurationReference = F262F0332D2FF35400B3DFDB /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -383,7 +382,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		BA8F05E22D33CD4800B57B90 /* RxCocoa */ = {
+		F2116B642D33F0BE00B786B8 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F2ED38982D2E16AE005B7BC0 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 class CustomTextFieldView: UIView {
     
@@ -19,7 +20,7 @@ class CustomTextFieldView: UIView {
         return label
     }()
     
-    private let textField: UITextField = {
+    let textField: UITextField = {
         let field = UITextField()
         field.borderStyle = .none
         field.font = UIFont.systemFont(ofSize: 14)
