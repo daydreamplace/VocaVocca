@@ -2,7 +2,7 @@
 //  VocaMainTableViewCell.swift
 //  VocaVocca
 //
-//  Created by t2023-m0072 on 1/9/25.
+//  Created by 안준경 on 1/9/25.
 //
 
 import UIKit
@@ -15,7 +15,7 @@ class VocaMainTableViewCell: UITableViewCell {
     private let cardView = CustomCardView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .white
         setupUI()
      }
@@ -33,8 +33,8 @@ class VocaMainTableViewCell: UITableViewCell {
     }
     
     func configureCell() {
-        cardView.meanLabel.text = "검정색"
-        cardView.wordLabel.text = "black"
+        cardView.meanLabel.text = "하얀색"
+        cardView.wordLabel.text = "White"
     }
 }
 

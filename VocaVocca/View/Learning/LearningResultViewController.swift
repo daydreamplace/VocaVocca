@@ -11,6 +11,16 @@ import SnapKit
 final class LearningResultViewController: UIViewController {
     
     private let learningResultView = LearningResultView()
+    private let viewModel: LearningResultViewModel
+    
+    init(viewModel: LearningResultViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         self.view = learningResultView

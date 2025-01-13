@@ -48,43 +48,50 @@ class FlashcardViewController: UIViewController {
     // MARK: - bind
     
     private func bind() {
+        // 코치마크 비활성화 여부 바인드
         flashcardViewModel.isCoachMarkDisabled
             .filter { $0 == false }
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.connectModal()
+                self.connectCoachmarkModal()
             })
             .disposed(by: disposeBag)
         
+        // 현재 단어 바인드
         flashcardViewModel.currentVoca
             .map { $0?.word }
             .bind(to: flashcardView.wordLabel.rx.text)
             .disposed(by: disposeBag)
         
+        // 현재 인덱스 바인드
         flashcardViewModel.currentIndex
             .map { "\($0 + 1)" }
             .bind(to: flashcardView.countLabel.rx.text)
             .disposed(by: disposeBag)
         
+        // 보카 단어 수 바인드
         flashcardViewModel.totalVocaCount
             .map { "\($0)" }
             .bind(to: flashcardView.totalCountLabel.rx.text)
             .disposed(by: disposeBag)
         
-        flashcardViewModel.isLastVoca
-            .filter { $0 }
-            .bind { [weak self] _ in
-                print("마지막 단어") // 수정 필요
+        // 학습 결과 바인드
+        flashcardViewModel.learningResult
+            .bind { [weak self] result in
+                guard let self = self else { return }
+                self.connectLearningResultModal(result)
             }
             .disposed(by: disposeBag)
         
+        // 닫기 버튼 클릭 바인드
         flashcardView.closeButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
                 self.closeButtonTapped()
             }
             .disposed(by: disposeBag)
-                
+        
+        // 알아요 버튼 클릭 바인드
         flashcardView.gotItButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
@@ -92,6 +99,7 @@ class FlashcardViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        // 잘몰라요 버튼 클릭 바인드
         flashcardView.notYetButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
@@ -100,12 +108,23 @@ class FlashcardViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func connectModal() {
+    // 코치마크 모달 연결
+    private func connectCoachmarkModal() {
         let coachmarkVC = CoachmarkViewController()
         coachmarkVC.modalPresentationStyle = .overFullScreen
         present(coachmarkVC, animated: false)
     }
     
+    // 결과 모달 연결
+    private func connectLearningResultModal(_ result: LearningResult) {
+        print(result)
+        let learningResultVM = LearningResultViewModel(learningResult: result)
+        let learningResultVC = LearningResultViewController(viewModel: learningResultVM)
+        learningResultVC.modalPresentationStyle = .overFullScreen
+        present(learningResultVC, animated: true)
+    }
+    
+    // 닫기 버튼 클릭
     private func closeButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
