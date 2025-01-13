@@ -64,7 +64,6 @@ class VocaBookModalViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupLanguageButtons()
-        configureUI()
     }
     
     // MARK: - Setup
@@ -90,10 +89,6 @@ class VocaBookModalViewController: UIViewController {
         }
     }
     
-    private func configureUI() {
-        modalView.update(title: "단어장 만들기", buttonTitle: "추가하기")
-    }
-    
     private func createLanguageButton(for language: Language) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(language.koreanTitle, for: .normal)
@@ -115,6 +110,7 @@ class VocaBookModalViewController: UIViewController {
     }
     
     // MARK: - bind
+    
     private func bindViewModel() {
         viewModel.title
             .bind(to: modalView.titleLabel.rx.text)
