@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class VocaModalViewController: UIViewController {
+class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
     
@@ -49,6 +49,7 @@ class VocaModalViewController: UIViewController {
         bindViewModel()
         setupActions()
         
+        modalView.delegate = self
         viewModel.fetchVocaBookFromCoreData()
     }
     
@@ -96,5 +97,11 @@ class VocaModalViewController: UIViewController {
         let vocaBookSelectVC = VocaBookSelectViewController()
         let navController = UINavigationController(rootViewController: vocaBookSelectVC)
         present(navController, animated: true, completion: nil)
+    }
+    
+    // MARK: - CustomModalViewDelegate
+    
+    func didTapCloseButton() {
+        dismiss(animated: true, completion: nil)
     }
 }

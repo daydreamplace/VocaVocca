@@ -34,6 +34,7 @@ class CustomModalView: UIView {
         let button = UIButton()
         button.setTitle("✕", for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
     
