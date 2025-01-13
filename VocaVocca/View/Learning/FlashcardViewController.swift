@@ -52,7 +52,7 @@ class FlashcardViewController: UIViewController {
             .filter { $0 == false }
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.connectModal()
+                self.connectCoachmarkModal()
             })
             .disposed(by: disposeBag)
         
@@ -74,7 +74,9 @@ class FlashcardViewController: UIViewController {
         flashcardViewModel.isLastVoca
             .filter { $0 }
             .bind { [weak self] _ in
-                print("마지막 단어") // 수정 필요
+                guard let self = self else { return }
+                self.connectResultModal()
+                self.flashcardViewModel.saveResults()
             }
             .disposed(by: disposeBag)
         
@@ -100,10 +102,16 @@ class FlashcardViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func connectModal() {
+    private func connectCoachmarkModal() {
         let coachmarkVC = CoachmarkViewController()
         coachmarkVC.modalPresentationStyle = .overFullScreen
         present(coachmarkVC, animated: false)
+    }
+    
+    private func connectResultModal() {
+        let learningResultVC = LearningResultViewController()
+        learningResultVC.modalPresentationStyle = .overFullScreen
+        present(learningResultVC, animated: true)
     }
     
     private func closeButtonTapped() {

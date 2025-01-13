@@ -53,4 +53,19 @@ class FlashcardViewModel {
         currentVoca.onNext(allVocaData[currentIndexValue])
         isLastVoca.onNext(currentIndexValue + 1 == allVocaData.count)
     }
+    
+    // 정답 결과 저장
+    func saveResults() {
+        print("correctWords")
+        print(correctWords)
+        print("incorrectWords")
+        print(incorrectWords)
+        correctWords.forEach {
+            CoreDataManager.shared.createRecordData(voca: $0, isCorrected: true, date: Date())
+        }
+        
+        incorrectWords.forEach {
+            CoreDataManager.shared.createRecordData(voca: $0, isCorrected: false, date: Date())
+        }
+    }
 }
