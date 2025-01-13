@@ -21,6 +21,8 @@ class FlashcardViewModel {
     private var correctWords = [VocaData]() // 맞춘 단어 목록
     private var incorrectWords = [VocaData]() // 틀린 단어 목록
     
+    private let disposeBag = DisposeBag()
+    
     init(data: VocaBookData) {
         allVocaData = data.words?.allObjects as? [VocaData] ?? []
         totalVocaCount = BehaviorSubject(value: allVocaData.count)
@@ -67,10 +69,18 @@ class FlashcardViewModel {
     func saveResults() {
         correctWords.forEach {
             CoreDataManager.shared.createRecordData(voca: $0, isCorrected: true, date: Date())
+                .subscribe(onCompleted: {
+                    print("맞은 단어 데이터 저장 성공")
+                })
+                .disposed(by: disposeBag)
         }
         
         incorrectWords.forEach {
             CoreDataManager.shared.createRecordData(voca: $0, isCorrected: false, date: Date())
+                .subscribe(onCompleted: {
+                    print("틀린 단어 데이터 저장 성공")
+                })
+                .disposed(by: disposeBag)
         }
     }
 }
