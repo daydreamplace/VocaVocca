@@ -27,7 +27,7 @@ final class LearningResultView: UIView {
     }()
     
     ///TODO - 숫자 관련 색상, 로직 필요
-    private let correctCountLabel: UILabel = {
+    let correctCountLabel: UILabel = {
         let label = UILabel()
         label.text = "정답 16"
         label.font = .systemFont(ofSize: 16, weight: .regular)
@@ -35,7 +35,7 @@ final class LearningResultView: UIView {
         return label
     }()
     
-    private let incorrectCountLabel: UILabel = {
+    let incorrectCountLabel: UILabel = {
         let label = UILabel()
         label.text = "오답 3"
         label.font = .systemFont(ofSize: 16, weight: .regular)
@@ -50,7 +50,7 @@ final class LearningResultView: UIView {
         return stackView
     }()
     
-    private let correctRateLabel: UILabel = {
+    let correctRateLabel: UILabel = {
         let label = UILabel()
         label.text = "정답률 90%"
         label.font = .systemFont(ofSize: 16, weight: .regular)
