@@ -2,18 +2,21 @@
 //  MainViewController.swift
 //  VocaVocca
 //
-//  Created by Eden on 1/8/25.
+//  Created by 안준경 on 1/8/25.
 //
 
+import CoreData
 import UIKit
 import RxSwift
 
 final class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
-    private let vocaBookSelectVC = VocaBookSelectViewController()
+    private let vocaMainViewModel = VocaMainViewModel()
+    private let vocaBookSelectViewController = VocaBookSelectViewController()
+    private var vocaBookData = VocaBookData()
     
-    private let vocaModalVC: VocaModalViewController = {
+    private let vocaModalViewController: VocaModalViewController = {
         let viewController = VocaModalViewController()
         viewController.modalPresentationStyle = .automatic
         viewController.view.backgroundColor = .none
@@ -25,6 +28,7 @@ final class VocaMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        fetchVocaBookData()
         bindViewEvents()
     }
     
@@ -37,13 +41,27 @@ final class VocaMainViewController: UIViewController {
         
     }
     
+    private func fetchVocaBookData() {
+        vocaMainViewModel.vocaBookSubject.subscribe(onNext: { vocaBookData in
+
+            self.vocaBookData = vocaBookData
+            
+            if let vocaBookTitle = vocaBookData.title {
+                self.vocaMainView.vocaBookSelectButton.setTitle(vocaBookTitle, for: .normal)
+            } else {
+                self.vocaMainView.vocaBookSelectButton.setTitle("단어장을 생성해 주세요 >", for: .normal)
+            }
+            
+        }).disposed(by: disposeBag)
+    }
+    
     private func bindViewEvents() {
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
             switch action {
             case .vocaBookSelect:
-                self.navigationController?.pushViewController(self.vocaBookSelectVC, animated: true)
+                self.navigationController?.pushViewController(self.vocaBookSelectViewController, animated: true)
             case .makeVoca:
-                self.present(self.vocaModalVC, animated: true)
+                self.present(self.vocaModalViewController, animated: true)
             }
         }).disposed(by: disposeBag)
         
@@ -51,11 +69,10 @@ final class VocaMainViewController: UIViewController {
     
 }
 
-//TODO: MVVM에 맞게 로직 변경
 extension VocaMainViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -65,6 +82,7 @@ extension VocaMainViewController: UITableViewDataSource {
         }
         
         cell.configureCell()
+        
         return cell
     }
 }

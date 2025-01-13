@@ -2,7 +2,7 @@
 //  VocaMainView.swift
 //  VocaVocca
 //
-//  Created by t2023-m0072 on 1/9/25.
+//  Created by 안준경 on 1/9/25.
 //
 
 import UIKit
@@ -18,6 +18,7 @@ enum buttonAction {
 final class VocaMainView: UIView {
     
     let buttonTapRelay = PublishRelay<buttonAction>()
+    let vocaBookTitleRelay = PublishRelay<Void>()
     private let disposeBag = DisposeBag()
     
     private let titleLable: UILabel = {
@@ -34,7 +35,7 @@ final class VocaMainView: UIView {
         return image
     }()
     
-    private let vocaBookSelectButton: UIButton = {
+    let vocaBookSelectButton: UIButton = {
         let button = UIButton()
         button.setTitle("단어장을 선택해 주세요 >", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .heavy)
@@ -87,7 +88,8 @@ final class VocaMainView: UIView {
         
         vocaBookSelectButton.snp.makeConstraints {
             $0.top.equalTo(titleLable.snp.bottom).offset(30)
-            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.leading.equalToSuperview().inset(30)
+            $0.width.equalTo(vocaBookSelectButton.intrinsicContentSize)//텍스트 길이만큼 넓이 설정
         }
         
         vocaTableView.snp.makeConstraints {
