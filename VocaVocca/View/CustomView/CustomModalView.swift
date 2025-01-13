@@ -7,8 +7,15 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 class CustomModalView: UIView {
+    
+    // MARK: - Properties
+    
+    private let disposeBag = DisposeBag()
+    var vocaBookViewModel: VocaBookModalViewModel?
     
     // MARK: - UI Components
     
