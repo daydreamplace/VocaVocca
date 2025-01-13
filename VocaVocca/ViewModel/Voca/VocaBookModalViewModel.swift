@@ -21,6 +21,9 @@ struct VocaBook {
 
 class VocaBookModalViewModel {
     
+    private let coreDataManager = CoreDataManager.shared
+    private let disposeBag = DisposeBag()
+    
     // MARK: - Input
     
     let vocaBookTitle = BehaviorRelay<String>(value: "")
@@ -64,16 +67,40 @@ class VocaBookModalViewModel {
     func handleSaveOrEdit() {
         guard let language = selectedLanguage.value, !vocaBookTitle.value.isEmpty else { return }
         
-        let vocaBook = VocaBook(title: vocaBookTitle.value, language: language)
-        
         if mode == .create {
-            // TODO: - Core Data 단어장 추가
-            
-            print("단어장을 추가: \(vocaBook)")
+            // Core Data 단어장 추가
+            coreDataManager.createVocaBookData(title: vocaBookTitle.value)
+                .subscribe(
+                    onCompleted: {
+                        print("단어장을 추가: \(self.vocaBookTitle.value)")
+                    },
+                    onError: { error in
+                        print("단어장 추가 실패: \(error)")
+                    }
+                ).disposed(by: disposeBag)
         } else {
-            // TODO: - Core Data 단어장 추가
-            
-            print("단어장을 수정: \(vocaBook)")
+            // Core Data 단어장 수정
+            coreDataManager.fetchVocaBookData()
+                .flatMap { books -> Observable<VocaBookData?> in
+                    let bookToEdit = books.first { $0.title == self.vocaBookTitle.value }
+                    return Observable.just(bookToEdit)
+                }
+                .compactMap { $0 }
+                .flatMap { bookToEdit -> Observable<Void> in
+                    return self.coreDataManager.updateVocaBookData(vocaBook: bookToEdit, newTitle: self.vocaBookTitle.value)
+                        .andThen(Observable.just(()))
+                }
+                .subscribe(
+                    onNext: { _ in
+                        print("단어장을 수정: \(self.vocaBookTitle.value)")
+                    },
+                    onError: { error in
+                        print("단어장 수정 실패: \(error)")
+                    },
+                    onCompleted: {
+                        print("단어장 수정 완료")
+                    }
+                ).disposed(by: disposeBag)
         }
     }
 }
