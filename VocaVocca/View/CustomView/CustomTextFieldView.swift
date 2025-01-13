@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import RxSwift
 
 class CustomTextFieldView: UIView {
     
@@ -22,7 +21,7 @@ class CustomTextFieldView: UIView {
     
     let textField: UITextField = {
         let field = UITextField()
-        field.borderStyle = .none
+        field.borderStyle = .roundedRect
         field.font = UIFont.systemFont(ofSize: 14)
         field.textColor = .black
         field.layer.borderWidth = 1
@@ -32,10 +31,7 @@ class CustomTextFieldView: UIView {
         return field
     }()
     
-    var text: String? {
-        get { return textField.text }
-        set { textField.text = newValue }
-    }
+    var didEndEditing: ((String) -> Void)?
     
     // MARK: - Initialization
     
@@ -65,18 +61,18 @@ class CustomTextFieldView: UIView {
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(40)
-        }
-        
-        self.snp.makeConstraints {
-            $0.height.greaterThanOrEqualTo(60)
+            $0.bottom.equalToSuperview()
         }
     }
     
     // MARK: - Update Method
     
-    /// 텍스트 필드의 제목 및 플레이스홀더를 동적으로 업데이트
     func update(title: String, placeholder: String) {
         titleLabel.text = title
+        textField.placeholder = placeholder
+    }
+    
+    func updatePlaceholder(_ placeholder: String) {
         textField.placeholder = placeholder
     }
 }
@@ -90,5 +86,9 @@ extension CustomTextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layer.borderColor = UIColor.lightGray.cgColor
+        
+        if let text = textField.text, !text.isEmpty {
+            didEndEditing?(text) // 편집 완료 시 콜백 실행
+        }
     }
 }

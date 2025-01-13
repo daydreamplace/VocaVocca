@@ -49,4 +49,3 @@ class VocaMainViewModel {
             }).disposed(by: disposeBag)
     }
 }
-

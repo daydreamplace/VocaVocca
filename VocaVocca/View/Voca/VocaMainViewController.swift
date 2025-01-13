@@ -17,7 +17,8 @@ final class VocaMainViewController: UIViewController {
     private var vocaBookData = VocaBookData()
     
     private let vocaModalViewController: VocaModalViewController = {
-        let viewController = VocaModalViewController()
+        let viewModel = VocaModalViewModel()
+        let viewController = VocaModalViewController(viewModel: viewModel)
         viewController.modalPresentationStyle = .automatic
         viewController.view.backgroundColor = .none
         return viewController
@@ -28,7 +29,7 @@ final class VocaMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        fetchVocaBookData()
+//        fetchVocaBookData()
         bindViewEvents()
     }
     
@@ -38,22 +39,21 @@ final class VocaMainViewController: UIViewController {
         vocaMainView.vocaTableView.dataSource = self
         vocaMainView.vocaTableView.rowHeight = 160
         vocaMainView.vocaTableView.separatorStyle = .none
-        
     }
     
-    private func fetchVocaBookData() {
-        vocaMainViewModel.vocaBookSubject.subscribe(onNext: { vocaBookData in
-
-            self.vocaBookData = vocaBookData
-            
-            if let vocaBookTitle = vocaBookData.title {
-                self.vocaMainView.vocaBookSelectButton.setTitle(vocaBookTitle, for: .normal)
-            } else {
-                self.vocaMainView.vocaBookSelectButton.setTitle("단어장을 생성해 주세요 >", for: .normal)
-            }
-            
-        }).disposed(by: disposeBag)
-    }
+//    private func fetchVocaBookData() {
+//        vocaMainViewModel.vocaBookSubject.subscribe(onNext: { vocaBookData in
+//
+//            self.vocaBookData = vocaBookData
+//            
+//            if let vocaBookTitle = vocaBookData.title {
+//                self.vocaMainView.vocaBookSelectButton.setTitle(vocaBookTitle, for: .normal)
+//            } else {
+//                self.vocaMainView.vocaBookSelectButton.setTitle("단어장을 생성해 주세요 >", for: .normal)
+//            }
+//            
+//        }).disposed(by: disposeBag)
+//    }
     
     private func bindViewEvents() {
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
@@ -66,7 +66,6 @@ final class VocaMainViewController: UIViewController {
         }).disposed(by: disposeBag)
         
     }
-    
 }
 
 extension VocaMainViewController: UITableViewDataSource {
@@ -86,5 +85,4 @@ extension VocaMainViewController: UITableViewDataSource {
         return cell
     }
 }
-
 
