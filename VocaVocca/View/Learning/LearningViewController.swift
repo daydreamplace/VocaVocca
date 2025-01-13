@@ -23,6 +23,7 @@ final class LearningViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpNaviBar()
+        viewModel.addTestVocaBooks()
         bind()
     }
     
@@ -60,9 +61,10 @@ final class LearningViewController: UIViewController {
                 cell.vocaCountLabel.text = "\(item.words?.count ?? 0) 개"
             }.disposed(by: disposeBag)
         
-        learningView.collectionView.rx.itemSelected
-            .subscribe(onNext: { [weak self] indexPath in
-                self?.viewModel.changeIndex(indexPath.item)
+        // 선택된 셀 데이터
+        learningView.collectionView.rx.modelSelected(VocaBookData.self)
+            .subscribe(onNext: { [weak self] selectedBook in
+                self?.viewModel.selectedVocaBook = selectedBook
             })
             .disposed(by: disposeBag)
         
@@ -71,15 +73,14 @@ final class LearningViewController: UIViewController {
             .subscribe(onNext: { [weak self] in
                 self?.navigateToFlashCard()
             })
-            .disposed(by: disposeBag)///ㅇ
+            .disposed(by: disposeBag)
     }
     
     private func navigateToFlashCard() {
-        viewModel.addTestVocaBooks()
-        let data = viewModel.getData()
+        guard let selectedBook = self.viewModel.selectedVocaBook else { return }
         
-        let flashCardVM = FlashcardViewModel(data: data)
+        let flashCardVM = FlashcardViewModel(data: selectedBook)
         let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
-        navigationController?.pushViewController(flashcardVC, animated: true)
-      }
+        self.navigationController?.pushViewController(flashcardVC, animated: true)
+    }
 }
