@@ -33,13 +33,6 @@ class CustomCardView: UIView {
         return label
     }()
     
-    let removeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "trash"), for: .normal)
-        button.tintColor = .gray
-        return button
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -50,7 +43,7 @@ class CustomCardView: UIView {
     }
     
     private func setupUI() {
-        cardBackgroundView.addSubviews(wordLabel, meanLabel, removeButton)
+        cardBackgroundView.addSubviews(wordLabel, meanLabel)
         addSubview(cardBackgroundView)
                 
         cardBackgroundView.snp.makeConstraints {
@@ -68,11 +61,6 @@ class CustomCardView: UIView {
         meanLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(40)
             $0.trailing.equalTo(cardBackgroundView.snp.trailing).inset(20)
-        }
-        
-        removeButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(20)
-            $0.trailing.equalToSuperview().inset(20)
         }
     }
     

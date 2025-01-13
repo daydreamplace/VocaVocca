@@ -10,13 +10,13 @@ import SnapKit
 
 final class RecordView: UIView {
     
-    private let correctView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.borderWidth = 1
-        view.layer.cornerRadius = 10
-        view.clipsToBounds = true
-        return view
+    private let correctButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 10
+        button.clipsToBounds = true
+        return button
     }()
     
     private let correctLabel: UILabel = {
@@ -36,13 +36,13 @@ final class RecordView: UIView {
         return label
     }()
     
-    private let incorrectView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.borderWidth = 1
-        view.layer.cornerRadius = 10
-        view.clipsToBounds = true
-        return view
+    private let incorrectButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = .white
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 10
+        button.clipsToBounds = true
+        return button
     }()
     
     private let incorrectLabel: UILabel = {
@@ -72,11 +72,11 @@ final class RecordView: UIView {
     }
     
     private func setupUI() {
-        correctView.addSubviews(correctLabel, correctCountLabel)
-        incorrectView.addSubviews(incorrectLabel, incorrectCountLabel)
-        addSubviews(correctView, incorrectView)
+        correctButton.addSubviews(correctLabel, correctCountLabel)
+        incorrectButton.addSubviews(incorrectLabel, incorrectCountLabel)
+        addSubviews(correctButton, incorrectButton)
         
-        correctView.snp.makeConstraints {
+        correctButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(30)
             $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(80)
             $0.height.equalTo(160)
@@ -92,9 +92,9 @@ final class RecordView: UIView {
             $0.centerX.equalToSuperview()
         }
         
-        incorrectView.snp.makeConstraints {
+        incorrectButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.top.equalTo(correctView.snp.bottom).offset(60)
+            $0.top.equalTo(correctButton.snp.bottom).offset(60)
             $0.height.equalTo(160)
         }
         
@@ -108,4 +108,17 @@ final class RecordView: UIView {
             $0.centerX.equalToSuperview()
         }
     }
+    
+    // MARK: - Button Actions
+    
+    func addCorrectButtonAction(target: Any, action: Selector) {
+        correctButton.addTarget(target, action: action, for: .touchUpInside)
+
+    }
+    
+    func addIncorrectButtonAction(target: Any, action: Selector) {
+        incorrectButton.addTarget(target, action: action, for: .touchUpInside)
+        
+    }
 }
+
