@@ -19,27 +19,24 @@ final class LearningViewCell: UICollectionViewCell {
         }
     }
     
-    private let tagView: CustomTagView = {
+    let tagView: CustomTagView = {
         let view = CustomTagView()
-        view.setTagView(layerColor: UIColor.customBrown, label: "영어", textColor: UIColor.customBrown)
         return view
     }()
     
-    private let vocaBookLabel: UILabel = {
+    let vocaBookLabel: UILabel = {
         let label = UILabel()
         label.textColor = .customBlack
         label.font = .systemFont(ofSize: 16, weight: .bold)
         label.numberOfLines = 1
-        label.text = "단어장"
         label.textAlignment = .center
         return label
     }()
     
-    private let vocaCountLabel: UILabel = {
+    let vocaCountLabel: UILabel = {
         let label = UILabel()
         label.textColor = .gray
         label.font = .systemFont(ofSize: 12, weight: .semibold)
-        label.text = "14개"
         label.textAlignment = .right
         return label
     }()
