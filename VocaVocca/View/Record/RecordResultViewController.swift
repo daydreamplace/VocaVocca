@@ -20,20 +20,40 @@ final class RecordResultViewController: UIViewController {
     }
     
     private func setup() {
-        view = correctWordsView // 기본적으로 맞은 단어 뷰를 표시
+        view.backgroundColor = .white
+        
+        view.addSubview(correctWordsView)
+        view.addSubview(incorrectWordsView)
+        
+        // 제약 조건 설정
+        correctWordsView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        incorrectWordsView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        // 데이터 소스 설정
         correctWordsView.tableView.dataSource = self
         incorrectWordsView.tableView.dataSource = self
         
+        // 셀 등록
         correctWordsView.tableView.register(RecordResultViewCell.self, forCellReuseIdentifier: RecordResultViewCell.id)
         incorrectWordsView.tableView.register(RecordResultViewCell.self, forCellReuseIdentifier: RecordResultViewCell.id)
+        
     }
     
     func showCorrectWords() {
-        view = correctWordsView
+        self.correctWordsView.isHidden = false
+        self.incorrectWordsView.isHidden = true
+        correctWordsView.tableView.reloadData()
     }
     
     func showIncorrectWords() {
-        view = incorrectWordsView
+        self.correctWordsView.isHidden = true
+        self.incorrectWordsView.isHidden = false
+        incorrectWordsView.tableView.reloadData()
     }
 }
 
@@ -49,8 +69,8 @@ extension RecordResultViewController: UITableViewDataSource {
         
         let isCorrect = tableView == correctWordsView.tableView
         cell.configureCell(isCorrect: isCorrect)
-        cell.cardView.meanLabel.text = "검정색"
-        cell.cardView.wordLabel.text = "black"
+        cell.cardView.meanLabel.text = isCorrect ? "검정색" : "파란색"
+        cell.cardView.wordLabel.text = isCorrect ? "black" : "blue"
         
         return cell
     }

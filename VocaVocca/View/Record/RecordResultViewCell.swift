@@ -53,7 +53,7 @@ class RecordResultViewCell: UITableViewCell {
     
     func configureCell(isCorrect: Bool) {
         let statusText = isCorrect ? "정답" : "오답"
-        let statusColor = isCorrect ? UIColor.systemGreen : UIColor.systemRed
+        let statusColor = isCorrect ? UIColor.systemBlue : UIColor.systemRed
         
         // 정답/오답 태그 설정
         statusTag.setTagView(layerColor: statusColor, label: statusText, textColor: .white)
