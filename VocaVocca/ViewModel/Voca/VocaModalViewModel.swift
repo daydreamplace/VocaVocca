@@ -9,16 +9,6 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-
-// TODO: - 삭제
-struct TranslationResponse: Decodable {
-    let translations: [Translation]
-    
-    struct Translation: Decodable {
-        let translatedText: String
-    }
-}
-
 class VocaModalViewModel {
     
     // MARK: - Input
@@ -74,8 +64,8 @@ class VocaModalViewModel {
         return networkManager
             .fetch(customURLComponents: .translation(text: word, lang: .english))
             .asObservable()
-            .map { (response: TranslationResponse) in
-                response.translations.first?.translatedText ?? "번역 실패"
+            .map { (response: TranslationsResponse) in
+                response.translations.first?.text ?? "번역 실패"
             }
             .catchAndReturn("번역 실패")
     }
@@ -102,11 +92,6 @@ class VocaModalViewModel {
     }
     
     func handleSave() {
-        //        guard let vocaBook = selectedVocaBook.value, !word.value.isEmpty, !meaning.value.isEmpty else {
-        //            print("입력값이 부족합니다.")
-        //            return
-        //        }
-        
         print("111", testData)
         guard let vocaBooktestData = testData.first else { return }
         
