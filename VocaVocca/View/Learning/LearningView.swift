@@ -10,15 +10,6 @@ import SnapKit
 
 final class LearningView: UIView {
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.textColor = .black
-        label.textAlignment = .center
-        label.text = "플래시 카드"
-        return label
-    }()
-    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -37,7 +28,7 @@ final class LearningView: UIView {
         return collectionView
     }()
     
-    lazy var startButton: CustomButton = {
+    let startButton: CustomButton = {
         let button = CustomButton(title: "시작하기")
         return button
     }()
@@ -53,13 +44,7 @@ final class LearningView: UIView {
     }
     
     private func setupUI() {
-        addSubviews(titleLabel, collectionView, startButton)
-        
-        ///TODO - 타이틀 네비바로 할지 고민
-        titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(60)
-            $0.centerX.equalToSuperview()
-        }
+        addSubviews(collectionView, startButton)
         
         collectionView.snp.makeConstraints {
             $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide)

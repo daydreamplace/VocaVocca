@@ -7,10 +7,14 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class LearningViewController: UIViewController {
     
     private let learningView = LearningView()
+    private let disposeBag = DisposeBag()
+    private let viewModel = LearningViewModel()
     
     override func loadView() {
         self.view = learningView
@@ -18,45 +22,66 @@ final class LearningViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionView()
-        setupActions()
+        setUpNaviBar()
+        bind()
     }
     
-    private func setupCollectionView() {
-        learningView.collectionView.dataSource = self
-        learningView.collectionView.delegate = self
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
     }
     
-    ///TODO - 뷰에 있는 버튼 로직 처리
-    private func setupActions() {
-        learningView.startButton.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
+    // 네비바 설정
+    private func setUpNaviBar() {
+        title = "플래시 카드"
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = nil
+        
+        navigationController?.navigationBar.tintColor = .customBlack
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.compactAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
+    // 테이블 뷰에 데이터 바인딩
+    private func bind() {
+        viewModel.vocaBookSubject
+            .observe(on: MainScheduler.instance)
+            .bind(to: learningView.collectionView.rx.items(cellIdentifier: LearningViewCell.id, cellType: LearningViewCell.self)) {
+                index, item, cell in
+                
+                cell.vocaBookLabel.text = item.title
+                
+                /// TODO - 태그 언어 관련 고민
+                cell.tagView.setTagView(layerColor: UIColor.customBrown, label: "영어", textColor: UIColor.customBrown)
+                cell.vocaCountLabel.text = "\(item.words?.count ?? 0) 개"
+            }.disposed(by: disposeBag)
+        
+        // 버튼 액션 바인딩
+        learningView.startButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.startButtonTapped()
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func startButtonTapped() {
+        // 테스트 데이터 생성
+        viewModel.addTestVocaBooks()
         // 플래시카드뷰 띄우기
         let flashcardVC = FlashcardViewController()
-        flashcardVC.modalPresentationStyle = .fullScreen
-        present(flashcardVC, animated: false)
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension LearningViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 23
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LearningViewCell.id, for: indexPath) as? LearningViewCell else {
-            return UICollectionViewCell()
-        }
-        return cell
+        navigationController?.pushViewController(flashcardVC, animated: true)
     }
 }
 
 // MARK: - UICollectionViewDelegate
 
 extension LearningViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        /// TODO - 선택된 셀 (단어장) 데이터 flashCardVM 으로 넘기기
+    }
 }
