@@ -45,24 +45,28 @@ class VocaModalViewModel {
         // 화면 타이틀과 버튼 텍스트 설정
         title = Observable.just("새로운 단어 만들기")
         buttonTitle = Observable.just("추가하기")
+        
+        // 단어 입력 시 meaning 플레이스홀더 업데이트
+        bindMeaningToPlaceholder()
     }
     
-    // 네트워크 매니저
     private func bindMeaningToPlaceholder() {
         word
             .distinctUntilChanged()
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance) // 입력 간 딜레이
             .flatMapLatest { [weak self] word -> Observable<String> in
                 guard let self = self, !word.isEmpty else {
-                    return Observable.just("")
+                    return Observable.just("") // 빈 값 처리
                 }
                 return self.fetchTranslation(for: word)
             }
+            .observe(on: MainScheduler.instance)
             .bind(to: meaning)
             .disposed(by: disposeBag)
     }
     
-    private func fetchTranslation(for word: String) -> Observable<String> {
+    // 네트워크 매니저
+    func fetchTranslation(for word: String) -> Observable<String> {
         return networkManager
             .fetch(customURLComponents: .translation(text: word, lang: .english))
             .asObservable()

@@ -23,6 +23,7 @@ class VocaModalViewController: UIViewController {
         label.text = "단어장을 선택해 주세요 >"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .customBrown
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -46,6 +47,7 @@ class VocaModalViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         bindViewModel()
+        setupActions()
     }
     
     // MARK: - Setup
@@ -64,24 +66,22 @@ class VocaModalViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        // 제목과 버튼 텍스트 바인딩
-        viewModel.title
-            .bind(to: modalView.titleLabel.rx.text)
-            .disposed(by: disposeBag)
+        // 단어 입력 텍스트 필드 바인딩
+        wordTextFieldView.didEndEditing = { [weak self] text in
+            self?.viewModel.word.accept(text)
+            self?.viewModel.fetchTranslation(for: text)
+                .observe(on: MainScheduler.instance)
+                .subscribe(onNext: { [weak self] translation in
+                    self?.meaningTextFieldView.textField.placeholder = translation
+                })
+                .disposed(by: self?.disposeBag ?? DisposeBag())
+        }
         
-        viewModel.buttonTitle
-            .bind { [weak self] title in
-                self?.modalView.confirmButton.setTitle(title, for: .normal)
+        // 뜻 텍스트 필드의 플레이스홀더 업데이트
+        viewModel.meaning
+            .bind { [weak self] meaning in
+                self?.meaningTextFieldView.updatePlaceholder(meaning)
             }
-            .disposed(by: disposeBag)
-        
-        // 텍스트 필드 바인딩
-        wordTextFieldView.textField.rx.text.orEmpty
-            .bind(to: viewModel.word)
-            .disposed(by: disposeBag)
-        
-        meaningTextFieldView.textField.rx.text.orEmpty
-            .bind(to: viewModel.meaning)
             .disposed(by: disposeBag)
         
         // 저장 버튼 활성화 상태
@@ -95,5 +95,16 @@ class VocaModalViewController: UIViewController {
                 self?.viewModel.handleSave()
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func setupActions() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(selectVocaBook))
+        selectVocaLabel.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func selectVocaBook() {
+        let vocaBookSelectVC = VocaBookSelectViewController()
+        let navController = UINavigationController(rootViewController: vocaBookSelectVC)
+        present(navController, animated: true, completion: nil)
     }
 }

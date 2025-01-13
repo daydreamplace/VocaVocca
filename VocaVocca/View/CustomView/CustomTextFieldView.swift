@@ -71,19 +71,24 @@ class CustomTextFieldView: UIView {
         titleLabel.text = title
         textField.placeholder = placeholder
     }
+    
+    func updatePlaceholder(_ placeholder: String) {
+        textField.placeholder = placeholder
+    }
 }
 
 // MARK: - UITextFieldDelegate
 
 extension CustomTextFieldView: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        
-        print("Editing started")
         textField.layer.borderColor = UIColor.customDarkerBrown.cgColor
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        didEndEditing?(textField.text ?? "")
+        
+        if let text = textField.text, !text.isEmpty {
+            didEndEditing?(text) // 편집 완료 시 콜백 실행
+        }
     }
 }
