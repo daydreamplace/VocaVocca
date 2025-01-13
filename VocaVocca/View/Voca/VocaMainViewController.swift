@@ -8,14 +8,22 @@
 import UIKit
 import RxSwift
 
-class VocaMainViewController: UIViewController {
+final class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
+    private let vocaBookSelectVC = VocaBookSelectViewController()
+    
+    private let vocaModalVC: VocaModalViewController = {
+        let viewController = VocaModalViewController()
+        viewController.modalPresentationStyle = .automatic
+        viewController.view.backgroundColor = .none
+        return viewController
+    }()
+
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setup()
         bindViewEvents()
     }
@@ -30,12 +38,14 @@ class VocaMainViewController: UIViewController {
     }
     
     private func bindViewEvents() {
-        
-        vocaMainView.buttonTapRelay.subscribe(onNext: { [weak self] in
-            self?.navigationController?.pushViewController(VocaBookSelectViewController(), animated: true)
+        vocaMainView.buttonTapRelay.subscribe(onNext: { action in
+            switch action {
+            case .vocaBookSelect:
+                self.navigationController?.pushViewController(self.vocaBookSelectVC, animated: true)
+            case .makeVoca:
+                self.present(self.vocaModalVC, animated: true)
+            }
         }).disposed(by: disposeBag)
-        
-        
         
     }
     

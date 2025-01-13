@@ -10,12 +10,17 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-class VocaMainView: UIView {
+enum buttonAction {
+    case vocaBookSelect
+    case makeVoca
+}
+
+final class VocaMainView: UIView {
     
-    let buttonTapRelay = PublishRelay<Void>()
-    let disposeBag = DisposeBag()
-            
-    let titleLable: UILabel = {
+    let buttonTapRelay = PublishRelay<buttonAction>()
+    private let disposeBag = DisposeBag()
+    
+    private let titleLable: UILabel = {
         let label = UILabel()
         label.text = "보카볶아"
         label.font = .systemFont(ofSize: 24, weight: .heavy)
@@ -23,13 +28,13 @@ class VocaMainView: UIView {
         return label
     }()
     
-    let logoImageView: UIImageView = {
+    private let logoImageView: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "logoImage")
         return image
     }()
     
-    let vocaBookSelectButton: UIButton = {
+    private let vocaBookSelectButton: UIButton = {
         let button = UIButton()
         button.setTitle("단어장을 선택해 주세요 >", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .heavy)
@@ -45,10 +50,21 @@ class VocaMainView: UIView {
         return tableView
     }()
     
+    private let makeVocaButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("+", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 30, weight: .light)
+        button.backgroundColor = UIColor.customDarkBrown
+        button.layer.cornerRadius = 30
+        button.clipsToBounds = true
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        buttonBind()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -56,7 +72,7 @@ class VocaMainView: UIView {
     }
     
     private func setupUI() {
-        addSubviews(titleLable, logoImageView, vocaBookSelectButton, vocaTableView)
+        addSubviews(titleLable, logoImageView, vocaBookSelectButton, vocaTableView, makeVocaButton)
         
         titleLable.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide.snp.top)
@@ -79,10 +95,21 @@ class VocaMainView: UIView {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
+        
+        makeVocaButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.trailing.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.width.height.equalTo(60)
+        }
     }
     
-    func buttonBind() {
+    private func bind() {
         vocaBookSelectButton.rx.tap
+            .map { buttonAction.vocaBookSelect }
+            .bind(to: buttonTapRelay).disposed(by: disposeBag)
+        
+        makeVocaButton.rx.tap
+            .map { buttonAction.makeVoca }
             .bind(to: buttonTapRelay).disposed(by: disposeBag)
     }
 }
