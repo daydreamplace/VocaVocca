@@ -127,6 +127,12 @@ class VocaBookModalViewController: UIViewController {
         viewModel.isSaveEnabled
             .bind(to: modalView.confirmButton.rx.isEnabled)
             .disposed(by: disposeBag)
+        
+        modalView.confirmButton.rx.tap
+            .bind { [weak self] in
+                self?.viewModel.handleSaveOrEdit()
+            }
+            .disposed(by: disposeBag)
     }
     
     @objc private func languageButtonTapped(_ sender: UIButton) {
