@@ -6,8 +6,14 @@
 //
 
 import UIKit
+import SnapKit
+import RxCocoa
+import RxSwift
 
 class VocaMainView: UIView {
+    
+    let buttonTapRelay = PublishRelay<Void>()
+    let disposeBag = DisposeBag()
             
     let titleLable: UILabel = {
         let label = UILabel()
@@ -23,12 +29,14 @@ class VocaMainView: UIView {
         return image
     }()
     
-    let vocaBookSelectLabel: UILabel = {
-        let label = UILabel()
-        label.text = "단어장을 선택해 주세요 >"
-        label.font = .systemFont(ofSize: 18, weight: .heavy)
-        label.textColor = UIColor.customDarkBrown
-        return label
+    let vocaBookSelectButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("단어장을 선택해 주세요 >", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .heavy)
+        button.setTitleColor(UIColor.customDarkBrown, for: .normal)
+        button.backgroundColor = .none
+        button.contentHorizontalAlignment = .left
+        return button
     }()
     
     let vocaTableView: UITableView = {
@@ -40,6 +48,7 @@ class VocaMainView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        buttonBind()
     }
     
     required init?(coder: NSCoder) {
@@ -47,7 +56,7 @@ class VocaMainView: UIView {
     }
     
     private func setupUI() {
-        addSubviews(titleLable, logoImageView, vocaBookSelectLabel, vocaTableView)
+        addSubviews(titleLable, logoImageView, vocaBookSelectButton, vocaTableView)
         
         titleLable.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide.snp.top)
@@ -60,16 +69,21 @@ class VocaMainView: UIView {
             $0.width.height.equalTo(30)
         }
         
-        vocaBookSelectLabel.snp.makeConstraints {
+        vocaBookSelectButton.snp.makeConstraints {
             $0.top.equalTo(titleLable.snp.bottom).offset(30)
-            $0.leading.equalToSuperview().inset(30)
+            $0.leading.trailing.equalToSuperview().inset(30)
         }
         
         vocaTableView.snp.makeConstraints {
-            $0.top.equalTo(vocaBookSelectLabel.snp.bottom).offset(50)
+            $0.top.equalTo(vocaBookSelectButton.snp.bottom).offset(50)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
+    }
+    
+    func buttonBind() {
+        vocaBookSelectButton.rx.tap
+            .bind(to: buttonTapRelay).disposed(by: disposeBag)
     }
 }
 

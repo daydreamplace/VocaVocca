@@ -11,11 +11,13 @@ import RxSwift
 class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         setup()
+        bindViewEvents()
     }
     
     private func setup() {
@@ -24,6 +26,16 @@ class VocaMainViewController: UIViewController {
         vocaMainView.vocaTableView.dataSource = self
         vocaMainView.vocaTableView.rowHeight = 160
         vocaMainView.vocaTableView.separatorStyle = .none
+        
+    }
+    
+    private func bindViewEvents() {
+        
+        vocaMainView.buttonTapRelay.subscribe(onNext: { [weak self] in
+            self?.navigationController?.pushViewController(VocaBookSelectViewController(), animated: true)
+        }).disposed(by: disposeBag)
+        
+        
         
     }
     
