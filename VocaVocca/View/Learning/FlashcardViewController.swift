@@ -15,10 +15,19 @@ class FlashcardViewController: UIViewController {
     // MARK: - UI 컴포넌트
     
     let flashcardView = FlashcardView()
-    let flashcardViewModel = FlashcardViewModel()
+    let flashcardViewModel: FlashcardViewModel
     let disposeBag = DisposeBag()
     
     // MARK: - 생명주기 메서드
+    
+    init(viewModel: FlashcardViewModel) {
+        self.flashcardViewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = flashcardView
@@ -39,20 +48,54 @@ class FlashcardViewController: UIViewController {
     // MARK: - bind
     
     private func bind() {
-        flashcardViewModel.subject
+        flashcardViewModel.isCoachMarkDisabled
             .filter { $0 == false }
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 self.connectModal()
-                
             })
             .disposed(by: disposeBag)
-        flashcardViewModel.isCoachMarkDisabled()
+        
+        flashcardViewModel.currentVoca
+            .map { $0?.word }
+            .bind(to: flashcardView.wordLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        flashcardViewModel.currentIndex
+            .map { "\($0 + 1)" }
+            .bind(to: flashcardView.countLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        flashcardViewModel.totalVocaCount
+            .map { "\($0)" }
+            .bind(to: flashcardView.totalCountLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        flashcardViewModel.isLastVoca
+            .filter { $0 }
+            .bind { [weak self] _ in
+                print("마지막 단어") // 수정 필요
+            }
+            .disposed(by: disposeBag)
         
         flashcardView.closeButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
                 self.closeButtonTapped()
+            }
+            .disposed(by: disposeBag)
+                
+        flashcardView.gotItButton.rx.tap
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                self.flashcardViewModel.markWordAsCorrect()
+            }
+            .disposed(by: disposeBag)
+        
+        flashcardView.notYetButton.rx.tap
+            .bind { [weak self] _ in
+                guard let self = self else { return }
+                self.flashcardViewModel.markWordsAsIncorrect()
             }
             .disposed(by: disposeBag)
     }
