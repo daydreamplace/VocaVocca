@@ -8,12 +8,6 @@
 import Foundation
 import RxSwift
 
-
-struct LearningResult {
-    let correctCount: Int
-    let IncorrectCount: Int
-}
-
 class FlashcardViewModel {
     
     let isCoachMarkDisabled = BehaviorSubject(value: false) // 사용자가 코치마크를 비활성화했는지 여부
