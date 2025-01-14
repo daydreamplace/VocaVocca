@@ -96,6 +96,8 @@ class FlashcardViewController: UIViewController {
         flashcardView.gotItButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
+                UIView.transition(with: self.flashcardView.flashcardView, duration: 0.5, options: .transitionFlipFromRight, animations: {})
+
                 self.flashcardViewModel.markWordAsCorrect()
             }
             .disposed(by: disposeBag)
@@ -104,6 +106,7 @@ class FlashcardViewController: UIViewController {
         flashcardView.notYetButton.rx.tap
             .bind { [weak self] _ in
                 guard let self = self else { return }
+                UIView.transition(with: self.flashcardView.flashcardView, duration: 0.5, options: .transitionFlipFromRight, animations: {})
                 self.flashcardViewModel.markWordsAsIncorrect()
             }
             .disposed(by: disposeBag)
@@ -112,7 +115,10 @@ class FlashcardViewController: UIViewController {
         flashcardView.flashcardView.rx
             .swipeGesture([.left, .right])
             .skip(2)
-            .delay(.milliseconds(200), scheduler: MainScheduler.instance)
+            .do(onNext: { [weak self] gesture in
+                guard let self = self else { return }
+                UIView.transition(with: self.flashcardView.flashcardView, duration: 0.5, options: .transitionFlipFromRight, animations: {})
+            })
             .bind { [weak self] gesture in
                 guard let self = self else { return }
                 if gesture.direction == .left {
