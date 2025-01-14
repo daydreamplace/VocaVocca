@@ -39,14 +39,12 @@ class VocaMainViewModel {
             .subscribe(onNext: { [weak self] vocaBookData in
                 
                 //TODO: 단어선택화면 구현시 수정 예정
-                let voca = vocaBookData.first!
+                guard let voca = vocaBookData.first else { return }
                 
                 if let wordsSet = voca.words as? Set<VocaData> {
                     let array = Array(wordsSet)
                     
                     self?.vocaBookSubject.onNext(array)
-                    
-                    
                 }
                 
             },onError: { error in
