@@ -54,7 +54,7 @@ class FlashcardView: UIView {
     }()
 
     // 플래시카드 뷰
-    private let flashcardView: UIView = {
+    let flashcardView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.cornerRadius = 30

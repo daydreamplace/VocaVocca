@@ -94,8 +94,8 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
-                print("Confirm button tapped")
                 self?.viewModel.handleSave()
+                self?.dismiss(animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
         
