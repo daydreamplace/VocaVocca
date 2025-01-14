@@ -16,7 +16,7 @@ class VocaMainViewModel {
     private let disposeBag = DisposeBag()
     private let manager = UserDefaultsManager()
     private var thisVocaBook = VocaBookData()
-
+    
     
     let selectedvocaBook = PublishSubject<VocaBookData>()
     let updateSubject = PublishSubject<Void>()
@@ -63,7 +63,17 @@ class VocaMainViewModel {
                 self?.vocaSubject.onNext(allVocaData)
                 
             },onError: { error in
-                self.vocaSubject.onError(error)
+                print(error)
             }).disposed(by: disposeBag)
     }
+    
+    
+    func removeVoca(vocaData: VocaData) {
+        coreData.deleteVocaData(voca: vocaData).subscribe(onCompleted: {
+            print("onCompleted")
+        }, onError: { error in
+            print(error)
+        }).disposed(by: disposeBag)
+    }
+    
 }

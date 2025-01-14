@@ -76,7 +76,7 @@ final class RecordView: UIView {
         
         correctButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(30)
-            $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(80)
+            $0.centerY.equalToSuperview().offset(-100)
             $0.height.equalTo(160)
         }
         

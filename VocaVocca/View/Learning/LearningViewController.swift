@@ -30,6 +30,7 @@ final class LearningViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         tabBarController?.tabBar.isHidden = false
+        viewModel.fetchVocaBookFromCoreData()
     }
     
     // 네비바 설정

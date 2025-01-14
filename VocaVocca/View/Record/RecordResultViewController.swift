@@ -36,6 +36,20 @@ final class RecordResultViewController: UIViewController {
         bindTableView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // 화면 전환을 자연스럽게 만들기 위한 CATransition 사용
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = .push
+        transition.subtype = .fromLeft
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        navigationController?.view.layer.add(transition, forKey: kCATransition)
+        navigationController?.popViewController(animated: false) // 기본 애니메이션 비활성화
+    }
+    
     private func setup() {
         view.backgroundColor = .white
         
@@ -65,6 +79,7 @@ final class RecordResultViewController: UIViewController {
                 cell.configureCell(isCorrect: true)
                 cell.cardView.wordLabel.text = word
                 cell.cardView.meanLabel.text = meaning
+                cell.selectionStyle = .none
             }
             .disposed(by: disposeBag)
         
@@ -75,6 +90,7 @@ final class RecordResultViewController: UIViewController {
                 cell.configureCell(isCorrect: false)
                 cell.cardView.wordLabel.text = word
                 cell.cardView.meanLabel.text = meaning
+                cell.selectionStyle = .none
             }
             .disposed(by: disposeBag)
     }
