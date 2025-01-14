@@ -33,10 +33,6 @@ class LearningViewModel {
     let navigateToFlashCard = PublishSubject<VocaBookData>()
     var data = [VocaBookData]()
     
-    init () {
-        fetchVocaBookFromCoreData()
-    }
-    
     // 보카북 상태 확인
     func handleVocaBookSelection() {
         // 선택된 보카북이 없으면 noSelect 방출
@@ -59,7 +55,7 @@ class LearningViewModel {
         return selectedBook.words?.count ?? 0 > 0
     }
     
-    private func fetchVocaBookFromCoreData () {
+    func fetchVocaBookFromCoreData () {
         CoreDataManager.shared.fetchVocaBookData()
             .subscribe(onNext: { [weak self] vocaBookData in
                 self?.vocaBookSubject.onNext(vocaBookData)
