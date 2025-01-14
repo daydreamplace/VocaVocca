@@ -69,7 +69,7 @@ class VocaBookModalViewModel {
         
         if mode == .create {
             // Core Data 단어장 추가
-            coreDataManager.createVocaBookData(title: vocaBookTitle.value)
+            coreDataManager.createVocaBookData(title: vocaBookTitle.value, language: "언어")
                 .subscribe(
                     onCompleted: {
                         print("단어장을 추가: \(self.vocaBookTitle.value)")
@@ -87,7 +87,7 @@ class VocaBookModalViewModel {
                 }
                 .compactMap { $0 }
                 .flatMap { bookToEdit -> Observable<Void> in
-                    return self.coreDataManager.updateVocaBookData(vocaBook: bookToEdit, newTitle: self.vocaBookTitle.value)
+                    return self.coreDataManager.updateVocaBookData(vocaBook: bookToEdit, newTitle: self.vocaBookTitle.value, newLanguage: "언어")
                         .andThen(Observable.just(()))
                 }
                 .subscribe(

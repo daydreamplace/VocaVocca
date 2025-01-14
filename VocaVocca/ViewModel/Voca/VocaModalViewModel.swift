@@ -59,7 +59,7 @@ class VocaModalViewModel {
     }
     
     func testVocaBook () -> Completable {
-        coreDataManager.createVocaBookData(title: "토익")
+        coreDataManager.createVocaBookData(title: "토익", language: "언어")
     }
     
     func fetchVocaBookFromCoreData() {
@@ -86,7 +86,7 @@ class VocaModalViewModel {
         let finalMeaning = meaning.value.isEmpty ? "값이 없어" : meaning.value
         
         print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(vocaBooktestData)")
-        coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, language: "EN", book: vocaBooktestData)
+        coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: vocaBooktestData)
             .subscribe(
                 onCompleted: {
                     print("단어가 성공적으로 추가되었습니다.")

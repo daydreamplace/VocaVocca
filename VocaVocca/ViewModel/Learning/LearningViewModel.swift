@@ -83,7 +83,7 @@ class LearningViewModel {
     
     // 테스트 단어장 생성
     private func createTestVocaBookData() -> Completable {
-        return CoreDataManager.shared.createVocaBookData(title: "테스트 단어장")
+        return CoreDataManager.shared.createVocaBookData(title: "테스트 단어장", language: "언어")
     }
     
     // 테스트 단어 추가
@@ -93,10 +93,10 @@ class LearningViewModel {
         }
         
         return Completable.zip(
-            CoreDataManager.shared.createVocaData(word: "apple", meaning: "사과", language: Language.english.koreanTitle, book: firstBook),
-            CoreDataManager.shared.createVocaData(word: "banana", meaning: "바나나", language: Language.english.koreanTitle, book: firstBook),
-            CoreDataManager.shared.createVocaData(word: "cat", meaning: "고양이", language: Language.english.koreanTitle, book: firstBook),
-            CoreDataManager.shared.createVocaData(word: "dog", meaning: "개", language: Language.english.koreanTitle, book: firstBook)
+            CoreDataManager.shared.createVocaData(word: "apple", meaning: "사과", book: firstBook),
+            CoreDataManager.shared.createVocaData(word: "banana", meaning: "바나나", book: firstBook),
+            CoreDataManager.shared.createVocaData(word: "cat", meaning: "고양이", book: firstBook),
+            CoreDataManager.shared.createVocaData(word: "dog", meaning: "개", book: firstBook)
         )
     }
     
