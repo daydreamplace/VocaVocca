@@ -14,7 +14,7 @@ class VocaBookSelectViewModel {
     private let disposeBag = DisposeBag()
     
     let vocaBookSubject = BehaviorSubject(value: [VocaBookData]())
-    var selectedVocaBook: VocaBookData?
+    var selectedVocaBook = PublishSubject<VocaBookData>()
     
     init() {
     }
@@ -26,5 +26,11 @@ class VocaBookSelectViewModel {
             }, onError: { error in
                 self.vocaBookSubject.onError(error)
             }).disposed(by: disposeBag)
+    }
+    
+    func test (_ vocaBookData: VocaBookData) {
+        selectedVocaBook.onNext(vocaBookData)
+        print("단어장 변경 ")
+        print(vocaBookData)
     }
 }

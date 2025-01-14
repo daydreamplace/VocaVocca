@@ -13,7 +13,7 @@ final class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
     private let vocaMainViewModel = VocaMainViewModel()
-    private let vocaBookSelectViewController = VocaBookSelectViewController()
+
     private var vocaBookData = VocaBookData()
     
     private let vocaModalViewController: VocaModalViewController = {
@@ -45,21 +45,24 @@ final class VocaMainViewController: UIViewController {
 //        vocaMainViewModel.vocaBookSubject.subscribe(onNext: { vocaBookData in
 //
 //            self.vocaBookData = vocaBookData
-//            
+//
 //            if let vocaBookTitle = vocaBookData.title {
 //                self.vocaMainView.vocaBookSelectButton.setTitle(vocaBookTitle, for: .normal)
 //            } else {
 //                self.vocaMainView.vocaBookSelectButton.setTitle("단어장을 생성해 주세요 >", for: .normal)
 //            }
-//            
+//
 //        }).disposed(by: disposeBag)
 //    }
     
     private func bindViewEvents() {
+        let vocaBookSelectViewModel = VocaBookSelectViewModel()
+        let vocaBookSelectViewController = VocaBookSelectViewController(viewModel: vocaBookSelectViewModel)
+        
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
             switch action {
             case .vocaBookSelect:
-                self.navigationController?.pushViewController(self.vocaBookSelectViewController, animated: true)
+                self.navigationController?.pushViewController(vocaBookSelectViewController, animated: true)
             case .makeVoca:
                 self.present(self.vocaModalViewController, animated: true)
             }
@@ -85,4 +88,3 @@ extension VocaMainViewController: UITableViewDataSource {
         return cell
     }
 }
-

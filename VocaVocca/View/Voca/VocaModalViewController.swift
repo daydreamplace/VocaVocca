@@ -20,7 +20,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     private let selectVocaLabel: UILabel = {
         let label = UILabel()
-        label.text = "단어장을 선택해 주세요 >"
+        label.text = "단어장을 선택해주세요 >"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .customBrown
         label.isUserInteractionEnabled = true
@@ -111,7 +111,15 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     @objc private func selectVocaBook() {
-        let vocaBookSelectVC = VocaBookSelectViewController()
+        let vocaBookSelectVM = VocaBookSelectViewModel()
+        let vocaBookSelectVC = VocaBookSelectViewController(viewModel: vocaBookSelectVM)
+        
+        vocaBookSelectVM.selectedVocaBook
+            .map { vocaBook in
+                "\(vocaBook.title ?? "") >"
+            }
+            .bind(to: selectVocaLabel.rx.text)
+            .disposed(by: disposeBag)
         let navController = UINavigationController(rootViewController: vocaBookSelectVC)
         present(navController, animated: true, completion: nil)
     }
