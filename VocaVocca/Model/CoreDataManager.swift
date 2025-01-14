@@ -216,9 +216,10 @@ class CoreDataManager {
     }
     
     // RecordData를 업데이트하는 메서드.
-    func updateRecordData(record: RecordData, isCorrected: Bool) -> Completable {
+    func updateRecordData(record: RecordData, isCorrected: Bool, date: Date) -> Completable {
         return Completable.create { completable in
             record.iscorrected = isCorrected
+            record.date = date
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext())
