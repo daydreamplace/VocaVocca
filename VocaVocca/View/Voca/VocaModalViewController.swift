@@ -10,6 +10,30 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+extension VocaBookData {
+    var languageEnum: Language? {
+        guard let languageCode = language else {
+            print("Language code is nil")
+            return nil
+        }
+        
+        let mappedCode: String
+        switch languageCode {
+        case "영어": mappedCode = "EN"
+        case "중국어": mappedCode = "ZH"
+        case "일본어": mappedCode = "JA"
+        case "독일어": mappedCode = "DE"
+        case "스페인어": mappedCode = "ES"
+        default:
+            mappedCode = languageCode
+        }
+        
+        print("Mapped Language Code: \(mappedCode)")
+        
+        return Language(title: mappedCode)
+    }
+}
+
 class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
@@ -52,6 +76,18 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         
         modalView.delegate = self
         viewModel.fetchVocaBookFromCoreData()
+        
+        // CoreData에서 VocaBookData 읽기
+        CoreDataManager.shared.fetchVocaBookData()
+            .subscribe(onNext: { vocaBookData in
+                for vocaBook in vocaBookData {
+                    print("VocaBook ID: \(vocaBook.id?.uuidString ?? "nil")")
+                    print("VocaBook Title: \(vocaBook.title ?? "nil")")
+                    print("VocaBook Language: \(vocaBook.language ?? "nil")")
+                }
+            }, onError: { error in
+                print("Error fetching VocaBookData: \(error)")
+            }).disposed(by: disposeBag)
     }
     
     // MARK: - Setup
@@ -86,9 +122,15 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         
         // 검색 버튼 클릭 시 동작
         wordTextFieldView.didTapSearchButton = { [weak self] in
-            let word = self?.wordTextFieldView.textField.text ?? ""
-            print("검색된 단어: \(word)")
-            self?.viewModel.fetchTranslation(for: word)
+            guard let self = self else { return }
+            let word = self.wordTextFieldView.textField.text ?? ""
+            
+            if let language = self.viewModel.selectedVocaBook.value?.languageEnum {
+                print("검색된 단어: \(word), 언어: \(language.koreanTitle)")
+                self.viewModel.fetchTranslation(for: word, language: language)
+            } else {
+                print("단어장 언어를 찾을 수 없습니다.")
+            }
         }
         
         // 저장 버튼 동작
@@ -111,17 +153,25 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     @objc private func selectVocaBook() {
-        let vocaBookSelectVM = VocaBookSelectViewModel(selectedVocaBook: viewModel.selectedVocaBook, closeSubject: viewModel.completeSubject)
+        let selectedVocaBookSubject = PublishSubject<VocaBookData>()
+        
+        viewModel.selectedVocaBook
+            .compactMap { $0 }
+            .bind(to: selectedVocaBookSubject)
+            .disposed(by: disposeBag)
+        
+        let vocaBookSelectVM = VocaBookSelectViewModel(
+            selectedVocaBook: selectedVocaBookSubject,
+            closeSubject: viewModel.completeSubject
+        )
         let vocaBookSelectVC = VocaBookSelectViewController(viewModel: vocaBookSelectVM)
         
-        vocaBookSelectVM.selectedVocaBook
-            .map { vocaBook in
-                "\(vocaBook.title ?? "") >"
-            }
+        selectedVocaBookSubject
+            .map { vocaBook in "\(vocaBook.title ?? "") >" }
             .bind(to: selectVocaLabel.rx.text)
             .disposed(by: disposeBag)
         
-        vocaBookSelectVM.selectedVocaBook
+        selectedVocaBookSubject
             .bind { [weak self] vocabook in
                 self?.viewModel.updateVocaBook(vocabook)
             }

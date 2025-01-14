@@ -5,9 +5,9 @@
 //  Created by mun on 1/9/25.
 //
 
-enum Language: Int {
+enum Language: Int, CaseIterable {
     case english = 0
-    case chinese // 중국어(번체)
+    case chinese
     case japanese
     case german
     case spanish
@@ -22,7 +22,6 @@ enum Language: Int {
         }
     }
     
-    // 한글 이름
     var koreanTitle: String {
         switch self {
         case .english: return "영어"
@@ -31,5 +30,15 @@ enum Language: Int {
         case .german: return "독일어"
         case .spanish: return "스페인어"
         }
+    }
+    
+    init?(title: String) {
+        for language in Language.allCases {
+            if language.title.caseInsensitiveCompare(title) == .orderedSame {
+                self = language
+                return
+            }
+        }
+        return nil
     }
 }
