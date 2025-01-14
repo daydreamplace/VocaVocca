@@ -69,37 +69,6 @@ class LearningViewModel {
             }).disposed(by: disposeBag)
     }
     
-    // MARK: - 테스트 데이터 생성
-    
-    func addTestVocaBooks() {
-        createTestVocaBookData()
-            .andThen(fetchVocaBookFromCoreDataCompletable())
-            .andThen(addTestVocaData())
-            .subscribe(onCompleted: {
-                print("테스트 단어장 및 단어 생성 완료")
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    // 테스트 단어장 생성
-    private func createTestVocaBookData() -> Completable {
-        return CoreDataManager.shared.createVocaBookData(title: "테스트 단어장")
-    }
-    
-    // 테스트 단어 추가
-    private func addTestVocaData() -> Completable {
-        guard let firstBook = data.randomElement() else {
-            return Completable.error(NSError(domain: "단어장을 찾을 수 없습니다.", code: -1, userInfo: nil))
-        }
-        
-        return Completable.zip(
-            CoreDataManager.shared.createVocaData(word: "apple", meaning: "사과", language: Language.english.koreanTitle, book: firstBook),
-            CoreDataManager.shared.createVocaData(word: "banana", meaning: "바나나", language: Language.english.koreanTitle, book: firstBook),
-            CoreDataManager.shared.createVocaData(word: "cat", meaning: "고양이", language: Language.english.koreanTitle, book: firstBook),
-            CoreDataManager.shared.createVocaData(word: "dog", meaning: "개", language: Language.english.koreanTitle, book: firstBook)
-        )
-    }
-    
     // Core Data 동기화
     private func fetchVocaBookFromCoreDataCompletable() -> Completable {
         return Completable.create { [weak self] completable in
