@@ -13,15 +13,6 @@ final class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
     private let vocaMainViewModel = VocaMainViewModel()
-    
-    private let vocaModalViewController: VocaModalViewController = {
-        let viewModel = VocaModalViewModel()
-        let viewController = VocaModalViewController(viewModel: viewModel)
-        viewController.modalPresentationStyle = .automatic
-        viewController.view.backgroundColor = .none
-        return viewController
-    }()
-    
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -97,7 +88,7 @@ final class VocaMainViewController: UIViewController {
                 
             }
             .disposed(by: disposeBag)
-
+        vocaMainViewModel.fetchVocaBook()
         
         let vocaBookSelectViewModel = VocaBookSelectViewModel(selectedVocaBook: vocaMainViewModel.selectedvocaBook, closeSubject: vocaMainViewModel.updateSubject)
         let vocaBookSelectViewController = VocaBookSelectViewController(viewModel: vocaBookSelectViewModel)
@@ -106,7 +97,11 @@ final class VocaMainViewController: UIViewController {
             case .vocaBookSelect:
                 self.navigationController?.pushViewController(vocaBookSelectViewController, animated: true)
             case .makeVoca:
-                self.present(self.vocaModalViewController, animated: true)
+                let viewModel = VocaModalViewModel(closeSubject: self.vocaMainViewModel.updateSubject)
+                let viewController = VocaModalViewController(viewModel: viewModel)
+                viewController.modalPresentationStyle = .automatic
+                viewController.view.backgroundColor = .none
+                self.present(viewController, animated: true)
             }
         }).disposed(by: disposeBag)
         
