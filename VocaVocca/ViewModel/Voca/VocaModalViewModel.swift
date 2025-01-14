@@ -17,6 +17,7 @@ class VocaModalViewModel {
     let word = BehaviorRelay<String>(value: "")
     let meaning = BehaviorRelay<String>(value: "")
     let completeSubject = PublishSubject<Void>()
+    let closeSubject: PublishSubject<Void>
     
     // MARK: - Output
     
@@ -28,11 +29,12 @@ class VocaModalViewModel {
     private let networkManager = NetworkManager.shared
     private let disposeBag = DisposeBag()
     
-    private var thisVocaBook = VocaBookData()
+    private var thisVocaBook: VocaBookData?
     var testData = [VocaBookData]()
     
     // Initialization
-    init() {
+    init(closeSubject: PublishSubject<Void>) {
+        self.closeSubject = closeSubject
         // 저장 버튼 활성화 여부 결정
         isSaveEnabled = Observable
             .combineLatest(word.asObservable(), meaning.asObservable(), selectedVocaBook.asObservable())
@@ -74,8 +76,14 @@ class VocaModalViewModel {
     
     // CoreData 단어 업데이트
     func handleSave() {
+        // 단어장을 선택했는지 확인
+        guard let thisVocaBook = thisVocaBook else {
+            return
+        }
+        closeSubject.onNext(())
+
         let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
-        
+
         print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(thisVocaBook)")
         coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
             .subscribe(
