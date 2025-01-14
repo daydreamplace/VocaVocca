@@ -32,9 +32,11 @@ enum Language: Int, CaseIterable {
         }
     }
     
+    // 한국어 이름과 코드 둘 다 처리
     init?(title: String) {
         for language in Language.allCases {
-            if language.title.caseInsensitiveCompare(title) == .orderedSame {
+            if language.title.caseInsensitiveCompare(title) == .orderedSame ||
+               language.koreanTitle.caseInsensitiveCompare(title) == .orderedSame {
                 self = language
                 return
             }
