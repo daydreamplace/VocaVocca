@@ -23,7 +23,6 @@ final class LearningViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpNaviBar()
-        viewModel.addTestVocaBooks()
         bind()
     }
     

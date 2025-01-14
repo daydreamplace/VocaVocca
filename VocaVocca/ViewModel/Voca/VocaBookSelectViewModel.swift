@@ -14,9 +14,12 @@ class VocaBookSelectViewModel {
     private let disposeBag = DisposeBag()
     
     let vocaBookSubject = BehaviorSubject(value: [VocaBookData]())
-    var selectedVocaBook = PublishSubject<VocaBookData>()
-    
-    init() {
+    var selectedVocaBook: PublishSubject<VocaBookData>
+    var closeSubject: PublishSubject<Void>
+   
+    init(selectedVocaBook: PublishSubject<VocaBookData>, closeSubject: PublishSubject<Void>) {
+        self.selectedVocaBook = selectedVocaBook
+        self.closeSubject = closeSubject
     }
     
     func fetchVocaBookFromCoreData () {

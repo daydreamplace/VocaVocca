@@ -13,9 +13,10 @@ class VocaModalViewModel {
     
     // MARK: - Input
     
-    let selectedVocaBook = BehaviorRelay<VocaBookData?>(value: nil)
+    let selectedVocaBook = PublishSubject<VocaBookData>()
     let word = BehaviorRelay<String>(value: "")
     let meaning = BehaviorRelay<String>(value: "")
+    let completeSubject = PublishSubject<Void>()
     
     // MARK: - Output
     
@@ -27,6 +28,7 @@ class VocaModalViewModel {
     private let networkManager = NetworkManager.shared
     private let disposeBag = DisposeBag()
     
+    private var thisVocaBook = VocaBookData()
     var testData = [VocaBookData]()
     
     // Initialization
@@ -40,7 +42,9 @@ class VocaModalViewModel {
         title = Observable.just("새로운 단어 만들기")
         buttonTitle = Observable.just("추가하기")
     }
-    
+    func updateVocaBook(_ vocaBook: VocaBookData) {
+        thisVocaBook = vocaBook
+    }
     // 네트워크 매니저
     func fetchTranslation(for word: String) {
         networkManager
@@ -58,18 +62,7 @@ class VocaModalViewModel {
             .disposed(by: disposeBag)
     }
     
-    func testVocaBook () -> Completable {
-        coreDataManager.createVocaBookData(title: "토익", language: "언어")
-    }
-    
     func fetchVocaBookFromCoreData() {
-        testVocaBook()
-            .subscribe(onCompleted: {
-                print("VocaBook 생성 완료")
-            }, onError: { error in
-                print("Error: \(error)")
-            }).disposed(by: disposeBag)
-        
         coreDataManager.fetchVocaBookData()
             .subscribe(onNext: { [weak self] vocaBookData in
                 self?.testData = vocaBookData
@@ -80,13 +73,11 @@ class VocaModalViewModel {
     }
     
     // CoreData 단어 업데이트
-    func handleSave() {
-        guard let vocaBooktestData = testData.first else { return }
-        
+    func handleSave() {        
         let finalMeaning = meaning.value.isEmpty ? "값이 없어" : meaning.value
         
-        print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(vocaBooktestData)")
-        coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: vocaBooktestData)
+        print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(thisVocaBook)")
+        coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
             .subscribe(
                 onCompleted: {
                     print("단어가 성공적으로 추가되었습니다.")

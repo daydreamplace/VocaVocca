@@ -57,7 +57,7 @@ final class VocaMainViewController: UIViewController {
     // MARK: - 선택된 단어장 조회
     
     private func fetchVocaBookData() {
-        vocaMainViewModel.vocaBookSubject.subscribe(onNext: { vocaBookData in
+        vocaMainViewModel.vocaSubject.subscribe(onNext: { vocaBookData in
             
             //TODO: 단어장 선택 시 값 받아오도록 할 예정
             //            self.vocaBookData = vocaBookData[0]
@@ -74,7 +74,32 @@ final class VocaMainViewController: UIViewController {
     // MARK: - 버튼 바인딩
     
     private func bindViewEvents() {
-        let vocaBookSelectViewModel = VocaBookSelectViewModel()
+        vocaMainViewModel.selectedvocaBook
+            .bind { [weak self] vocabook in
+                self?.vocaMainViewModel.updateVocaBook(vocabook)
+                self?.changeName(vocabook)
+            }
+            .disposed(by: disposeBag)
+        
+        vocaMainViewModel.vocaSubject
+            .skip(1)
+            .bind { [weak self] _ in
+                //print(
+                //self?.vocaMainViewModel.updateVoca()
+            }
+            .disposed(by: disposeBag)
+        
+        vocaMainViewModel.updateSubject
+            .bind { [weak self] _ in
+                print("ttt")
+                self?.vocaMainViewModel.updateVoca()
+
+                
+            }
+            .disposed(by: disposeBag)
+
+        
+        let vocaBookSelectViewModel = VocaBookSelectViewModel(selectedVocaBook: vocaMainViewModel.selectedvocaBook, closeSubject: vocaMainViewModel.updateSubject)
         let vocaBookSelectViewController = VocaBookSelectViewController(viewModel: vocaBookSelectViewModel)
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
             switch action {
@@ -84,12 +109,18 @@ final class VocaMainViewController: UIViewController {
                 self.present(self.vocaModalViewController, animated: true)
             }
         }).disposed(by: disposeBag)
+        
+        self.navigationController?.navigationItem.rightBarButtonItem?.rx
+            .tap
+            .bind { [weak self] _ in
+                self?.closeView()
+            }
     }
     
     // MARK: - 테이블뷰 바인딩
     
     private func bindTableView() {
-        vocaMainViewModel.vocaBookSubject
+        vocaMainViewModel.vocaSubject
             .observe(on: MainScheduler.instance)
             .bind(to: vocaMainView.vocaTableView.rx.items(
                 cellIdentifier: VocaMainTableViewCell.id,
@@ -98,5 +129,15 @@ final class VocaMainViewController: UIViewController {
                 cell.cardView.meanLabel.text = element.meaning
                 cell.cardView.wordLabel.text = element.word
             }.disposed(by: disposeBag)
+    }
+    
+    
+    private func changeName(_ vocaBook: VocaBookData) {
+        vocaMainView.vocaBookSelectButton.setTitle(vocaBook.title, for: .normal)
+    }
+    
+    private func closeView() {
+        print("test")
+        self.navigationController?.popViewController(animated: true)
     }
 }

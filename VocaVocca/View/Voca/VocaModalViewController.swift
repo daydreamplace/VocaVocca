@@ -111,7 +111,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     @objc private func selectVocaBook() {
-        let vocaBookSelectVM = VocaBookSelectViewModel()
+        let vocaBookSelectVM = VocaBookSelectViewModel(selectedVocaBook: viewModel.selectedVocaBook, closeSubject: viewModel.completeSubject)
         let vocaBookSelectVC = VocaBookSelectViewController(viewModel: vocaBookSelectVM)
         
         vocaBookSelectVM.selectedVocaBook
@@ -120,6 +120,13 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             }
             .bind(to: selectVocaLabel.rx.text)
             .disposed(by: disposeBag)
+        
+        vocaBookSelectVM.selectedVocaBook
+            .bind { [weak self] vocabook in
+                self?.viewModel.updateVocaBook(vocabook)
+            }
+            .disposed(by: disposeBag)
+        
         let navController = UINavigationController(rootViewController: vocaBookSelectVC)
         present(navController, animated: true, completion: nil)
     }
