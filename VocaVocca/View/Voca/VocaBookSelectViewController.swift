@@ -132,6 +132,7 @@ final class VocaBookSelectViewController: UIViewController {
     /// TODO - 선택된 셀 로직
     private func selectedBook(book: VocaBookData) {
         viewModel.test(book)
+        viewModel.selectedVocaBook.onNext(book)
 //        viewModel.selectedVocaBook = book
 //        print("\(book.title ?? "")")
     }

@@ -65,7 +65,7 @@ class VocaBookModalViewModel {
     
     // save edit
     func handleSaveOrEdit() {
-        guard let language = selectedLanguage.value?.koreanTitle, !vocaBookTitle.value.isEmpty else { return }
+        guard let language = selectedLanguage.value?.title, !vocaBookTitle.value.isEmpty else { return }
         
         if mode == .create {
             // Core Data 단어장 추가

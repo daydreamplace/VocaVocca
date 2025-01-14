@@ -10,30 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-extension VocaBookData {
-    var languageEnum: Language? {
-        guard let languageCode = language else {
-            print("Language code is nil")
-            return nil
-        }
-        
-        let mappedCode: String
-        switch languageCode {
-        case "영어": mappedCode = "EN"
-        case "중국어": mappedCode = "ZH"
-        case "일본어": mappedCode = "JA"
-        case "독일어": mappedCode = "DE"
-        case "스페인어": mappedCode = "ES"
-        default:
-            mappedCode = languageCode
-        }
-        
-        print("Mapped Language Code: \(mappedCode)")
-        
-        return Language(title: mappedCode)
-    }
-}
-
 class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
@@ -76,18 +52,6 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         
         modalView.delegate = self
         viewModel.fetchVocaBookFromCoreData()
-        
-        // CoreData에서 VocaBookData 읽기
-        CoreDataManager.shared.fetchVocaBookData()
-            .subscribe(onNext: { vocaBookData in
-                for vocaBook in vocaBookData {
-                    print("VocaBook ID: \(vocaBook.id?.uuidString ?? "nil")")
-                    print("VocaBook Title: \(vocaBook.title ?? "nil")")
-                    print("VocaBook Language: \(vocaBook.language ?? "nil")")
-                }
-            }, onError: { error in
-                print("Error fetching VocaBookData: \(error)")
-            }).disposed(by: disposeBag)
     }
     
     // MARK: - Setup
@@ -125,12 +89,11 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             guard let self = self else { return }
             let word = self.wordTextFieldView.textField.text ?? ""
             
-            if let language = self.viewModel.selectedVocaBook.value?.languageEnum {
-                print("검색된 단어: \(word), 언어: \(language.koreanTitle)")
-                self.viewModel.fetchTranslation(for: word, language: language)
-            } else {
-                print("단어장 언어를 찾을 수 없습니다.")
-            }
+            guard let lang = viewModel.thisVocaBook?.language else { return }
+            print("111111", lang)
+            guard let a =  Language(rawValue: lang) else { return }
+            print("222222", a)
+            self.viewModel.fetchTranslation(for: word, language: a)
         }
         
         // 저장 버튼 동작
@@ -145,6 +108,13 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         viewModel.meaning
             .bind(to: meaningTextFieldView.textField.rx.text)
             .disposed(by: disposeBag)
+        
+        // 선택된 VocaBook 값 확인용 구독 추가
+        viewModel.selectedVocaBook
+            .subscribe(onNext: { book in
+                print("Emitted book in ViewModel: \(book)")
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setupActions() {
@@ -153,6 +123,10 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     @objc private func selectVocaBook() {
+        
+        if viewModel.selectedVocaBook.value == nil {
+            print("selectedVocaBook is nil")
+        }
         let selectedVocaBookSubject = PublishSubject<VocaBookData>()
         
         viewModel.selectedVocaBook
@@ -167,12 +141,19 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         let vocaBookSelectVC = VocaBookSelectViewController(viewModel: vocaBookSelectVM)
         
         selectedVocaBookSubject
+            .subscribe(onNext: { vocaBook in
+                print("VocaBook selected in Subject: \(vocaBook)")
+            })
+            .disposed(by: disposeBag)
+        
+        selectedVocaBookSubject
             .map { vocaBook in "\(vocaBook.title ?? "") >" }
             .bind(to: selectVocaLabel.rx.text)
             .disposed(by: disposeBag)
         
         selectedVocaBookSubject
             .bind { [weak self] vocabook in
+                print("VocaBook received in ViewModel update: \(vocabook)")
                 self?.viewModel.updateVocaBook(vocabook)
             }
             .disposed(by: disposeBag)
