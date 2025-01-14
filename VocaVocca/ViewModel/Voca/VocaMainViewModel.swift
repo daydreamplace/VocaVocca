@@ -15,22 +15,42 @@ class VocaMainViewModel {
     private let coreData = CoreDataManager.shared
     private let disposeBag = DisposeBag()
     private let manager = UserDefaultsManager()
+    private var thisVocaBook = VocaBookData()
+
+    
     let selectedvocaBook = PublishSubject<VocaBookData>()
-    
-    let vocaBookSubject = BehaviorSubject(value: [VocaData]())
-    
+    let updateSubject = PublishSubject<Void>()
+    let vocaSubject = BehaviorSubject(value: [VocaData]())
+
     init() {
 //        fetchVocaBookId()
         fetchVocaBook()
     }
     
+    func updateVocaBook(_ vocaBook: VocaBookData) {
+        thisVocaBook = vocaBook
+    }
+    
+    func updateVoca() {
+        fetchVocaBookId()
+    }
+    
     // MARK: - 단어장 ID 조회
     
     private func fetchVocaBookId() {
-        if let uuidString = manager.getVocaBookID(),
-           let uuid = UUID(uuidString: uuidString) {
-            currentVocaBookId = uuid
-        }
+        coreData.fetchVocaBookData()
+            .subscribe(onNext: { [weak self] vocaBookData in
+                let voca = vocaBookData
+                    .filter { [weak self] vocaBook in
+                        vocaBook.id == self?.thisVocaBook.id}
+                //.compactMap { $0.words }
+                
+                if let wordsSet = voca.first!.words as? Set<VocaData> {
+                    let array = Array(wordsSet)
+                    
+                    self?.vocaSubject.onNext(array)
+                }
+            })
     }
     
     // MARK: - 단어 조회
@@ -45,11 +65,11 @@ class VocaMainViewModel {
                 if let wordsSet = voca.words as? Set<VocaData> {
                     let array = Array(wordsSet)
                     
-                    self?.vocaBookSubject.onNext(array)
+                    self?.vocaSubject.onNext(array)
                 }
                 
             },onError: { error in
-                self.vocaBookSubject.onError(error)
+                self.vocaSubject.onError(error)
             }).disposed(by: disposeBag)
     }
 }

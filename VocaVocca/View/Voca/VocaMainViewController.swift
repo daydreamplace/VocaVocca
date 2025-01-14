@@ -57,7 +57,7 @@ final class VocaMainViewController: UIViewController {
     // MARK: - 선택된 단어장 조회
     
     private func fetchVocaBookData() {
-        vocaMainViewModel.vocaBookSubject.subscribe(onNext: { vocaBookData in
+        vocaMainViewModel.vocaSubject.subscribe(onNext: { vocaBookData in
             
             //TODO: 단어장 선택 시 값 받아오도록 할 예정
             //            self.vocaBookData = vocaBookData[0]
@@ -76,11 +76,30 @@ final class VocaMainViewController: UIViewController {
     private func bindViewEvents() {
         vocaMainViewModel.selectedvocaBook
             .bind { [weak self] vocabook in
+                self?.vocaMainViewModel.updateVocaBook(vocabook)
                 self?.changeName(vocabook)
             }
             .disposed(by: disposeBag)
         
-        let vocaBookSelectViewModel = VocaBookSelectViewModel(selectedVocaBook: vocaMainViewModel.selectedvocaBook)
+        vocaMainViewModel.vocaSubject
+            .skip(1)
+            .bind { [weak self] _ in
+                //print(
+                //self?.vocaMainViewModel.updateVoca()
+            }
+            .disposed(by: disposeBag)
+        
+        vocaMainViewModel.updateSubject
+            .bind { [weak self] _ in
+                print("ttt")
+                self?.vocaMainViewModel.updateVoca()
+
+                
+            }
+            .disposed(by: disposeBag)
+
+        
+        let vocaBookSelectViewModel = VocaBookSelectViewModel(selectedVocaBook: vocaMainViewModel.selectedvocaBook, closeSubject: vocaMainViewModel.updateSubject)
         let vocaBookSelectViewController = VocaBookSelectViewController(viewModel: vocaBookSelectViewModel)
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
             switch action {
@@ -101,7 +120,7 @@ final class VocaMainViewController: UIViewController {
     // MARK: - 테이블뷰 바인딩
     
     private func bindTableView() {
-        vocaMainViewModel.vocaBookSubject
+        vocaMainViewModel.vocaSubject
             .observe(on: MainScheduler.instance)
             .bind(to: vocaMainView.vocaTableView.rx.items(
                 cellIdentifier: VocaMainTableViewCell.id,

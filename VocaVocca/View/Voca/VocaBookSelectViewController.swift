@@ -58,6 +58,8 @@ final class VocaBookSelectViewController: UIViewController {
                     }).disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
         
+        viewModel
+        
         // 셀 선택 시 바인딩
         vocaBookSelectView.collectionView.rx.modelSelected(VocaBookData.self)
             .subscribe(onNext: { [weak self] selectedBook in
@@ -93,7 +95,9 @@ final class VocaBookSelectViewController: UIViewController {
         self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.doneButtonTapped()
+                print("네비바")
             }).disposed(by: disposeBag)
+
         
         
     }
@@ -131,6 +135,7 @@ final class VocaBookSelectViewController: UIViewController {
     
     /// TODO - 네비바버튼 관련 로직 : 데이터 넘기기
     private func doneButtonTapped() {
+        self.viewModel.closeSubject.onNext(())
         guard self.viewModel.selectedVocaBook != nil else { return }
         dismiss(animated: true)
         navigationController?.popViewController(animated: true)
