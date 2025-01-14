@@ -79,10 +79,12 @@ final class RecordResultViewController: UIViewController {
     func showCorrectWords() {
         correctWordsView.isHidden = false
         incorrectWordsView.isHidden = true
+        title = "암기한 단어"
     }
     
     func showIncorrectWords() {
         correctWordsView.isHidden = true
         incorrectWordsView.isHidden = false
+        title = "틀린 단어"
     }
 }
