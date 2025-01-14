@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxGesture
 
 class FlashcardViewController: UIViewController {
     
@@ -104,6 +105,20 @@ class FlashcardViewController: UIViewController {
             .bind { [weak self] _ in
                 guard let self = self else { return }
                 self.flashcardViewModel.markWordsAsIncorrect()
+            }
+            .disposed(by: disposeBag)
+        
+        // 플래시카드뷰 스와이프 바인딩
+        flashcardView.flashcardView.rx
+            .swipeGesture([.left, .right])
+            .skip(2)
+            .bind { [weak self] gesture in
+                guard let self = self else { return }
+                if gesture.direction == .left {
+                    self.flashcardViewModel.markWordsAsIncorrect()
+                } else {
+                    self.flashcardViewModel.markWordsAsIncorrect()
+                }
             }
             .disposed(by: disposeBag)
     }
