@@ -11,21 +11,11 @@ import RxCocoa
 
 final class RecordResultViewModel {
     
-    let correctWords: BehaviorRelay<[(String, String)]> = BehaviorRelay(value: [])
-    let incorrectWords: BehaviorRelay<[(String, String)]> = BehaviorRelay(value: [])
+    let correctWords: Observable<[(String, String)]>
+    let incorrectWords: Observable<[(String, String)]>
     
-    private let disposeBag = DisposeBag()
-    
-    init(recordViewModel: RecordViewModel) {
-        // RecordViewModel에서 데이터를 가져옴
-        recordViewModel.todayCorrectWords
-            .map { $0.map { ($0.word ?? "", $0.meaning ?? "") } }
-            .bind(to: correctWords)
-            .disposed(by: disposeBag)
-        
-        recordViewModel.todayIncorrectWords
-            .map { $0.map { ($0.word ?? "", $0.meaning ?? "") } }
-            .bind(to: incorrectWords)
-            .disposed(by: disposeBag)
+    init(correctWords: Observable<[(String, String)]>, incorrectWords: Observable<[(String, String)]>) {
+        self.correctWords = correctWords
+        self.incorrectWords = incorrectWords
     }
 }
