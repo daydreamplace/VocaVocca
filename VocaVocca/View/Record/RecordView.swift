@@ -27,11 +27,10 @@ final class RecordView: UIView {
         return label
     }()
     
-    private let correctCountLabel: UILabel = {
+    let correctCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 44, weight: .bold)
         label.textAlignment = .center
-        label.text = "15"
         label.textColor = .systemBlue
         return label
     }()
@@ -53,11 +52,10 @@ final class RecordView: UIView {
         return label
     }()
     
-    private let incorrectCountLabel: UILabel = {
+    let incorrectCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 44, weight: .bold)
         label.textAlignment = .center
-        label.text = "15"
         label.textColor = .systemRed
         return label
     }()
