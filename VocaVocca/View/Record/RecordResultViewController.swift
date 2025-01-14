@@ -17,19 +17,23 @@ final class RecordResultViewController: UIViewController {
     private let incorrectWordsView = RecordResultView()
     private let disposeBag = DisposeBag()
     
-    // 테스트 더미 데이터
-    private let dummyCorrectWords = [("apple", "사과"), ("banana", "바나나"), ("cherry", "체리"), ("date", "대추"), ("elderberry", "엘더베리")]
-    private let dummyIncorrectWords = [("fig", "무화과"), ("grape", "포도"), ("honeydew", "허니듀"), ("kiwi", "키위"), ("lemon", "레몬")]
+    let correctWords: Observable<[(String, String)]>
+    let incorrectWords: Observable<[(String, String)]>
     
-    // 데이터 소스
-    private let correctWords = BehaviorRelay<[(String, String)]>(value: [])
-    private let incorrectWords = BehaviorRelay<[(String, String)]>(value: [])
+    init(correctWords: Observable<[(String, String)]>, incorrectWords: Observable<[(String, String)]>) {
+        self.correctWords = correctWords
+        self.incorrectWords = incorrectWords
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         bindTableView()
-        loadDummyData() // 더미 데이터 로드
     }
     
     private func setup() {
@@ -54,7 +58,7 @@ final class RecordResultViewController: UIViewController {
     }
     
     private func bindTableView() {
-        // CorrectWordsView 테이블 뷰 바인딩
+        // CorrectWordsView 바인딩
         correctWords
             .bind(to: correctWordsView.tableView.rx.items(cellIdentifier: RecordResultViewCell.id, cellType: RecordResultViewCell.self)) { _, wordPair, cell in
                 let (word, meaning) = wordPair
@@ -64,7 +68,7 @@ final class RecordResultViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        // IncorrectWordsView 테이블 뷰 바인딩
+        // IncorrectWordsView 바인딩
         incorrectWords
             .bind(to: incorrectWordsView.tableView.rx.items(cellIdentifier: RecordResultViewCell.id, cellType: RecordResultViewCell.self)) { _, wordPair, cell in
                 let (word, meaning) = wordPair
@@ -75,19 +79,15 @@ final class RecordResultViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func loadDummyData() {
-        // 더미 데이터 설정
-        correctWords.accept(dummyCorrectWords)
-        incorrectWords.accept(dummyIncorrectWords)
-    }
-    
     func showCorrectWords() {
-        self.correctWordsView.isHidden = false
-        self.incorrectWordsView.isHidden = true
+        correctWordsView.isHidden = false
+        incorrectWordsView.isHidden = true
+        title = "암기한 단어"
     }
     
     func showIncorrectWords() {
-        self.correctWordsView.isHidden = true
-        self.incorrectWordsView.isHidden = false
+        correctWordsView.isHidden = true
+        incorrectWordsView.isHidden = false
+        title = "틀린 단어"
     }
 }
