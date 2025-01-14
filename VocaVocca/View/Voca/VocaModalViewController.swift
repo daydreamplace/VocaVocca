@@ -30,6 +30,15 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     private let wordTextFieldView = CustomTextFieldView(title: "단어", placeholder: "단어를 입력하세요")
     private let meaningTextFieldView = CustomTextFieldView(title: "뜻", placeholder: "뜻을 입력하세요")
     
+    private let checkButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("확인", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .customDarkBrown
+        button.layer.cornerRadius = 8
+        return button
+    }()
+    
     // MARK: - Initialization
     
     init(viewModel: VocaModalViewModel) {
@@ -57,7 +66,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     private func setupView() {
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addSubview(modalView)
+        view.addSubviews(modalView, checkButton)
         
         modalView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -66,6 +75,13 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         }
         
         modalView.contentStackView.addArrangedSubviews(selectVocaLabel, wordTextFieldView, meaningTextFieldView)
+        
+        checkButton.snp.makeConstraints {
+            $0.top.equalTo(wordTextFieldView.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(30)
+            $0.height.equalTo(40)
+        }
+        
     }
     
     private func bindViewModel() {
@@ -78,6 +94,9 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         meaningTextFieldView.didEndEditing = { [weak self] text in
             self?.viewModel.meaning.accept(text)
         }
+        
+        // 확인 버튼 클릭 시 단어 번역
+        checkButton.addTarget(self, action: #selector(didTapCheckButton), for: .touchUpInside)
         
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
@@ -103,5 +122,11 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     func didTapCloseButton() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func didTapCheckButton() {
+        let word = wordTextFieldView.textField.text ?? ""
+        print("입력된 단어: \(word)")
+        viewModel.fetchTranslation(for: word) // 뷰모델에서 fetchTranslation 호출
     }
 }

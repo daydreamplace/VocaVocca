@@ -39,7 +39,7 @@ class NetworkManager {
                     single(.failure(NetworkError.dataFetchFail)) // 데이터패치 에러 전달
                     return
                 }
-
+                
                 do {
                     let decodedData = try JSONDecoder().decode(T.self, from: data)
                     single(.success(decodedData)) // 성공 이벤트 전달

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F2116B652D33F0BE00B786B8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F2116B642D33F0BE00B786B8 /* RxCocoa */; };
 		F262F0342D2FF35400B3DFDB /* (null) in Resources */ = {isa = PBXBuildFile; };
+		F2CC632A2D35DFC8003FAA63 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = F2CC63292D35DFC8003FAA63 /* Config.xcconfig */; };
 		F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F2ED388C2D2E111F005B7BC0 /* .gitignore */; };
 		F2ED38972D2E13A8005B7BC0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38962D2E13A8005B7BC0 /* SnapKit */; };
 		F2ED389A2D2E16AF005B7BC0 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F2ED38992D2E16AF005B7BC0 /* RxSwift */; };
@@ -17,6 +18,7 @@
 
 /* Begin PBXFileReference section */
 		BAB189962D2E7D4300E4DF7C /* VocaVocca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocaVocca.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2CC63292D35DFC8003FAA63 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		F2ED388C2D2E111F005B7BC0 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		F2ED389C2D2E16E7005B7BC0 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -64,6 +66,7 @@
 				F2ED388C2D2E111F005B7BC0 /* .gitignore */,
 				F2ED389B2D2E16E7005B7BC0 /* Frameworks */,
 				BAB189962D2E7D4300E4DF7C /* VocaVocca.app */,
+				F2CC63292D35DFC8003FAA63 /* Config.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F262F0342D2FF35400B3DFDB /* (null) in Resources */,
+				F2CC632A2D35DFC8003FAA63 /* Config.xcconfig in Resources */,
 				F2ED388D2D2E111F005B7BC0 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -220,6 +224,7 @@
 		};
 		F2ED385A2D2E10D8005B7BC0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2CC63292D35DFC8003FAA63 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
