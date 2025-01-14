@@ -27,7 +27,7 @@ class LearningResultViewModel {
         // 커피콩 개수 계산 (10%마다 1개)
         self.filledBeanCount = correctRate
             .map { result in
-                return min(result / 10, 10) // 10개를 넘지 않도록 제한
+                return result / 10
             }
     }
     
