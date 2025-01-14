@@ -7,10 +7,13 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 final class RecordViewController: UIViewController {
     
     private let recordView = RecordView()
+    private let disposeBag = DisposeBag()
     
     override func loadView() {
         view = recordView
@@ -30,29 +33,31 @@ final class RecordViewController: UIViewController {
         appearance.backgroundColor = .white
         appearance.shadowColor = nil
         
-        navigationController?.navigationBar.tintColor = .customBlack
+        navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     private func setupActions() {
-        // 오늘 암기한 단어 버튼 액션
-        recordView.addCorrectButtonAction(target: self, action: #selector(correctButtonTapped))
+        // Correct 버튼 클릭 시
+        recordView.correctButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                let resultVC = RecordResultViewController()
+                resultVC.showCorrectWords()
+                self.navigationController?.pushViewController(resultVC, animated: true)
+            })
+            .disposed(by: disposeBag)
         
-        // 오늘 틀린 단어 버튼 액션
-        recordView.addIncorrectButtonAction(target: self, action: #selector(incorrectButtonTapped))
-    }
-    
-    @objc private func correctButtonTapped() {
-        let resultVC = RecordResultViewController()
-        resultVC.showCorrectWords()
-        navigationController?.pushViewController(resultVC, animated: true)
-    }
-    
-    @objc private func incorrectButtonTapped() {
-        let resultVC = RecordResultViewController()
-        resultVC.showIncorrectWords()
-        navigationController?.pushViewController(resultVC, animated: true)
+        // Incorrect 버튼 클릭 시
+        recordView.incorrectButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                let resultVC = RecordResultViewController()
+                resultVC.showIncorrectWords()
+                self.navigationController?.pushViewController(resultVC, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
 }
