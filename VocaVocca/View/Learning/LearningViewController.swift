@@ -50,6 +50,22 @@ final class LearningViewController: UIViewController {
     
     // 테이블 뷰에 데이터 바인딩
     private func bind() {
+        // 선택에러 바인딩
+        viewModel.vocaBookSelectionError
+            .skip(1)
+            .bind { [weak self] status in
+                self?.checkStatus(status)
+            }
+            .disposed(by: disposeBag)
+        
+        // 플래시카드이동 바인딩
+        viewModel.navigateToFlashCard
+            .bind { [weak self] data in
+                self?.navigateToFlashCard(data)
+            }
+            .disposed(by: disposeBag)
+        
+        // 보카북서브젝트 바인딩
         viewModel.vocaBookSubject
             .observe(on: MainScheduler.instance)
             .bind(to: learningView.collectionView.rx.items(cellIdentifier: LearningViewCell.id, cellType: LearningViewCell.self)) {
@@ -72,19 +88,36 @@ final class LearningViewController: UIViewController {
         // 버튼 액션 바인딩
         learningView.startButton.rx.tap
             .subscribe(onNext: { [weak self] in
-                self?.navigateToFlashCard()
+                self?.viewModel.handleVocaBookSelection()
             })
             .disposed(by: disposeBag)
     }
     
-    // 단어장 단어 0개면 화면 안넘어가도록
-    private func navigateToFlashCard() {
-        if viewModel.checkWordsCount() {
-            guard let selectedBook = self.viewModel.selectedVocaBook else { return }
-            
-            let flashCardVM = FlashcardViewModel(data: selectedBook)
-            let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
-            self.navigationController?.pushViewController(flashcardVC, animated: true)
+    // 선택 에러 상태 확인
+    private func checkStatus(_ status: SelectionError) {
+        switch status {
+        case .noSelect: showToastMessage(status.text)
+        case .noVoca: showToastMessage(status.text)
+        }
+    }
+    
+    // 플래시카드로 화면 전환
+    private func navigateToFlashCard(_ data: VocaBookData) {
+        let flashCardVM = FlashcardViewModel(data: data)
+        let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
+        self.navigationController?.pushViewController(flashcardVC, animated: true)
+    }
+    
+    // 토스트 메세지 보여주기
+    private func showToastMessage(_ message: String) {
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseIn, animations: {
+            self.learningView.toastView.isHidden = false
+            self.learningView.toastView.alpha = 0.0
+            self.learningView.toastLabel.text = message
+        }) { _ in
+            self.learningView.toastView.isHidden = true
+            self.learningView.toastView.alpha = 1
+
         }
     }
 }
