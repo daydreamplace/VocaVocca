@@ -112,6 +112,17 @@ final class VocaMainViewController: UIViewController {
             )) { row, element, cell in
                 cell.cardView.meanLabel.text = element.meaning
                 cell.cardView.wordLabel.text = element.word
+                
+                //커스텀 태그
+                cell.customTag.subviews.first?.backgroundColor = .lightGray
+                
+                //TODO: 코어데이터 모델에서 language가 단어 -> 단어장으로 수정되면, label 수정 작업 필요
+                cell.customTag.setTagView(layerColor: .lightGray, label: "영어", textColor: .white)
+         
+                cell.removeButton.rx.tap.subscribe(onNext: { [weak self] in
+                    self?.vocaMainViewModel.removeVoca(vocaData: element)
+                }).disposed(by: cell.disposeBag)
+                
             }.disposed(by: disposeBag)
     }
     
