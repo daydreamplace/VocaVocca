@@ -55,7 +55,7 @@ class FlashcardViewModel {
     private func moveToNextVoca() {
         // 마지막 단어인지 확인
         if currentIndexValue + 1 == allVocaData.count {
-            saveResults() // 결과 저장
+            saveAllResults() // 결과 저장
             let reslut = LearningResult(correctCount: correctWords.count, IncorrectCount: incorrectWords.count)
             learningResult.onNext(reslut)
         } else {
@@ -66,20 +66,38 @@ class FlashcardViewModel {
     }
     
     // 학습 결과 저장
-    func saveResults() {
+    func saveAllResults() {
         correctWords.forEach {
-            CoreDataManager.shared.createRecordData(voca: $0, isCorrected: true, date: Date())
-                .subscribe(onCompleted: {
-                    print("맞은 단어 데이터 저장 성공")
-                })
-                .disposed(by: disposeBag)
+            saveWordResult(voca: $0, isCorrected: true)
         }
         
         incorrectWords.forEach {
-            CoreDataManager.shared.createRecordData(voca: $0, isCorrected: false, date: Date())
-                .subscribe(onCompleted: {
-                    print("틀린 단어 데이터 저장 성공")
-                })
+            saveWordResult(voca: $0, isCorrected: false)
+        }
+    }
+    
+    // 단어 하나씩 저장
+    private func saveWordResult(voca: VocaData, isCorrected: Bool) {
+        let todayDate = Date()
+
+        if let recordwords = voca.recordwords,
+           let recordDate = recordwords.date {
+            // 단어에 저장된 기록이 있으면 update
+            CoreDataManager.shared.updateRecordData(
+                record: recordwords,
+                isCorrected: isCorrected,
+                date: todayDate
+            )
+                .subscribe(onCompleted: {})
+                .disposed(by: disposeBag)
+        } else {
+            // 단어에 저장된 기록이 없으면 create
+            CoreDataManager.shared.createRecordData(
+                voca: voca,
+                isCorrected: isCorrected,
+                date: todayDate
+            )
+                .subscribe(onCompleted: {})
                 .disposed(by: disposeBag)
         }
     }
