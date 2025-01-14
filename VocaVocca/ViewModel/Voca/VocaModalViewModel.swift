@@ -73,8 +73,8 @@ class VocaModalViewModel {
     }
     
     // CoreData 단어 업데이트
-    func handleSave() {        
-        let finalMeaning = meaning.value.isEmpty ? "값이 없어" : meaning.value
+    func handleSave() {
+        let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
         
         print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(thisVocaBook)")
         coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
