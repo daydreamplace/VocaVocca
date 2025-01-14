@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 class VocaMainTableViewCell: UITableViewCell {
     
@@ -15,12 +16,19 @@ class VocaMainTableViewCell: UITableViewCell {
     let cardView = CustomCardView()
     let customTag = CustomTagView()
     
+    var disposeBag = DisposeBag()
+    
     let removeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.tintColor = .gray
         return button
     }()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag() // 기존 바인딩 초기화
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,27 +41,26 @@ class VocaMainTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
-        customTag.subviews.first?.backgroundColor = .lightGray
-        customTag.setTagView(layerColor: .lightGray, label: "영어", textColor: .white)
-        
         cardView.addSubviews(customTag, removeButton)
         addSubviews(cardView)
         
         cardView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
+            $0.edges.equalToSuperview()
+            $0.width.equalTo(340)
+            $0.height.equalTo(140)
         }
         
         customTag.snp.makeConstraints {
-            $0.bottom.equalTo(cardView.snp.bottom).offset(120)
-            $0.leading.equalTo(cardView.snp.leading).inset(-150)
+            $0.bottom.equalTo(cardView.snp.bottom).inset(40)
+            $0.leading.equalTo(cardView.snp.leading).inset(50)
             $0.width.equalTo(45)
             $0.height.equalTo(20)
         }
         
         removeButton.snp.makeConstraints {
-            $0.bottom.equalTo(cardView.snp.bottom).offset(120)
-            $0.trailing.equalTo(cardView.snp.trailing).offset(150)
-            $0.width.height.equalTo(20)
+            $0.bottom.equalTo(cardView.snp.bottom).inset(40)
+            $0.trailing.equalTo(cardView.snp.trailing).inset(50)
+            $0.width.height.equalTo(30)
         }
     }
 }
