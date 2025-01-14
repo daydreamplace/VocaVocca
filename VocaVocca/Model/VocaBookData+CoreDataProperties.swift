@@ -18,6 +18,7 @@ extension VocaBookData {
 
     @NSManaged public var id: UUID?
     @NSManaged public var title: String?
+    @NSManaged public var language: String?
     @NSManaged public var words: NSSet?
 
 }

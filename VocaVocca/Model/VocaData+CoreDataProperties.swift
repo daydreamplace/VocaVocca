@@ -17,7 +17,6 @@ extension VocaData {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var language: String?
     @NSManaged public var meaning: String?
     @NSManaged public var word: String?
     @NSManaged public var books: VocaBookData?

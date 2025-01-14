@@ -54,7 +54,7 @@ class CoreDataManager {
     // MARK: - CRUD for VocaData
     
     // 새로운 VocaData를 생성하는 메서드
-    func createVocaData(word: String, meaning: String, language: String, book: VocaBookData) -> Completable {
+    func createVocaData(word: String, meaning: String, book: VocaBookData) -> Completable {
         return Completable.create { [weak self] completable in
             guard let self = self else {
                 completable(.error(NSError(domain: "CoreDataManager", code: -1, userInfo: nil)))
@@ -65,7 +65,6 @@ class CoreDataManager {
             voca.id = UUID()
             voca.word = word
             voca.meaning = meaning
-            voca.language = language
             voca.books = book
             book.addToWords(voca)
             completable(.completed)
@@ -93,12 +92,11 @@ class CoreDataManager {
     }
     
     // VocaData를 업데이트하는 메서드.
-    func updateVocaData(voca: VocaData, newWord: String, newMeaning: String, newLanguage: String) -> Completable {
+    func updateVocaData(voca: VocaData, newWord: String, newMeaning: String) -> Completable {
         return Completable.create { completable in
             // 기존 VocaData 수정.
             voca.word = newWord
             voca.meaning = newMeaning
-            voca.language = newLanguage
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 변경사항 저장.
@@ -120,7 +118,7 @@ class CoreDataManager {
     // MARK: - CRUD for VocaBookData
     
     // 새로운 VocaBookData를 생성하는 메서드.
-    func createVocaBookData(title: String) -> Completable {
+    func createVocaBookData(title: String, language: String) -> Completable {
         return Completable.create { [weak self] completable in
             guard let self = self else {
                 completable(.error(NSError(domain: "CoreDataManager", code: -1, userInfo: nil)))
@@ -130,6 +128,7 @@ class CoreDataManager {
             let vocaBook = VocaBookData(context: self.context)
             vocaBook.id = UUID()
             vocaBook.title = title
+            vocaBook.language = language
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 생성 후 변경사항 저장.
@@ -155,9 +154,10 @@ class CoreDataManager {
     }
     
     // VocaBookData를 업데이트하는 메서드.
-    func updateVocaBookData(vocaBook: VocaBookData, newTitle: String) -> Completable {
+    func updateVocaBookData(vocaBook: VocaBookData, newTitle: String, newLanguage: String) -> Completable {
         return Completable.create { completable in
             vocaBook.title = newTitle
+            vocaBook.language = newLanguage
             completable(.completed)
             return Disposables.create()
         }.concat(self.saveContext()) // 변경사항 저장.
