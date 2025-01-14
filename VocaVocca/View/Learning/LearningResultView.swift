@@ -74,7 +74,6 @@ final class LearningResultView: UIView {
         return label
     }()
     
-    ///TODO - (현재 비어있음) 커피콩 이미지, 로직 추가구현 필요
     private lazy var coffeeStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -82,6 +81,9 @@ final class LearningResultView: UIView {
         stackView.distribution = .fillEqually
         return stackView
     }()
+    
+    // 커피콩 이미지 담을 배열
+    private var coffeeBeans: [UIImageView] = []
     
     private let resultDiscriptionLabel: UILabel = {
         let label = UILabel()
@@ -101,6 +103,7 @@ final class LearningResultView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupCoffeeBeans()
     }
     
     required init?(coder: NSCoder) {
@@ -164,6 +167,35 @@ final class LearningResultView: UIView {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(50)
             $0.centerX.equalToSuperview()
+        }
+    }
+    
+    private func setupCoffeeBeans() {
+        
+        // 가로 두줄
+        for _ in 0..<2 {
+            let horizontalStackView = UIStackView()
+            horizontalStackView.axis = .horizontal
+            horizontalStackView.spacing = 8
+            horizontalStackView.distribution = .fillEqually
+            
+            ///TODO - 
+            // 한줄에 5개 이미지
+            for _ in 0..<5 {
+                let imageView = UIImageView(image: UIImage(systemName: "circle.fill"))
+                imageView.tintColor = .customDarkerBrown
+                imageView.alpha = 0.2
+                coffeeBeans.append(imageView)
+                horizontalStackView.addArrangedSubview(imageView)
+            }
+            coffeeStackView.addArrangedSubview(horizontalStackView)
+        }
+    }
+    
+    // 커피콩 갯수 업데이트
+    func updateCoffeeBeans(correctCount: Int) {
+        for (index, imageView) in coffeeBeans.enumerated() {
+            imageView.alpha = index < correctCount ? 1.0 : 0.2
         }
     }
 }

@@ -10,7 +10,7 @@ import SnapKit
 
 final class RecordView: UIView {
     
-    private let correctButton: UIButton = {
+    let correctButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.layer.borderWidth = 1
@@ -36,7 +36,7 @@ final class RecordView: UIView {
         return label
     }()
     
-    private let incorrectButton: UIButton = {
+    let incorrectButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.layer.borderWidth = 1

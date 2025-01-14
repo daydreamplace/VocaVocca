@@ -77,11 +77,14 @@ final class LearningViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
+    // 단어장 단어 0개면 화면 안넘어가도록
     private func navigateToFlashCard() {
-        guard let selectedBook = self.viewModel.selectedVocaBook else { return }
-        
-        let flashCardVM = FlashcardViewModel(data: selectedBook)
-        let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
-        self.navigationController?.pushViewController(flashcardVC, animated: true)
+        if viewModel.checkWordsCount() {
+            guard let selectedBook = self.viewModel.selectedVocaBook else { return }
+            
+            let flashCardVM = FlashcardViewModel(data: selectedBook)
+            let flashcardVC = FlashcardViewController(viewModel: flashCardVM)
+            self.navigationController?.pushViewController(flashcardVC, animated: true)
+        }
     }
 }
