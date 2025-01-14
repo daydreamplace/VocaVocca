@@ -41,7 +41,6 @@ class VocaModalViewModel {
         buttonTitle = Observable.just("추가하기")
     }
     
-    
     // 네트워크 매니저
     func fetchTranslation(for word: String) {
         networkManager
@@ -58,7 +57,7 @@ class VocaModalViewModel {
             })
             .disposed(by: disposeBag)
     }
-
+    
     func testVocaBook () -> Completable {
         coreDataManager.createVocaBookData(title: "토익")
     }
@@ -85,8 +84,10 @@ class VocaModalViewModel {
         print("111", testData)
         guard let vocaBooktestData = testData.first else { return }
         
-        print("단어 추가: \(word.value), 뜻: \(meaning.value), 단어장: \(vocaBooktestData)")
-        coreDataManager.createVocaData(word: word.value, meaning: meaning.value, language: "EN", book: vocaBooktestData)
+        let finalMeaning = meaning.value.isEmpty ? "값이 없어" : meaning.value
+        
+        print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(vocaBooktestData)")
+        coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, language: "EN", book: vocaBooktestData)
             .subscribe(
                 onCompleted: {
                     print("단어가 성공적으로 추가되었습니다.")
