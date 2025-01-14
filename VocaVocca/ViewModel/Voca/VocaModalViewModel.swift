@@ -80,11 +80,9 @@ class VocaModalViewModel {
         guard let thisVocaBook = thisVocaBook else {
             return
         }
-        closeSubject.onNext(())
 
         let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
 
-        print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(thisVocaBook)")
         coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
             .subscribe(
                 onCompleted: {
@@ -94,5 +92,6 @@ class VocaModalViewModel {
                     print("단어 추가 실패: \(error)")
                 }
             ).disposed(by: disposeBag)
+        closeSubject.onNext(())
     }
 }

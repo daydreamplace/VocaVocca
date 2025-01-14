@@ -71,21 +71,10 @@ final class VocaMainViewController: UIViewController {
                 self?.changeName(vocabook)
             }
             .disposed(by: disposeBag)
-        
-        vocaMainViewModel.vocaSubject
-            .skip(1)
-            .bind { [weak self] _ in
-                //print(
-                //self?.vocaMainViewModel.updateVoca()
-            }
-            .disposed(by: disposeBag)
-        
+
         vocaMainViewModel.updateSubject
             .bind { [weak self] _ in
-                print("ttt")
                 self?.vocaMainViewModel.updateVoca()
-
-                
             }
             .disposed(by: disposeBag)
         vocaMainViewModel.fetchVocaBook()
@@ -132,7 +121,6 @@ final class VocaMainViewController: UIViewController {
     }
     
     private func closeView() {
-        print("test")
         self.navigationController?.popViewController(animated: true)
     }
 }

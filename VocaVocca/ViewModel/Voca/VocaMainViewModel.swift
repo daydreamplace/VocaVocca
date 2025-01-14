@@ -43,14 +43,10 @@ class VocaMainViewModel {
                 let voca = vocaBookData
                     .filter { [weak self] vocaBook in
                         vocaBook.id == self?.thisVocaBook.id}
-                //.compactMap { $0.words }
-                
-                if let wordsSet = voca.first!.words as? Set<VocaData> {
-                    let array = Array(wordsSet)
-                    
-                    self?.vocaSubject.onNext(array)
-                }
-            })
+                let allVocaData = voca.first?.words?.allObjects as? [VocaData] ?? []
+                self?.vocaSubject.onNext(allVocaData)
+
+            }).disposed(by: disposeBag)
     }
     
     // MARK: - 단어 조회
@@ -63,11 +59,8 @@ class VocaMainViewModel {
                 guard let voca = vocaBookData.first else { return }
                 self?.selectedvocaBook.onNext(voca)
                 
-                if let wordsSet = voca.words as? Set<VocaData> {
-                    let array = Array(wordsSet)
-                    
-                    self?.vocaSubject.onNext(array)
-                }
+                let allVocaData = voca.words?.allObjects as? [VocaData] ?? []
+                self?.vocaSubject.onNext(allVocaData)
                 
             },onError: { error in
                 self.vocaSubject.onError(error)
