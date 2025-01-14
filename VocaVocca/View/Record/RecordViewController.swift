@@ -25,9 +25,6 @@ final class RecordViewController: UIViewController {
         setupActions()
         setUpNaviBar()
         
-        // 오늘 학습 기록 불러오기
-        viewModel.fetchTodayRecords()
-        
         // 데이터 바인딩 확인
         viewModel.todayCorrectWords
             .map { "\($0.count)" }
@@ -65,8 +62,10 @@ final class RecordViewController: UIViewController {
         recordView.correctButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                let resultVM = RecordResultViewModel(recordViewModel: self.viewModel)
-                let resultVC = RecordResultViewController(viewModel: resultVM)
+                let resultVC = RecordResultViewController(
+                    correctWords: self.viewModel.todayCorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } },
+                    incorrectWords: self.viewModel.todayIncorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } }
+                )
                 resultVC.showCorrectWords()
                 self.navigationController?.pushViewController(resultVC, animated: true)
             })
@@ -76,8 +75,10 @@ final class RecordViewController: UIViewController {
         recordView.incorrectButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                let resultVM = RecordResultViewModel(recordViewModel: self.viewModel)
-                let resultVC = RecordResultViewController(viewModel: resultVM)
+                let resultVC = RecordResultViewController(
+                    correctWords: self.viewModel.todayCorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } },
+                    incorrectWords: self.viewModel.todayIncorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } }
+                )
                 resultVC.showIncorrectWords()
                 self.navigationController?.pushViewController(resultVC, animated: true)
             })

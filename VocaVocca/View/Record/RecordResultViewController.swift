@@ -16,10 +16,13 @@ final class RecordResultViewController: UIViewController {
     private let correctWordsView = RecordResultView()
     private let incorrectWordsView = RecordResultView()
     private let disposeBag = DisposeBag()
-    private let viewModel: RecordResultViewModel
     
-    init(viewModel: RecordResultViewModel) {
-        self.viewModel = viewModel
+    let correctWords: Observable<[(String, String)]>
+    let incorrectWords: Observable<[(String, String)]>
+    
+    init(correctWords: Observable<[(String, String)]>, incorrectWords: Observable<[(String, String)]>) {
+        self.correctWords = correctWords
+        self.incorrectWords = incorrectWords
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,7 +59,7 @@ final class RecordResultViewController: UIViewController {
     
     private func bindTableView() {
         // CorrectWordsView 바인딩
-        viewModel.correctWords
+        correctWords
             .bind(to: correctWordsView.tableView.rx.items(cellIdentifier: RecordResultViewCell.id, cellType: RecordResultViewCell.self)) { _, wordPair, cell in
                 let (word, meaning) = wordPair
                 cell.configureCell(isCorrect: true)
@@ -66,7 +69,7 @@ final class RecordResultViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // IncorrectWordsView 바인딩
-        viewModel.incorrectWords
+        incorrectWords
             .bind(to: incorrectWordsView.tableView.rx.items(cellIdentifier: RecordResultViewCell.id, cellType: RecordResultViewCell.self)) { _, wordPair, cell in
                 let (word, meaning) = wordPair
                 cell.configureCell(isCorrect: false)
