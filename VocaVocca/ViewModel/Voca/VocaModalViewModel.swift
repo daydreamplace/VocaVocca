@@ -52,13 +52,8 @@ class VocaModalViewModel {
                 return response.translations.first?.text ?? "번역 실패"
             }
             .subscribe(onNext: { [weak self] translation in
-                // word와 meaning이 같지 않을 때만 업데이트
-                if self?.word.value != self?.meaning.value {
-                    print("Translated Text: \(translation)")
-                    self?.meaning.accept(translation)
-                } else {
-                    print("Word and Meaning are the same, skipping update.")
-                }
+                print("Translated Text: \(translation)")
+                self?.meaning.accept(translation)
             })
             .disposed(by: disposeBag)
     }
@@ -86,7 +81,6 @@ class VocaModalViewModel {
     
     // CoreData 단어 업데이트
     func handleSave() {
-        print("111", testData)
         guard let vocaBooktestData = testData.first else { return }
         
         let finalMeaning = meaning.value.isEmpty ? "값이 없어" : meaning.value
