@@ -5,12 +5,12 @@
 //  Created by mun on 1/9/25.
 //
 
-enum Language: Int, CaseIterable {
-    case english = 0
-    case chinese
-    case japanese
-    case german
-    case spanish
+enum Language: String, CaseIterable {
+    case english = "EN"
+    case chinese = "ZH"
+    case japanese = "JA"
+    case german = "DE"
+    case spanish = "ES"
     
     var title: String {
         switch self {
@@ -30,17 +30,5 @@ enum Language: Int, CaseIterable {
         case .german: return "독일어"
         case .spanish: return "스페인어"
         }
-    }
-    
-    // 한국어 이름과 코드 둘 다 처리
-    init?(title: String) {
-        for language in Language.allCases {
-            if language.title.caseInsensitiveCompare(title) == .orderedSame ||
-               language.koreanTitle.caseInsensitiveCompare(title) == .orderedSame {
-                self = language
-                return
-            }
-        }
-        return nil
     }
 }

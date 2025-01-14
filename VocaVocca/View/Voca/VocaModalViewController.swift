@@ -10,21 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-//extension VocaBookData {
-//    var languageEnum: Language? {
-//        guard let languageCode = language else {
-//            print("VocaBook.language is nil")
-//            return nil
-//        }
-//        if let language = Language(title: languageCode) {
-//            return language
-//        } else {
-//            print("Failed to map languageCode: \(languageCode) to Language Enum")
-//            return nil
-//        }
-//    }
-//}
-
 class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
@@ -89,7 +74,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         wordTextFieldView.didEndEditing = { [weak self] text in
             self?.viewModel.word.accept(text)
         }
-
+        
         // 뜻 입력 텍스트 필드
         meaningTextFieldView.textField.rx.text
             .orEmpty
@@ -98,21 +83,19 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
                 self?.viewModel.meaning.accept(text)
             })
             .disposed(by: disposeBag)
-
+        
         // 검색 버튼 클릭 시 동작
         wordTextFieldView.didTapSearchButton = { [weak self] in
             guard let self = self else { return }
             let word = self.wordTextFieldView.textField.text ?? ""
             
-//            let lang = Language(rawValue: word)
-            
-//            if let language = self.viewModel.selectedVocaBook.value?.languageEnum {
-//            self.viewModel.fetchTranslation(for: word, language: lang)
-//            } else {
-//                print("단어장 언어를 찾을 수 없습니다.")
-//            }
+            guard let lang = viewModel.thisVocaBook?.language else { return }
+            print("111111", lang)
+            guard let a =  Language(rawValue: lang) else { return }
+            print("222222", a)
+            self.viewModel.fetchTranslation(for: word, language: a)
         }
-
+        
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
@@ -120,7 +103,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
                 self?.dismiss(animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
-
+        
         // meaning을 바인딩
         viewModel.meaning
             .bind(to: meaningTextFieldView.textField.rx.text)
@@ -162,12 +145,12 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
                 print("VocaBook selected in Subject: \(vocaBook)")
             })
             .disposed(by: disposeBag)
-
+        
         selectedVocaBookSubject
             .map { vocaBook in "\(vocaBook.title ?? "") >" }
             .bind(to: selectVocaLabel.rx.text)
             .disposed(by: disposeBag)
-
+        
         selectedVocaBookSubject
             .bind { [weak self] vocabook in
                 print("VocaBook received in ViewModel update: \(vocabook)")

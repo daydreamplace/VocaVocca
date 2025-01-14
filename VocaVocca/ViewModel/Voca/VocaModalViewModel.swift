@@ -29,7 +29,7 @@ class VocaModalViewModel {
     private let networkManager = NetworkManager.shared
     private let disposeBag = DisposeBag()
     
-    private var thisVocaBook: VocaBookData?
+    var thisVocaBook: VocaBookData?
     var testData = [VocaBookData]()
     
     // Initialization
@@ -44,6 +44,7 @@ class VocaModalViewModel {
         title = Observable.just("새로운 단어 만들기")
         buttonTitle = Observable.just("추가하기")
     }
+    
     func updateVocaBook(_ vocaBook: VocaBookData) {
         thisVocaBook = vocaBook
     }
@@ -80,9 +81,9 @@ class VocaModalViewModel {
         guard let thisVocaBook = thisVocaBook else {
             return
         }
-
+        
         let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
-
+        
         coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
             .subscribe(
                 onCompleted: {

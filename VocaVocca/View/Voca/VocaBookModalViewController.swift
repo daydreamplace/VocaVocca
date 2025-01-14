@@ -85,7 +85,8 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     private func setupLanguageButtons() {
-        for language in availableLanguages {
+        for (index, language) in (availableLanguages.enumerated()) {
+            let lang = Language.allCases
             let button = createLanguageButton(for: language)
             languageStackView.addArrangedSubview(button)
         }
@@ -93,11 +94,10 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
     
     private func createLanguageButton(for language: Language) -> UIButton {
         let button = UIButton(type: .system)
-        button.setTitle(language.koreanTitle, for: .normal)
+        button.setTitle(language.title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .lightGray
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-        button.tag = language.rawValue
         button.translatesAutoresizingMaskIntoConstraints = false
         
         button.snp.makeConstraints {
@@ -139,7 +139,8 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     @objc private func languageButtonTapped(_ sender: UIButton) {
-        guard let language = Language(rawValue: sender.tag) else { return }
+        guard let language = Language(rawValue: sender.titleLabel!.text!) else { return }
+        
         viewModel.selectedLanguage(language)
         
         for button in languageStackView.arrangedSubviews.compactMap({ $0 as? UIButton }) {
