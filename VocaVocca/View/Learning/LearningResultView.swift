@@ -62,7 +62,7 @@ final class LearningResultView: UIView {
         let view = UIView()
         view.layer.cornerRadius = 20
         view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.customBlack.cgColor
+        view.layer.borderColor = UIColor.customDarkerBrown.cgColor
         return view
     }()
     
@@ -71,6 +71,7 @@ final class LearningResultView: UIView {
         label.text = "볶아 쿠폰"
         label.font = .systemFont(ofSize: 24, weight: .semibold)
         label.textAlignment = .center
+        label.textColor = .customDarkerBrown
         return label
     }()
     
@@ -147,12 +148,12 @@ final class LearningResultView: UIView {
         }
         
         couponLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(10)
+            $0.top.equalToSuperview().inset(15)
             $0.centerX.equalToSuperview()
         }
         
         coffeeStackView.snp.makeConstraints {
-            $0.top.equalTo(couponLabel.snp.bottom).offset(20)
+            $0.top.equalTo(couponLabel.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
         }
         
@@ -182,9 +183,12 @@ final class LearningResultView: UIView {
             ///TODO - 
             // 한줄에 5개 이미지
             for _ in 0..<5 {
-                let imageView = UIImageView(image: UIImage(systemName: "circle.fill"))
-                imageView.tintColor = .customDarkerBrown
+                let imageView = UIImageView(image: UIImage(named: "logoImage"))
                 imageView.alpha = 0.2
+                imageView.contentMode = .scaleAspectFit
+                imageView.snp.makeConstraints {
+                    $0.width.height.equalTo(34)
+                }
                 coffeeBeans.append(imageView)
                 horizontalStackView.addArrangedSubview(imageView)
             }
