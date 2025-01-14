@@ -12,7 +12,7 @@ class VocaMainTableViewCell: UITableViewCell {
     
     static let id = "VocaMainTableViewCell"
     
-    private let cardView = CustomCardView()
+    let cardView = CustomCardView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,11 +30,6 @@ class VocaMainTableViewCell: UITableViewCell {
         cardView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
         }
-    }
-    
-    func configureCell() {
-        cardView.meanLabel.text = "하얀색"
-        cardView.wordLabel.text = "White"
     }
 }
 

@@ -88,14 +88,12 @@ class VocaModalViewModel {
     func fetchVocaBookFromCoreData () {
         testVocaBook()
             .subscribe(onCompleted: {
-                print("444")
             }, onError: { error in
                 print(error)
             }).disposed(by: disposeBag)
         coreDataManager.fetchVocaBookData()
             .subscribe(onNext: { [weak self] vocaBookData in
                 self?.testData = vocaBookData
-                print("222", vocaBookData)
             }, onError: { error in
                 print(error)
             }).disposed(by: disposeBag)
