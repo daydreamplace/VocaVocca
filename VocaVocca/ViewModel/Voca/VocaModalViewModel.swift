@@ -13,7 +13,7 @@ class VocaModalViewModel {
     
     // MARK: - Input
     
-    let selectedVocaBook = BehaviorRelay<VocaBookData?>(value: nil)
+    let selectedVocaBook = PublishSubject<VocaBookData>()
     let word = BehaviorRelay<String>(value: "")
     let meaning = BehaviorRelay<String>(value: "")
     

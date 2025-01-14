@@ -15,6 +15,7 @@ class VocaMainViewModel {
     private let coreData = CoreDataManager.shared
     private let disposeBag = DisposeBag()
     private let manager = UserDefaultsManager()
+    let selectedvocaBook = PublishSubject<VocaBookData>()
     
     let vocaBookSubject = BehaviorSubject(value: [VocaData]())
     

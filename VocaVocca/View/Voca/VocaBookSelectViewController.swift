@@ -94,6 +94,8 @@ final class VocaBookSelectViewController: UIViewController {
             .subscribe(onNext: { [weak self] in
                 self?.doneButtonTapped()
             }).disposed(by: disposeBag)
+        
+        
     }
     
     ///TODO - 네비바 세팅 위치 보카메인뷰컨으로
@@ -131,6 +133,7 @@ final class VocaBookSelectViewController: UIViewController {
     private func doneButtonTapped() {
         guard self.viewModel.selectedVocaBook != nil else { return }
         dismiss(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     /// TODO - 선택된 셀 로직

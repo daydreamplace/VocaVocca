@@ -74,7 +74,13 @@ final class VocaMainViewController: UIViewController {
     // MARK: - 버튼 바인딩
     
     private func bindViewEvents() {
-        let vocaBookSelectViewModel = VocaBookSelectViewModel()
+        vocaMainViewModel.selectedvocaBook
+            .bind { [weak self] vocabook in
+                self?.changeName(vocabook)
+            }
+            .disposed(by: disposeBag)
+        
+        let vocaBookSelectViewModel = VocaBookSelectViewModel(selectedVocaBook: vocaMainViewModel.selectedvocaBook)
         let vocaBookSelectViewController = VocaBookSelectViewController(viewModel: vocaBookSelectViewModel)
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
             switch action {
@@ -84,6 +90,12 @@ final class VocaMainViewController: UIViewController {
                 self.present(self.vocaModalViewController, animated: true)
             }
         }).disposed(by: disposeBag)
+        
+        self.navigationController?.navigationItem.rightBarButtonItem?.rx
+            .tap
+            .bind { [weak self] _ in
+                self?.closeView()
+            }
     }
     
     // MARK: - 테이블뷰 바인딩
@@ -98,5 +110,15 @@ final class VocaMainViewController: UIViewController {
                 cell.cardView.meanLabel.text = element.meaning
                 cell.cardView.wordLabel.text = element.word
             }.disposed(by: disposeBag)
+    }
+    
+    
+    private func changeName(_ vocaBook: VocaBookData) {
+        vocaMainView.vocaBookSelectButton.setTitle(vocaBook.title, for: .normal)
+    }
+    
+    private func closeView() {
+        print("test")
+        self.navigationController?.popViewController(animated: true)
     }
 }

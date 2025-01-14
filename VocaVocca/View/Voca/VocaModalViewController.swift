@@ -111,7 +111,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     }
     
     @objc private func selectVocaBook() {
-        let vocaBookSelectVM = VocaBookSelectViewModel()
+        let vocaBookSelectVM = VocaBookSelectViewModel(selectedVocaBook: viewModel.selectedVocaBook)
         let vocaBookSelectVC = VocaBookSelectViewController(viewModel: vocaBookSelectVM)
         
         vocaBookSelectVM.selectedVocaBook
