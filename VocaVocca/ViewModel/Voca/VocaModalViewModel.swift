@@ -63,7 +63,7 @@ class VocaModalViewModel {
     }
     
     func testVocaBook () -> Completable {
-        coreDataManager.createVocaBookData(title: "토익")
+        coreDataManager.createVocaBookData(title: "토익", language: "언어")
     }
     
     func fetchVocaBookFromCoreData() {
