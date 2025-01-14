@@ -112,12 +112,13 @@ class FlashcardViewController: UIViewController {
         flashcardView.flashcardView.rx
             .swipeGesture([.left, .right])
             .skip(2)
+            .delay(.milliseconds(200), scheduler: MainScheduler.instance)
             .bind { [weak self] gesture in
                 guard let self = self else { return }
                 if gesture.direction == .left {
                     self.flashcardViewModel.markWordsAsIncorrect()
                 } else {
-                    self.flashcardViewModel.markWordsAsIncorrect()
+                    self.flashcardViewModel.markWordAsCorrect()
                 }
             }
             .disposed(by: disposeBag)
