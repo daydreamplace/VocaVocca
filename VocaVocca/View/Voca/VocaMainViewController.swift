@@ -13,7 +13,7 @@ final class VocaMainViewController: UIViewController {
     
     private let vocaMainView = VocaMainView()
     private let vocaMainViewModel = VocaMainViewModel()
-
+    private let vocaBookSelectViewController = VocaBookSelectViewController()
     private var vocaBookData = VocaBookData()
     
     private let vocaModalViewController: VocaModalViewController = {
@@ -56,13 +56,10 @@ final class VocaMainViewController: UIViewController {
 //    }
     
     private func bindViewEvents() {
-        let vocaBookSelectViewModel = VocaBookSelectViewModel()
-        let vocaBookSelectViewController = VocaBookSelectViewController(viewModel: vocaBookSelectViewModel)
-        
         vocaMainView.buttonTapRelay.subscribe(onNext: { action in
             switch action {
             case .vocaBookSelect:
-                self.navigationController?.pushViewController(vocaBookSelectViewController, animated: true)
+                self.navigationController?.pushViewController(self.vocaBookSelectViewController, animated: true)
             case .makeVoca:
                 self.present(self.vocaModalViewController, animated: true)
             }
