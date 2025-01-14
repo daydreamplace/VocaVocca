@@ -22,6 +22,12 @@ class LearningViewModel {
         fetchVocaBookFromCoreData()
     }
     
+    // 단어장의 단어 개수를 확인해 이동 가능 여부를 반환
+    func checkWordsCount() -> Bool {
+        guard let selectedBook = selectedVocaBook else { return false }
+        return selectedBook.words?.count ?? 0 > 0
+    }
+    
     private func fetchVocaBookFromCoreData () {
         CoreDataManager.shared.fetchVocaBookData()
             .subscribe(onNext: { [weak self] vocaBookData in
@@ -43,12 +49,12 @@ class LearningViewModel {
             })
             .disposed(by: disposeBag)
     }
-
+    
     // 테스트 단어장 생성
     private func createTestVocaBookData() -> Completable {
         return CoreDataManager.shared.createVocaBookData(title: "테스트 단어장")
     }
-
+    
     // 테스트 단어 추가
     private func addTestVocaData() -> Completable {
         guard let firstBook = data.first else {
