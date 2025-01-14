@@ -116,12 +116,12 @@ final class VocaMainViewController: UIViewController {
                 //커스텀 태그
                 cell.customTag.subviews.first?.backgroundColor = .lightGray
                 
-                //TODO: 코어데이터 모델에서 language가 단어 -> 단어장으로 수정되면, label 수정 작업 필요
-                cell.customTag.setTagView(layerColor: .lightGray, label: "영어", textColor: .white)
+                //TODO: EN 으로 표시되는중
+                let language = element.books?.language ?? "언어"
+                cell.customTag.setTagView(layerColor: .lightGray, label: language, textColor: .white)
          
                 cell.removeButton.rx.tap.subscribe(onNext: { [weak self] in
-                    self?.vocaMainViewModel.removeVoca(vocaData: element)
-                    self?.vocaMainViewModel.updateVoca()
+                    self?.showDeleteAlert(for: element)
                 }).disposed(by: cell.disposeBag)
                 
             }.disposed(by: disposeBag)
@@ -134,5 +134,20 @@ final class VocaMainViewController: UIViewController {
     
     private func closeView() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    // 삭제 알럿
+    private func showDeleteAlert(for voca: VocaData) {
+        let alert = UIAlertController(
+            title: "삭제 확인",
+            message: "정말로 단어를 삭제하시겠습니까?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+            self?.vocaMainViewModel.removeVoca(vocaData: voca)
+            self?.vocaMainViewModel.updateVoca()
+        }))
+        present(alert, animated: true)
     }
 }

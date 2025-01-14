@@ -15,15 +15,15 @@ class VocaMainViewModel {
     private let coreData = CoreDataManager.shared
     private let disposeBag = DisposeBag()
     private let manager = UserDefaultsManager()
-    private var thisVocaBook = VocaBookData()
+    private var thisVocaBook: VocaBookData?
     
     
     let selectedvocaBook = PublishSubject<VocaBookData>()
     let updateSubject = PublishSubject<Void>()
     let vocaSubject = BehaviorSubject(value: [VocaData]())
-
+    
     init() {
-//        fetchVocaBookId()
+        //        fetchVocaBookId()
         // fetchVocaBook()
     }
     
@@ -42,7 +42,7 @@ class VocaMainViewModel {
             .subscribe(onNext: { [weak self] vocaBookData in
                 let voca = vocaBookData
                     .filter { [weak self] vocaBook in
-                        vocaBook.id == self?.thisVocaBook.id}
+                        vocaBook.id == self?.thisVocaBook?.id}
                 let allVocaData = voca.first?.words?.allObjects as? [VocaData] ?? []
                 self?.vocaSubject.onNext(allVocaData)
 
