@@ -121,6 +121,7 @@ final class VocaMainViewController: UIViewController {
          
                 cell.removeButton.rx.tap.subscribe(onNext: { [weak self] in
                     self?.vocaMainViewModel.removeVoca(vocaData: element)
+                    self?.vocaMainViewModel.updateVoca()
                 }).disposed(by: cell.disposeBag)
                 
             }.disposed(by: disposeBag)
