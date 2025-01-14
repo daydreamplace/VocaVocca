@@ -10,20 +10,20 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-extension VocaBookData {
-    var languageEnum: Language? {
-        guard let languageCode = language else {
-            print("VocaBook.language is nil")
-            return nil
-        }
-        if let language = Language(title: languageCode) {
-            return language
-        } else {
-            print("Failed to map languageCode: \(languageCode) to Language Enum")
-            return nil
-        }
-    }
-}
+//extension VocaBookData {
+//    var languageEnum: Language? {
+//        guard let languageCode = language else {
+//            print("VocaBook.language is nil")
+//            return nil
+//        }
+//        if let language = Language(title: languageCode) {
+//            return language
+//        } else {
+//            print("Failed to map languageCode: \(languageCode) to Language Enum")
+//            return nil
+//        }
+//    }
+//}
 
 class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
@@ -104,11 +104,13 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             guard let self = self else { return }
             let word = self.wordTextFieldView.textField.text ?? ""
             
-            if let language = self.viewModel.selectedVocaBook.value?.languageEnum {
-                self.viewModel.fetchTranslation(for: word, language: language)
-            } else {
-                print("단어장 언어를 찾을 수 없습니다.")
-            }
+//            let lang = Language(rawValue: word)
+            
+//            if let language = self.viewModel.selectedVocaBook.value?.languageEnum {
+//            self.viewModel.fetchTranslation(for: word, language: lang)
+//            } else {
+//                print("단어장 언어를 찾을 수 없습니다.")
+//            }
         }
 
         // 저장 버튼 동작
