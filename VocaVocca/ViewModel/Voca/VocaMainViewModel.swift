@@ -14,34 +14,37 @@ class VocaMainViewModel {
     private var currentVocaBookId = UUID()
     private let coreData = CoreDataManager.shared
     private let disposeBag = DisposeBag()
+    private let manager = UserDefaultsManager()
     
-    let vocaBookSubject = BehaviorSubject(value: VocaBookData())
+    let vocaBookSubject = BehaviorSubject(value: [VocaData]())
     
     init() {
-        fetchVocaBookId()
+//        fetchVocaBookId()
         fetchVocaBook()
     }
-
+    
+    // MARK: - 단어장 ID 조회
+    
     private func fetchVocaBookId() {
-        if let uuidString = UserDefaults.standard.string(forKey: "chosenVocaBook"),
+        if let uuidString = manager.getVocaBookID(),
            let uuid = UUID(uuidString: uuidString) {
-            print("uuid: \(uuid)")
             currentVocaBookId = uuid
         }
     }
+    
+    // MARK: - 단어 조회
     
     private func fetchVocaBook() {
         coreData.fetchVocaBookData()
             .subscribe(onNext: { [weak self] vocaBookData in
                 
-                guard let uuid = self?.currentVocaBookId else { return }
+                //TODO: 단어선택화면 구현시 수정 예정
+                guard let voca = vocaBookData.first else { return }
                 
-                for data in vocaBookData {
-                    if data.id == uuid {
-                        self?.vocaBookSubject.onNext(data)
-                        
-                        return
-                    }
+                if let wordsSet = voca.words as? Set<VocaData> {
+                    let array = Array(wordsSet)
+                    
+                    self?.vocaBookSubject.onNext(array)
                 }
                 
             },onError: { error in
