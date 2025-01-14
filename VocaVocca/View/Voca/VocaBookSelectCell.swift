@@ -7,8 +7,11 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 final class VocaBookSelectCell: UICollectionViewCell {
+    
+    let disposeBag = DisposeBag()
     
     static let id = "VocaBookSelectCell"
     
@@ -19,19 +22,17 @@ final class VocaBookSelectCell: UICollectionViewCell {
         }
     }
     
-    private let vocaBookNameLabel: UILabel = {
+    let vocaBookNameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.textColor = .customBlack
-        label.text = "토익"
         return label
     }()
     
-    private let wordsCountLabel: UILabel = {
+    let wordsCountLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .light)
         label.textColor = .gray
-        label.text = "단어 8개"
         return label
     }()
     
@@ -42,8 +43,7 @@ final class VocaBookSelectCell: UICollectionViewCell {
         return stackView
     }()
     
-    ///TODO - 버튼 액션, 로직처리
-    private let deleteButton: UIButton = {
+    let deleteButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.tintColor = .gray

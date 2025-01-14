@@ -57,7 +57,7 @@ class LearningViewModel {
     
     // 테스트 단어 추가
     private func addTestVocaData() -> Completable {
-        guard let firstBook = data.first else {
+        guard let firstBook = data.randomElement() else {
             return Completable.error(NSError(domain: "단어장을 찾을 수 없습니다.", code: -1, userInfo: nil))
         }
         
