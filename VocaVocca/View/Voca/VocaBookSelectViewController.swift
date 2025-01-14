@@ -118,7 +118,14 @@ final class VocaBookSelectViewController: UIViewController {
     private func createButtonTapped() {
         let vocaBookModalVM = VocaBookModalViewModel(mode: .create)
         let vocaBookModalVC = VocaBookModalViewController(viewModel: vocaBookModalVM)
-        present(vocaBookModalVC, animated: true)
+        
+        vocaBookModalVM.saveCompleted
+              .subscribe(onNext: { [weak self] in
+                  self?.viewModel.fetchVocaBookFromCoreData()
+              })
+              .disposed(by: disposeBag)
+          
+          present(vocaBookModalVC, animated: true)
     }
     
     /// TODO - 네비바버튼 관련 로직 : 데이터 넘기기
