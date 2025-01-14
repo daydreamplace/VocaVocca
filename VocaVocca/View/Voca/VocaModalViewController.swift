@@ -27,22 +27,14 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         return label
     }()
     
-    private let wordTextFieldView = CustomTextFieldView(title: "단어", placeholder: "단어를 입력하세요")
+    private let wordTextFieldView: CustomTextFieldView
     private let meaningTextFieldView = CustomTextFieldView(title: "뜻", placeholder: "뜻을 입력하세요")
-    
-    private let checkButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("확인", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .customDarkBrown
-        button.layer.cornerRadius = 8
-        return button
-    }()
     
     // MARK: - Initialization
     
     init(viewModel: VocaModalViewModel) {
         self.viewModel = viewModel
+        self.wordTextFieldView = CustomTextFieldView(title: "단어", placeholder: "단어를 입력하세요", showSearchButton: true)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -66,7 +58,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     private func setupView() {
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        view.addSubviews(modalView, checkButton)
+        view.addSubview(modalView)
         
         modalView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -75,28 +67,25 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         }
         
         modalView.contentStackView.addArrangedSubviews(selectVocaLabel, wordTextFieldView, meaningTextFieldView)
-        
-        checkButton.snp.makeConstraints {
-            $0.top.equalTo(wordTextFieldView.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(30)
-            $0.height.equalTo(40)
-        }
-        
     }
     
     private func bindViewModel() {
-        // 단어 입력 텍스트 필드 바인딩
+        // 단어 입력 텍스트 필드
         wordTextFieldView.didEndEditing = { [weak self] text in
             self?.viewModel.word.accept(text)
         }
         
-        // 뜻 입력 텍스트 필드 바인딩
+        // 뜻 입력 텍스트 필드
         meaningTextFieldView.didEndEditing = { [weak self] text in
             self?.viewModel.meaning.accept(text)
         }
         
-        // 확인 버튼 클릭 시 단어 번역
-        checkButton.addTarget(self, action: #selector(didTapCheckButton), for: .touchUpInside)
+        // 검색 버튼 클릭 시 동작
+        wordTextFieldView.didTapSearchButton = { [weak self] in
+            let word = self?.wordTextFieldView.textField.text ?? ""
+            print("검색된 단어: \(word)")
+            self?.viewModel.fetchTranslation(for: word)
+        }
         
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
@@ -104,6 +93,11 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
                 print("Confirm button tapped")
                 self?.viewModel.handleSave()
             }
+            .disposed(by: disposeBag)
+        
+        // meaning을 바인딩
+        viewModel.meaning
+            .bind(to: meaningTextFieldView.textField.rx.text)
             .disposed(by: disposeBag)
     }
     
@@ -122,11 +116,5 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     func didTapCloseButton() {
         dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func didTapCheckButton() {
-        let word = wordTextFieldView.textField.text ?? ""
-        print("입력된 단어: \(word)")
-        viewModel.fetchTranslation(for: word) // 뷰모델에서 fetchTranslation 호출
     }
 }

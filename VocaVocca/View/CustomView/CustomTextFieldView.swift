@@ -31,14 +31,29 @@ class CustomTextFieldView: UIView {
         return field
     }()
     
+    private let searchButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        button.tintColor = .customDarkBrown
+        return button
+    }()
+    
+    var didTapSearchButton: (() -> Void)?
     var didEndEditing: ((String) -> Void)?
     
     // MARK: - Initialization
     
-    init(title: String, placeholder: String) {
+    init(title: String, placeholder: String, showSearchButton: Bool = false) {
         super.init(frame: .zero)
         setupUI(title: title, placeholder: placeholder)
+        if showSearchButton {
+            textField.rightView = searchButton
+            textField.rightViewMode = .always
+        } else {
+            textField.rightView = nil
+        }
         textField.delegate = self
+        searchButton.addTarget(self, action: #selector(didTapSearchButtonAction), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +68,9 @@ class CustomTextFieldView: UIView {
         
         addSubviews(titleLabel, textField)
         
+        textField.rightView = searchButton
+        textField.rightViewMode = .always
+        
         titleLabel.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
         }
@@ -63,6 +81,10 @@ class CustomTextFieldView: UIView {
             $0.height.equalTo(40)
             $0.bottom.equalToSuperview()
         }
+    }
+    
+    @objc private func didTapSearchButtonAction() {
+        didTapSearchButton?()
     }
     
     // MARK: - Update Method
@@ -88,7 +110,7 @@ extension CustomTextFieldView: UITextFieldDelegate {
         textField.layer.borderColor = UIColor.lightGray.cgColor
         
         if let text = textField.text, !text.isEmpty {
-            didEndEditing?(text) // 편집 완료 시 콜백 실행
+            didEndEditing?(text)
         }
     }
 }
