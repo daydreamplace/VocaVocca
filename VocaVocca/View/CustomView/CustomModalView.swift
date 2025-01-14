@@ -10,12 +10,15 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol CustomModalViewDelegate: AnyObject {
+    func didTapCloseButton()
+}
+
 class CustomModalView: UIView {
     
-    // MARK: - Properties
+    // MARK: - Delegate
     
-    private let disposeBag = DisposeBag()
-    var vocaBookViewModel: VocaBookModalViewModel?
+    weak var delegate: CustomModalViewDelegate?
     
     // MARK: - UI Components
     
@@ -31,6 +34,7 @@ class CustomModalView: UIView {
         let button = UIButton()
         button.setTitle("✕", for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -92,11 +96,7 @@ class CustomModalView: UIView {
         }
     }
     
-    // MARK: - Public Methods
-    
-    /// 제목과 버튼 텍스트 업데이트
-    func update(title: String, buttonTitle: String) {
-        self.titleLabel.text = title
-        self.confirmButton.setTitle(buttonTitle, for: .normal)
+    @objc private func closeButtonTapped() {
+        delegate?.didTapCloseButton()
     }
 }

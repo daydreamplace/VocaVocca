@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 
-class VocaBookModalViewController: UIViewController {
+class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
     
@@ -64,6 +64,7 @@ class VocaBookModalViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupLanguageButtons()
+        modalView.delegate = self
     }
     
     // MARK: - Setup
@@ -143,5 +144,11 @@ class VocaBookModalViewController: UIViewController {
             button.backgroundColor = .lightGray
         }
         sender.backgroundColor = .customDarkBrown
+    }
+    
+    // MARK: - CustomModalViewDelegate
+    
+    func didTapCloseButton() {
+        dismiss(animated: true, completion: nil)
     }
 }

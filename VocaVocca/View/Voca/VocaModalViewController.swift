@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class VocaModalViewController: UIViewController {
+class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
     
@@ -20,20 +20,21 @@ class VocaModalViewController: UIViewController {
     
     private let selectVocaLabel: UILabel = {
         let label = UILabel()
-        label.text = "단어장을 선택해 주세요 >"
+        label.text = "단어장을 선택해주세요 >"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .customBrown
         label.isUserInteractionEnabled = true
         return label
     }()
     
-    private let wordTextFieldView = CustomTextFieldView(title: "단어", placeholder: "단어를 입력하세요")
+    private let wordTextFieldView: CustomTextFieldView
     private let meaningTextFieldView = CustomTextFieldView(title: "뜻", placeholder: "뜻을 입력하세요")
     
     // MARK: - Initialization
     
     init(viewModel: VocaModalViewModel) {
         self.viewModel = viewModel
+        self.wordTextFieldView = CustomTextFieldView(title: "단어", placeholder: "단어를 입력하세요", showSearchButton: true)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,6 +50,7 @@ class VocaModalViewController: UIViewController {
         bindViewModel()
         setupActions()
         
+        modalView.delegate = self
         viewModel.fetchVocaBookFromCoreData()
     }
     
@@ -68,22 +70,38 @@ class VocaModalViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        // 단어 입력 텍스트 필드 바인딩
+        // 단어 입력 텍스트 필드
         wordTextFieldView.didEndEditing = { [weak self] text in
             self?.viewModel.word.accept(text)
         }
         
-        // 뜻 입력 텍스트 필드 바인딩
-        meaningTextFieldView.didEndEditing = { [weak self] text in
-            self?.viewModel.meaning.accept(text)
+        // 뜻 입력 텍스트 필드
+        meaningTextFieldView.textField.rx.text
+            .orEmpty
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] text in
+                self?.viewModel.meaning.accept(text)
+            })
+            .disposed(by: disposeBag)
+        
+        // 검색 버튼 클릭 시 동작
+        wordTextFieldView.didTapSearchButton = { [weak self] in
+            let word = self?.wordTextFieldView.textField.text ?? ""
+            print("검색된 단어: \(word)")
+            self?.viewModel.fetchTranslation(for: word)
         }
         
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
-                print("Confirm button tapped")
                 self?.viewModel.handleSave()
+                self?.dismiss(animated: true, completion: nil)
             }
+            .disposed(by: disposeBag)
+        
+        // meaning을 바인딩
+        viewModel.meaning
+            .bind(to: meaningTextFieldView.textField.rx.text)
             .disposed(by: disposeBag)
     }
     
@@ -93,8 +111,22 @@ class VocaModalViewController: UIViewController {
     }
     
     @objc private func selectVocaBook() {
-        let vocaBookSelectVC = VocaBookSelectViewController()
+        let vocaBookSelectVM = VocaBookSelectViewModel()
+        let vocaBookSelectVC = VocaBookSelectViewController(viewModel: vocaBookSelectVM)
+        
+        vocaBookSelectVM.selectedVocaBook
+            .map { vocaBook in
+                "\(vocaBook.title ?? "") >"
+            }
+            .bind(to: selectVocaLabel.rx.text)
+            .disposed(by: disposeBag)
         let navController = UINavigationController(rootViewController: vocaBookSelectVC)
         present(navController, animated: true, completion: nil)
+    }
+    
+    // MARK: - CustomModalViewDelegate
+    
+    func didTapCloseButton() {
+        dismiss(animated: true, completion: nil)
     }
 }

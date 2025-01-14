@@ -14,21 +14,21 @@ final class VocaBookSelectViewController: UIViewController {
     
     private let vocaBookSelectView = VocaBookSelectView()
     private let disposeBag = DisposeBag()
-    private let viewModel = VocaBookSelectViewModel()
+    private let viewModel: VocaBookSelectViewModel
     
     override func loadView() {
         self.view = vocaBookSelectView
     }
     
     ///TODO - 데이터 넘겨받을 경우 생성자 수정
-    //    init(viewModel: VocaBookSelectViewModel) {
-    //        self.viewModel = viewModel
-    //        super.init(nibName: nil, bundle: nil)
-    //    }
+        init(viewModel: VocaBookSelectViewModel) {
+            self.viewModel = viewModel
+            super.init(nibName: nil, bundle: nil)
+        }
     
-    //    required init?(coder: NSCoder) {
-    //        fatalError("init(coder:) has not been implemented")
-    //    }
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,8 +135,9 @@ final class VocaBookSelectViewController: UIViewController {
     
     /// TODO - 선택된 셀 로직
     private func selectedBook(book: VocaBookData) {
-        viewModel.selectedVocaBook = book
-        print("\(book.title ?? "")")
+        viewModel.test(book)
+//        viewModel.selectedVocaBook = book
+//        print("\(book.title ?? "")")
     }
     
     /// TODO - 꾹 누른 셀 아이템 관련 로직
