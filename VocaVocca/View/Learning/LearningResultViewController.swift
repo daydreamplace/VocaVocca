@@ -52,6 +52,13 @@ final class LearningResultViewController: UIViewController {
             .bind(to: learningResultView.correctRateLabel.rx.text)
             .disposed(by: disposeBag)
         
+        // 커피콩 개수 바인딩
+        viewModel.filledBeanCount
+            .subscribe(onNext: { [weak self] filledCount in
+                self?.learningResultView.updateCoffeeBeans(correctCount: filledCount)
+            })
+            .disposed(by: disposeBag)
+        
         // 닫기 서브젝트 바인딩
         viewModel.closeSubject
             .bind { [weak self] _ in
