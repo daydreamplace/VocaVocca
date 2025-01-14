@@ -57,9 +57,7 @@ final class VocaBookSelectViewController: UIViewController {
                         self?.testdeleteButtonTapped()
                     }).disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
-        
-        viewModel
-        
+                
         // 셀 선택 시 바인딩
         vocaBookSelectView.collectionView.rx.modelSelected(VocaBookData.self)
             .subscribe(onNext: { [weak self] selectedBook in
