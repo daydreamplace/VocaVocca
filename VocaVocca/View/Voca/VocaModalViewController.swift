@@ -10,6 +10,14 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+extension VocaBookData {
+    var languageEnum: Language? {
+        guard let languageCode = language else { return nil }
+        return Language(title: languageCode)
+    }
+}
+
+
 class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     // MARK: - Properties
@@ -86,9 +94,15 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         
         // 검색 버튼 클릭 시 동작
         wordTextFieldView.didTapSearchButton = { [weak self] in
-            let word = self?.wordTextFieldView.textField.text ?? ""
-            print("검색된 단어: \(word)")
-            self?.viewModel.fetchTranslation(for: word)
+            guard let self = self else { return }
+            let word = self.wordTextFieldView.textField.text ?? ""
+            
+            if let language = self.viewModel.selectedVocaBook.value?.languageEnum {
+                print("검색된 단어: \(word), 언어: \(language.koreanTitle)")
+                self.viewModel.fetchTranslation(for: word, language: language)
+            } else {
+                print("단어장 언어를 찾을 수 없습니다.")
+            }
         }
         
         // 저장 버튼 동작

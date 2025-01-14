@@ -51,7 +51,7 @@ class VocaBookModalViewModel {
         // 저장 버튼 활성화 여부 결정?
         isSaveEnabled = Observable
             .combineLatest(vocaBookTitle.asObservable(), selectedLanguage.asObservable())
-            .map { $0.isEmpty && $1 != nil}
+            .map { !$0.isEmpty && $1 != nil}
         
         // 버튼, 텍스트
         title = Observable.just(mode == .create ? "단어장 만들기": "단어장 수정하기")
@@ -65,11 +65,11 @@ class VocaBookModalViewModel {
     
     // save edit
     func handleSaveOrEdit() {
-        guard let language = selectedLanguage.value, !vocaBookTitle.value.isEmpty else { return }
+        guard let language = selectedLanguage.value?.koreanTitle, !vocaBookTitle.value.isEmpty else { return }
         
         if mode == .create {
             // Core Data 단어장 추가
-            coreDataManager.createVocaBookData(title: vocaBookTitle.value, language: "언어")
+            coreDataManager.createVocaBookData(title: vocaBookTitle.value, language: language)
                 .subscribe(
                     onCompleted: {
                         print("단어장을 추가: \(self.vocaBookTitle.value)")

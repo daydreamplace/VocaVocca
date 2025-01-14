@@ -64,6 +64,7 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         super.viewDidLoad()
         setupView()
         setupLanguageButtons()
+        bindViewModel()
         modalView.delegate = self
     }
     
@@ -132,6 +133,7 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
                 self?.viewModel.handleSaveOrEdit()
+                self?.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
     }

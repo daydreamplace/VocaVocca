@@ -45,17 +45,17 @@ class VocaModalViewModel {
     func updateVocaBook(_ vocaBook: VocaBookData) {
         thisVocaBook = vocaBook
     }
+    
     // 네트워크 매니저
-    func fetchTranslation(for word: String) {
+    func fetchTranslation(for word: String, language: Language) {
         networkManager
-            .fetch(customURLComponents: .translation(text: word, lang: .english))
+            .fetch(customURLComponents: .translation(text: word, lang: language))
             .asObservable()
-            .map { (response: TranslationsResponse) in
+            .map { (response: TranslationsResponse) -> String in
                 print("API Response: \(response)")
-                print("Translations: \(response.translations)")
                 return response.translations.first?.text ?? "번역 실패"
             }
-            .subscribe(onNext: { [weak self] translation in
+            .subscribe(onNext: { [weak self] (translation: String) in
                 print("Translated Text: \(translation)")
                 self?.meaning.accept(translation)
             })
@@ -74,7 +74,7 @@ class VocaModalViewModel {
     
     // CoreData 단어 업데이트
     func handleSave() {
-        let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
+        let finalMeaning = meaning.value.isEmpty ? "값이 없어" : meaning.value
         
         print("단어 추가: \(word.value), 뜻: \(finalMeaning), 단어장: \(thisVocaBook)")
         coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
