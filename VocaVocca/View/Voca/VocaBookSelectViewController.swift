@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxGesture
 
 final class VocaBookSelectViewController: UIViewController {
     
@@ -54,9 +55,17 @@ final class VocaBookSelectViewController: UIViewController {
                 // 셀 버튼액션 바인딩
                 cell.deleteButton.rx.tap
                     .subscribe(onNext: { [weak self] in
-                        self?.testdeleteButtonTapped()
+                        self?.showDeleteAlert(for: item)
                     }).disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
+        
+        // 삭제 완료 알림
+          viewModel.deletionCompleteSubject
+              .observe(on: MainScheduler.instance)
+              .subscribe(onNext: { [weak self] in
+                  self?.showDeletionSuccessAlert()
+              })
+              .disposed(by: disposeBag)
                 
         // 셀 선택 시 바인딩
         vocaBookSelectView.collectionView.rx.modelSelected(VocaBookData.self)
@@ -66,10 +75,8 @@ final class VocaBookSelectViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // 셀 꾹 눌렀을 때 바인딩
-        let longPressGesture = UILongPressGestureRecognizer()
-        vocaBookSelectView.collectionView.addGestureRecognizer(longPressGesture)
-        
-        longPressGesture.rx.event
+        vocaBookSelectView.collectionView.rx.longPressGesture()
+            .when(.began)
             .filter { $0.state == .began }
             .compactMap { [weak self] gesture -> IndexPath? in
                 guard let collectionView = self?.vocaBookSelectView.collectionView else { return nil }
@@ -100,28 +107,11 @@ final class VocaBookSelectViewController: UIViewController {
         
     }
     
-    ///TODO - 네비바 세팅 위치 보카메인뷰컨으로
     private func setUpNaviBar() {
         title = "단어장 선택"
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        appearance.shadowColor = nil
-        
-        navigationController?.navigationBar.tintColor = .customBlack
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료")
         navigationItem.rightBarButtonItem?.tintColor = .customBrown
-    }
-    
-    ///TODO - 해당 단어장 삭제, 알럿
-    // 셀 삭제 버튼 테스트
-    private func testdeleteButtonTapped() {
-        print("testButtonTapped")
     }
     
     // 단어장 추가버튼 로직
@@ -150,6 +140,30 @@ final class VocaBookSelectViewController: UIViewController {
     private func handleLongPress(at indexPath: IndexPath) {
         guard let item = try? viewModel.vocaBookSubject.value()[indexPath.row] else { return }
         print("\(item.title ?? "")")
+    }
+    
+    // 삭제 알럿
+    private func showDeleteAlert(for vocaBook: VocaBookData) {
+        let alert = UIAlertController(
+            title: "삭제 확인",
+            message: "정말로 단어장을 삭제하시겠습니까?",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { [weak self] _ in
+            self?.viewModel.deleteVocaBook(vocaBook)
+        }))
+        present(alert, animated: true)
+    }
+
+    private func showDeletionSuccessAlert() {
+        let alert = UIAlertController(
+            title: "삭제 완료",
+            message: "단어장이 삭제되었습니다.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        present(alert, animated: true)
     }
     
 }
