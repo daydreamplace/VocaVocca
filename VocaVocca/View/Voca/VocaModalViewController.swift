@@ -76,9 +76,13 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         }
         
         // 뜻 입력 텍스트 필드
-        meaningTextFieldView.didEndEditing = { [weak self] text in
-            self?.viewModel.meaning.accept(text)
-        }
+        meaningTextFieldView.textField.rx.text
+            .orEmpty
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] text in
+                self?.viewModel.meaning.accept(text)
+            })
+            .disposed(by: disposeBag)
         
         // 검색 버튼 클릭 시 동작
         wordTextFieldView.didTapSearchButton = { [weak self] in
