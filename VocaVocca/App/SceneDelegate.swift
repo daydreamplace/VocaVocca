@@ -12,15 +12,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-            guard let windowScene = (scene as? UIWindowScene) else { return }
-
-            window = UIWindow(windowScene: windowScene)
-
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        window = UIWindow(windowScene: windowScene)
+        
         let firstViewController = UINavigationController(rootViewController: VocaMainViewController())
         let secondViewController = UINavigationController(rootViewController: LearningViewController())
         let thirdViewController = UINavigationController(rootViewController: RecordViewController())
         let tabBarController = UITabBarController()
         tabBarController.setViewControllers([firstViewController, secondViewController, thirdViewController], animated: true)
+        
+        tabBarController.tabBar.backgroundColor = .white
+        tabBarController.tabBar.tintColor = .customDarkerBrown
         
         if let items = tabBarController.tabBar.items {
             items[0].image = UIImage(systemName: "book")
@@ -32,7 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
-        }
+    }
 }
 
 

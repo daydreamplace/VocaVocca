@@ -45,21 +45,21 @@ class VocaMainTableViewCell: UITableViewCell {
         addSubviews(cardView)
         
         cardView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.center.equalToSuperview()
             $0.width.equalTo(340)
             $0.height.equalTo(140)
         }
         
         customTag.snp.makeConstraints {
-            $0.bottom.equalTo(cardView.snp.bottom).inset(40)
-            $0.leading.equalTo(cardView.snp.leading).inset(50)
+            $0.bottom.equalTo(cardView.snp.bottom).inset(20)
+            $0.leading.equalTo(cardView.snp.leading).inset(20)
             $0.width.equalTo(45)
             $0.height.equalTo(20)
         }
         
         removeButton.snp.makeConstraints {
-            $0.bottom.equalTo(cardView.snp.bottom).inset(40)
-            $0.trailing.equalTo(cardView.snp.trailing).inset(50)
+            $0.bottom.equalTo(cardView.snp.bottom).inset(16)
+            $0.trailing.equalTo(cardView.snp.trailing).inset(16)
             $0.width.height.equalTo(30)
         }
     }

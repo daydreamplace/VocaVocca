@@ -11,7 +11,7 @@ import RxSwift
 
 final class VocaBookSelectCell: UICollectionViewCell {
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     static let id = "VocaBookSelectCell"
     
@@ -20,6 +20,12 @@ final class VocaBookSelectCell: UICollectionViewCell {
         didSet {
             contentView.backgroundColor = isSelected ? UIColor.customLightBrown : UIColor.white
         }
+    }
+    
+    // 셀 재사용시 DisposeBag 초기화
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
     let vocaBookNameLabel: UILabel = {

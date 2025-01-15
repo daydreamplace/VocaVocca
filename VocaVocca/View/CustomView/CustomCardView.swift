@@ -28,7 +28,7 @@ class CustomCardView: UIView {
     
     let meanLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.font = .systemFont(ofSize: 24, weight: .semibold)
         label.textColor = .black
         return label
     }()
@@ -45,22 +45,21 @@ class CustomCardView: UIView {
     private func setupUI() {
         cardBackgroundView.addSubviews(wordLabel, meanLabel)
         addSubview(cardBackgroundView)
-                
+        
         cardBackgroundView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.centerX.equalToSuperview()
+            $0.center.equalToSuperview()
             $0.width.equalTo(340)
             $0.height.equalTo(140)
         }
         
         wordLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(40)
-            $0.leading.equalTo(cardBackgroundView.snp.leading).inset(20)
+            $0.leading.equalToSuperview().inset(30)
         }
         
         meanLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(40)
-            $0.trailing.equalTo(cardBackgroundView.snp.trailing).inset(20)
+            $0.top.equalToSuperview().inset(50)
+            $0.trailing.equalToSuperview().inset(30)
         }
     }
     

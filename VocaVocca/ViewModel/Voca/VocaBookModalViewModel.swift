@@ -35,6 +35,8 @@ class VocaBookModalViewModel {
     let title: Observable<String>
     let buttonTitle: Observable<String>
     
+    let saveCompleted = PublishSubject<Void>()
+    
     // mode
     private let mode: Mode
     
@@ -72,6 +74,7 @@ class VocaBookModalViewModel {
             coreDataManager.createVocaBookData(title: vocaBookTitle.value, language: language)
                 .subscribe(
                     onCompleted: {
+                        self.saveCompleted.onNext(())
                         print("단어장을 추가: \(self.vocaBookTitle.value)")
                     },
                     onError: { error in
@@ -92,13 +95,11 @@ class VocaBookModalViewModel {
                 }
                 .subscribe(
                     onNext: { _ in
+                        self.saveCompleted.onNext(())
                         print("단어장을 수정: \(self.vocaBookTitle.value)")
                     },
                     onError: { error in
                         print("단어장 수정 실패: \(error)")
-                    },
-                    onCompleted: {
-                        print("단어장 수정 완료")
                     }
                 ).disposed(by: disposeBag)
         }

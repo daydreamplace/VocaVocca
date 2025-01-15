@@ -22,14 +22,14 @@ final class VocaBookSelectViewController: UIViewController {
     }
     
     ///TODO - 데이터 넘겨받을 경우 생성자 수정
-        init(viewModel: VocaBookSelectViewModel) {
-            self.viewModel = viewModel
-            super.init(nibName: nil, bundle: nil)
-        }
+    init(viewModel: VocaBookSelectViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,14 +59,6 @@ final class VocaBookSelectViewController: UIViewController {
                     }).disposed(by: cell.disposeBag)
             }.disposed(by: disposeBag)
         
-        // 삭제 완료 알림
-          viewModel.deletionCompleteSubject
-              .observe(on: MainScheduler.instance)
-              .subscribe(onNext: { [weak self] in
-                  self?.showDeletionSuccessAlert()
-              })
-              .disposed(by: disposeBag)
-                
         // 셀 선택 시 바인딩
         vocaBookSelectView.collectionView.rx.modelSelected(VocaBookData.self)
             .subscribe(onNext: { [weak self] selectedBook in
@@ -89,7 +81,6 @@ final class VocaBookSelectViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        
         // 단어장 추가 버튼 바인딩
         vocaBookSelectView.createButton.rx.tap
             .subscribe(onNext: { [weak self] in
@@ -102,14 +93,11 @@ final class VocaBookSelectViewController: UIViewController {
                 self?.doneButtonTapped()
                 print("네비바")
             }).disposed(by: disposeBag)
-
-        
-        
     }
     
     private func setUpNaviBar() {
         title = "단어장 선택"
-
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료")
         navigationItem.rightBarButtonItem?.tintColor = .customBrown
     }
@@ -118,6 +106,13 @@ final class VocaBookSelectViewController: UIViewController {
     private func createButtonTapped() {
         let vocaBookModalVM = VocaBookModalViewModel(mode: .create)
         let vocaBookModalVC = VocaBookModalViewController(viewModel: vocaBookModalVM)
+        
+        vocaBookModalVM.saveCompleted
+            .subscribe(onNext: { [weak self] in
+                self?.viewModel.fetchVocaBookFromCoreData()
+            })
+            .disposed(by: disposeBag)
+        
         present(vocaBookModalVC, animated: true)
     }
     
@@ -133,8 +128,8 @@ final class VocaBookSelectViewController: UIViewController {
     private func selectedBook(book: VocaBookData) {
         viewModel.test(book)
         viewModel.selectedVocaBook.onNext(book)
-//        viewModel.selectedVocaBook = book
-//        print("\(book.title ?? "")")
+        //        viewModel.selectedVocaBook = book
+        //        print("\(book.title ?? "")")
     }
     
     /// TODO - 꾹 누른 셀 아이템 관련 로직
@@ -156,7 +151,7 @@ final class VocaBookSelectViewController: UIViewController {
         }))
         present(alert, animated: true)
     }
-
+    
     private func showDeletionSuccessAlert() {
         let alert = UIAlertController(
             title: "삭제 완료",

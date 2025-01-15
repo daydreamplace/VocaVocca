@@ -14,11 +14,10 @@ class VocaBookSelectViewModel {
     private let disposeBag = DisposeBag()
     
     let vocaBookSubject = BehaviorSubject(value: [VocaBookData]())
-    let deletionCompleteSubject = PublishSubject<Void>()
     
     var selectedVocaBook: PublishSubject<VocaBookData>
     var closeSubject: PublishSubject<Void>
-   
+    
     init(selectedVocaBook: PublishSubject<VocaBookData>, closeSubject: PublishSubject<Void>) {
         self.selectedVocaBook = selectedVocaBook
         self.closeSubject = closeSubject
@@ -42,15 +41,12 @@ class VocaBookSelectViewModel {
     func deleteVocaBook(_ vocaBook: VocaBookData) {
         CoreDataManager.shared.deleteVocaBookData(vocaBook: vocaBook)
             .subscribe(onCompleted: { [weak self] in
-                self?.refreshVocaBooks() // 삭제 후 데이터 갱신
-                self?.deletionCompleteSubject.onNext(())
+                
+                // 삭제 후 데이터 갱신
+                self?.fetchVocaBookFromCoreData()
             }, onError: { error in
                 print("Error deleting VocaBook: \(error)")
             }).disposed(by: disposeBag)
-    }
-    
-    private func refreshVocaBooks() {
-        fetchVocaBookFromCoreData()
     }
     
 }
