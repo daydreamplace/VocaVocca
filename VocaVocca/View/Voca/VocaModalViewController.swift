@@ -22,7 +22,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         let label = UILabel()
         label.text = "→ 단어장을 선택해주세요"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textColor = .customBrown
+        label.textColor = .customDarkBrown
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -97,6 +97,10 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         }
         
         modalView.contentStackView.addArrangedSubviews(selectVocaLabel, wordTextFieldView, meaningTextFieldView)
+        
+        modalView.contentStackView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(100)
+        }
     }
     
     private func bindViewModel() {

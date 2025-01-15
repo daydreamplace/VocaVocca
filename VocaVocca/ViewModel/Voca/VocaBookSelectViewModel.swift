@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+
 class VocaBookSelectViewModel {
     
     private let disposeBag = DisposeBag()
