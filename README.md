@@ -11,7 +11,7 @@ VocaVocca는 학습 단어장 iOS 앱 입니다.
 한국어, 영어, 중국어, 일본어, 독일어, 스페인어 등 </p>
 원하는 단어를 저장하고 학습할 수 있는 단어장 앱 프로젝트입니다.
 
-- [VocaVocca 프로젝트 대시보드]([https://www.notion.so/teamsparta/5-e1738a727feb4137a6cfd23d21c1dc9b])
+- [VocaVocca 프로젝트 대시보드](https://www.notion.so/teamsparta/5-e1738a727feb4137a6cfd23d21c1dc9b)
 
 ### 대상 사용자
 
@@ -29,7 +29,7 @@ VocaVocca는 학습 단어장 iOS 앱 입니다.
 | Kkang  | iOS 개발자 | [@Kkang](https://github.com/kangminseoung) |
 | Eden | iOS 개발자 | [@Eden](https://github.com/daydreamplace) | 
 | MUN   | iOS 개발자 | [@MUN ](https://github.com/name-mun) | 
-| 니쥬니  | iOS 개발자  | [@bryjna07](https://github.com/bryjna07) |
+| 니쥬니  | iOS 개발자  | [@Watson_22](https://github.com/bryjna07) |
 
 ---
 
@@ -40,12 +40,107 @@ VocaVocca는 학습 단어장 iOS 앱 입니다.
 
 ---
 
+## 📂 파일구조
+
+```
+📦 VocaVocca
+└── 📦 VocaVocca
+    ├── 📁 App
+    │   ├── 📄 AppDelegate.swift
+    │   └── 📄 SceneDelegate.swift
+    │
+    ├── 📁 Extension
+    │   ├── 📄 UIColor+Custom.swift
+    │   ├── 📄 UIStackView+ArrangedSubviews.swift
+    │   └── 📄 UIView+AddSubviews.swift
+    │
+    ├── 📁 Model
+    │   ├── 📄 CoreDataManager.swift
+    │   ├── 📄 Language.swift
+    │   ├── 📄 LearningResult.swift
+    │   ├── 📄 NetworkManager.swift
+    │   ├── 📄 RecordData+CoreDataClass.swift
+    │   ├── 📄 RecordData+CoreDataProperties.swift
+    │   ├── 📄 TranslationsResponse.swift
+    │   ├── 📄 UserDefaultsManager.swift
+    │   ├── 📄 VocaBookData+CoreDataClass.swift
+    │   ├── 📄 VocaBookData+CoreDataProperties.swift
+    │   ├── 📄 VocaData+CoreDataClass.swift
+    │   └── 📄 VocaData+CoreDataProperties.swift
+    │
+    ├── 📁 Resource
+    │   ├── 🎨 Assets.xcassets
+    │   ├── 📃 Info.plist
+    │   └── 🎬 LaunchScreen.storyboard
+    │
+    ├── 📁 View
+    │   ├── 📁 CustomView
+    │   │   ├── 📄 CustomButton.swift
+    │   │   ├── 📄 CustomCardView.swift
+    │   │   ├── 📄 CustomModalView.swift
+    │   │   ├── 📄 CustomSelectedOption.swift
+    │   │   ├── 📄 CustomTagView.swift
+    │   │   └── 📄 CustomTextFieldView.swift
+    │   │
+    │   ├── 📁 Learning
+    │   │   ├── 📄 CoachmarkView.swift
+    │   │   ├── 📄 CoachmarkViewController.swift
+    │   │   ├── 📄 FlashcardView.swift
+    │   │   ├── 📄 FlashcardViewController.swift
+    │   │   ├── 📄 LearningResultView.swift
+    │   │   ├── 📄 LearningResultViewController.swift
+    │   │   ├── 📄 LearningView.swift
+    │   │   ├── 📄 LearningViewCell.swift
+    │   │   └── 📄 LearningViewController.swift
+    │   │
+    │   ├── 📁 Record
+    │   │   ├── 📄 RecordResultView.swift
+    │   │   ├── 📄 RecordResultViewCell.swift
+    │   │   ├── 📄 RecordResultViewController.swift
+    │   │   ├── 📄 RecordView.swift
+    │   │   └── 📄 RecordViewController.swift
+    │   │
+    │   └── 📁 Voca
+    │       ├── 📄 VocaBookModalViewController.swift
+    │       ├── 📄 VocaBookSelectCell.swift
+    │       ├── 📄 VocaBookSelectView.swift
+    │       ├── 📄 VocaBookSelectViewController.swift
+    │       ├── 📄 VocaMainTableViewCell.swift
+    │       ├── 📄 VocaMainView.swift
+    │       ├── 📄 VocaMainViewController.swift
+    │       └── 📄 VocaModalViewController.swift
+    │
+    ├── 📁 ViewModel
+    │   ├── 📁 Learning
+    │   │   ├── 📄 CoachmarkViewModel.swift
+    │   │   ├── 📄 FlashcardViewModel.swift
+    │   │   ├── 📄 LearningResultViewModel.swift
+    │   │   └── 📄 LearningViewModel.swift
+    │   │
+    │   ├── 📁 Record
+    │   │   ├── 📄 RecordResultViewModel.swift
+    │   │   └── 📄 RecordViewModel.swift
+    │   │
+    │   └── 📁 Voca
+    │       ├── 📄 VocaBookModalViewModel.swift
+    │       ├── 📄 VocaBookSelectViewModel.swift
+    │       ├── 📄 VocaMainViewModel.swift
+    │       └── 📄 VocaModalViewModel.swift
+    ├── 📄 .gitignore
+    ├── 📁 Frameworks
+    │   ├── 📦 CoreData
+    │   └── 📦 VocaVocca
+    └── ⚙️ Config
+```
+
+---
+
 ## 최소 지원버전
 -  iOS 16
   
 ## 🛠️ 기술 스택
 
-### Library
+### ReactiveX
 - RxSwift
 - RxCocoa
 - RxGesture
@@ -102,7 +197,7 @@ VocaVocca는 학습 단어장 iOS 앱 입니다.
 
 1. **단어장 생성 및 단어 저장**
 
-   5개 국어의 단어장, 원하는 단어를 저장할 수 있습니다.
+   6개 국어의 단어장, 원하는 단어를 저장할 수 있습니다.
 
 2. **단어 검색 기능**
 
