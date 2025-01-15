@@ -79,7 +79,10 @@ final class RecordResultViewController: UIViewController {
                 cell.configureCell(isCorrect: true)
                 cell.cardView.wordLabel.text = word
                 cell.cardView.meanLabel.text = meaning
-                cell.languageTag.setTagView(layerColor: .systemGray2, label: lanaguage, textColor: .white)
+                
+                let setlanguage = Language(rawValue: lanaguage) ?? .english
+                
+                cell.languageTag.setTagView(color: setlanguage.color, label: lanaguage)
                 cell.selectionStyle = .none
             }
             .disposed(by: disposeBag)
@@ -91,7 +94,9 @@ final class RecordResultViewController: UIViewController {
                 cell.configureCell(isCorrect: false)
                 cell.cardView.wordLabel.text = word
                 cell.cardView.meanLabel.text = meaning
-                cell.languageTag.setTagView(layerColor: .red, label: lanaguage, textColor: .white)
+                
+                let setlanguage = Language(rawValue: lanaguage) ?? .english
+                cell.languageTag.setTagView(color: setlanguage.color, label: lanaguage)
                 cell.selectionStyle = .none
             }
             .disposed(by: disposeBag)

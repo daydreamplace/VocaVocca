@@ -56,8 +56,7 @@ class RecordResultViewCell: UITableViewCell {
         let statusColor = isCorrect ? UIColor.systemBlue : UIColor.systemRed
         
         // 정답/오답 태그 설정
-        statusTag.setTagView(layerColor: statusColor, label: statusText, textColor: .white)
-        languageTag.setTagView(layerColor: .systemGray2, label: "한국어", textColor: .white)
+        statusTag.setTagView(color: statusColor, label: statusText)
         
         // 내부 배경색 설정
         if let backgroundView = statusTag.subviews.first {
