@@ -3,7 +3,7 @@
 VocaVocca는 학습 단어장 iOS 앱 입니다.
 ---
 <p align="left">
-  <img src="" alt="VocaVocca" width="800">
+  <img src="https://github.com/user-attachments/assets/b2c50d62-6919-4200-96fd-b163e21fcc6c" alt="VocaVocca" width="800">
 </p>
 
 ## 📌 프로젝트 소개
@@ -45,12 +45,18 @@ VocaVocca는 학습 단어장 iOS 앱 입니다.
   
 ## 🛠️ 기술 스택
 
+### Library
+- RxSwift
+- RxCocoa
+- RxGesture
+
 ### UI Frameworks
 - UIKit
 - AutoLayout
 
 ### 데이터 처리
 - UserDefaults
+- CoreData
 
 ### API 통신
 - URLSession
