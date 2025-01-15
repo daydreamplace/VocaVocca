@@ -20,7 +20,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     private let selectVocaLabel: UILabel = {
         let label = UILabel()
-        label.text = "단어장을 선택해주세요 >"
+        label.text = "→ 단어장을 선택해주세요"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textColor = .customBrown
         label.isUserInteractionEnabled = true
@@ -29,6 +29,22 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     private let wordTextFieldView: CustomTextFieldView
     private let meaningTextFieldView = CustomTextFieldView(title: "뜻", placeholder: "뜻을 입력하세요")
+    
+    let toastView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.7)
+        view.layer.cornerRadius = 15
+        view.isHidden = true
+        return view
+    }()
+
+    let toastLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.sizeToFit()
+        return label
+    }()
     
     // MARK: - Initialization
     
@@ -59,11 +75,25 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     private func setupView() {
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
         view.addSubview(modalView)
+        view.addSubview(toastView)
+        
+        toastView.addSubview(toastLabel)
         
         modalView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalToSuperview().multipliedBy(0.85)
             $0.bottom.equalToSuperview()
+        }
+        
+        toastView.snp.makeConstraints {
+            $0.width.equalTo(toastLabel.snp.width).multipliedBy(1.5)
+            $0.height.equalTo(toastLabel.snp.height).multipliedBy(2)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(200)
+        }
+        
+        toastLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
         
         modalView.contentStackView.addArrangedSubviews(selectVocaLabel, wordTextFieldView, meaningTextFieldView)
@@ -87,23 +117,39 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             .disposed(by: disposeBag)
         
         // 검색 버튼 클릭 시 동작
-        wordTextFieldView.didTapSearchButton = { [weak self] in
-            guard let self = self else { return }
-            let word = self.wordTextFieldView.textField.text ?? ""
-            self.viewModel.wordValue = word
+        wordTextFieldView.searchButton.rx.tap
+            .subscribe(on: MainScheduler.instance)
+            .bind { [weak self] in
+                guard let self = self else { return }
+                let word = self.wordTextFieldView.textField.text ?? ""
+                self.viewModel.wordValue = word
 
-            guard let lang = viewModel.thisVocaBook?.language else { return }
-            print("111111", lang)
-            guard let a =  Language(rawValue: lang) else { return }
-            print("222222", a)
-            self.viewModel.fetchTranslation(for: word, language: a)
-        }
+                guard let lang = viewModel.thisVocaBook?.language else { return }
+                guard let a =  Language(rawValue: lang) else { return }
+                self.viewModel.fetchTranslation(for: word, language: a)
+            }
+            .disposed(by: disposeBag)
         
         // 저장 버튼 동작
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
-                self?.viewModel.handleSave()
+                self?.viewModel.meaningValue = self?.meaningTextFieldView.textField.text ?? ""
+                self?.viewModel.wordValue = self?.wordTextFieldView.textField.text ?? ""
+                self?.viewModel.checkStatus()
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel.closeSubject
+            .bind { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel.createVocaError
+            .skip(3)
+            .bind { [weak self] status in
+                print(status)
+                self?.checkStatus(status)
             }
             .disposed(by: disposeBag)
         
@@ -150,7 +196,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             .disposed(by: disposeBag)
         
         selectedVocaBookSubject
-            .map { vocaBook in "\(vocaBook.title ?? "") >" }
+            .map { vocaBook in "→ \(vocaBook.title ?? "")" }
             .bind(to: selectVocaLabel.rx.text)
             .disposed(by: disposeBag)
         
@@ -169,5 +215,29 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     
     func didTapCloseButton() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    // 선택 에러 상태 확인
+    private func checkStatus(_ status: CreateVocaError) {
+        switch status {
+        case .noSelect: showToastMessage(status.text)
+        case .noWord: showToastMessage(status.text)
+        case .noMeaning: showToastMessage(status.text)
+        }
+    }
+    
+    
+    // 토스트 메세지 보여주기
+    private func showToastMessage(_ message: String) {
+        print(message)
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseIn, animations: {
+            self.toastView.isHidden = false
+            self.toastView.alpha = 0.0
+            self.toastLabel.text = message
+        }) { _ in
+            self.toastView.isHidden = true
+            self.toastView.alpha = 1
+
+        }
     }
 }

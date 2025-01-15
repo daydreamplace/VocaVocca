@@ -31,14 +31,14 @@ class CustomTextFieldView: UIView {
         return field
     }()
     
-    private let searchButton: UIButton = {
+    let searchButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         button.tintColor = .customDarkBrown
         return button
     }()
     
-    var didTapSearchButton: (() -> Void)?
+    //var didTapSearchButton: (() -> Void)?
     var didEndEditing: ((String) -> Void)?
     
     // MARK: - Initialization
@@ -53,7 +53,6 @@ class CustomTextFieldView: UIView {
             textField.rightView = nil
         }
         textField.delegate = self
-        searchButton.addTarget(self, action: #selector(didTapSearchButtonAction), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -81,10 +80,10 @@ class CustomTextFieldView: UIView {
             $0.height.equalTo(40)
             $0.bottom.equalToSuperview()
         }
-    }
-    
-    @objc private func didTapSearchButtonAction() {
-        didTapSearchButton?()
+        
+//        textField.rightView?.snp.makeConstraints {
+//            $0.trailing.equalToSuperview().inset(20)
+//        }
     }
     
     // MARK: - Update Method

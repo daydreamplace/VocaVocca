@@ -9,6 +9,23 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+enum CreateVocaError {
+    case noSelect
+    case noWord
+    case noMeaning
+    
+    var text: String {
+        switch self {
+        case .noSelect:
+            return "단어장을 선택해주세요."
+        case .noWord:
+            return "단어를 입력해주세요."
+        case .noMeaning:
+            return "뜻을 입력해주세요."
+        }
+    }
+}
+
 class VocaModalViewModel {
     
     // MARK: - Input
@@ -18,6 +35,7 @@ class VocaModalViewModel {
     let meaning = BehaviorRelay<String>(value: "")
     let completeSubject = PublishSubject<Void>()
     let closeSubject: PublishSubject<Void>
+    let createVocaError = PublishSubject<CreateVocaError>()
     
     // MARK: - Output
     
@@ -50,9 +68,25 @@ class VocaModalViewModel {
     func updateVocaBook(_ vocaBook: VocaBookData) {
         thisVocaBook = vocaBook
     }
+
     
-    func updateText() {
-        
+    func save() {
+        // 단어장을 선택했는지 확인
+        guard let thisVocaBook = thisVocaBook else {
+            return
+        }
+            
+        coreDataManager.createVocaData(word: wordValue, meaning: meaningValue, book: thisVocaBook)
+            .subscribe(
+                onCompleted: {
+                    print("단어가 성공적으로 추가되었습니다.")
+                },
+                onError: { error in
+                    print("단어 추가 실패: \(error)")
+                }
+            ).disposed(by: disposeBag)
+        closeSubject.onNext(())
+    
     }
     
     // 네트워크 매니저
@@ -83,24 +117,22 @@ class VocaModalViewModel {
     }
     
     // CoreData 단어 업데이트
-    func handleSave() {
-        // 단어장을 선택했는지 확인
+    func checkStatus() {
         guard let thisVocaBook = thisVocaBook else {
+            createVocaError.onNext(CreateVocaError.noSelect)
             return
         }
         
-        //let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
+        if wordValue == "" {
+            createVocaError.onNext(CreateVocaError.noWord)
+            return
+        }
         
-        print("ddd",wordValue, meaningValue)
-        coreDataManager.createVocaData(word: wordValue, meaning: meaningValue, book: thisVocaBook)
-            .subscribe(
-                onCompleted: {
-                    print("단어가 성공적으로 추가되었습니다.")
-                },
-                onError: { error in
-                    print("단어 추가 실패: \(error)")
-                }
-            ).disposed(by: disposeBag)
-        closeSubject.onNext(())
+        if meaningValue == "" {
+            createVocaError.onNext(CreateVocaError.noMeaning)
+            return
+        }
+        
+        save()
     }
 }
