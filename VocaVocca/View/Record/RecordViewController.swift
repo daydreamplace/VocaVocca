@@ -63,8 +63,8 @@ final class RecordViewController: UIViewController {
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 let resultVC = RecordResultViewController(
-                    correctWords: self.viewModel.todayCorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } },
-                    incorrectWords: self.viewModel.todayIncorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } }
+                    correctWords: self.viewModel.todayCorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "", $0.books?.language ?? "언어") } },
+                    incorrectWords: self.viewModel.todayIncorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "", $0.books?.language ?? "언어") } }
                 )
                 resultVC.showCorrectWords()
                 self.navigationController?.pushViewController(resultVC, animated: true)
@@ -76,8 +76,8 @@ final class RecordViewController: UIViewController {
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
                 let resultVC = RecordResultViewController(
-                    correctWords: self.viewModel.todayCorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } },
-                    incorrectWords: self.viewModel.todayIncorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "") } }
+                    correctWords: self.viewModel.todayCorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "", $0.books?.language ?? "언어") } },
+                    incorrectWords: self.viewModel.todayIncorrectWords.map { $0.map { ($0.word ?? "", $0.meaning ?? "", $0.books?.language ?? "언어") } }
                 )
                 resultVC.showIncorrectWords()
                 self.navigationController?.pushViewController(resultVC, animated: true)

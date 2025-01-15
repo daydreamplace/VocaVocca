@@ -73,9 +73,10 @@ final class LearningViewController: UIViewController {
                 
                 cell.vocaBookLabel.text = item.title
                 
-                /// EN 으로 표시되는중
-                let language = item.language ?? "언어"
-                cell.tagView.setTagView(layerColor: UIColor.customBrown, label: language, textColor: UIColor.customBrown)
+                let languageCode = item.language ?? "언어"
+                let language = Language(rawValue: languageCode) ?? .english
+                
+                cell.tagView.setTagView(color: language.color, label: language.title)
                 cell.vocaCountLabel.text = "\(item.words?.count ?? 0) 개"
             }.disposed(by: disposeBag)
         

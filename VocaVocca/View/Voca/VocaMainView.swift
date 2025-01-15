@@ -24,7 +24,7 @@ final class VocaMainView: UIView {
     private let titleLable: UILabel = {
         let label = UILabel()
         label.text = "보카볶아"
-        label.font = .systemFont(ofSize: 24, weight: .heavy)
+        label.font = .systemFont(ofSize: 32, weight: .heavy)
         label.textColor = UIColor.customDarkBrown
         return label
     }()
@@ -37,8 +37,8 @@ final class VocaMainView: UIView {
     
     let vocaBookSelectButton: UIButton = {
         let button = UIButton()
-        button.setTitle("단어장을 선택해 주세요 >", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .heavy)
+        button.setTitle("→ 단어장을 선택해 주세요", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 23, weight: .medium)
         button.setTitleColor(UIColor.customDarkBrown, for: .normal)
         button.backgroundColor = .none
         button.contentHorizontalAlignment = .left
@@ -53,12 +53,7 @@ final class VocaMainView: UIView {
     
     private let makeVocaButton: UIButton = {
         let button = UIButton()
-        button.setTitle("+", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 30, weight: .light)
-        button.backgroundColor = UIColor.customDarkBrown
-        button.layer.cornerRadius = 30
-        button.clipsToBounds = true
+        button.setImage(UIImage.button, for: .normal)
         return button
     }()
     
@@ -82,26 +77,26 @@ final class VocaMainView: UIView {
         
         logoImageView.snp.makeConstraints {
             $0.top.equalTo(titleLable)
-            $0.leading.equalTo(titleLable.snp.trailing).offset(5)
-            $0.width.height.equalTo(30)
+            $0.leading.equalTo(titleLable.snp.trailing)
+            $0.width.height.equalTo(35)
         }
         
         vocaBookSelectButton.snp.makeConstraints {
-            $0.top.equalTo(titleLable.snp.bottom).offset(30)
+            $0.top.equalTo(titleLable.snp.bottom).offset(10)
             $0.leading.equalToSuperview().inset(30)
             $0.width.equalTo(vocaBookSelectButton.intrinsicContentSize)//텍스트 길이만큼 넓이 설정
         }
         
         vocaTableView.snp.makeConstraints {
-            $0.top.equalTo(vocaBookSelectButton.snp.bottom).offset(50)
+            $0.top.equalTo(vocaBookSelectButton.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
         }
         
         makeVocaButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(50)
             $0.trailing.equalTo(safeAreaLayoutGuide).inset(20)
-            $0.width.height.equalTo(60)
+            $0.width.height.equalTo(50)
         }
     }
     

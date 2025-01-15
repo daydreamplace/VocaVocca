@@ -15,10 +15,11 @@ final class VocaBookSelectCell: UICollectionViewCell {
     
     static let id = "VocaBookSelectCell"
     
-    // 셀 선택 시 배경색 변경
+    // 셀 선택 시 테두리 색칠
     override var isSelected: Bool {
         didSet {
-            contentView.backgroundColor = isSelected ? UIColor.customLightBrown : UIColor.white
+            contentView.layer.borderWidth = isSelected ? 3 : 1
+            contentView.layer.borderColor = isSelected ? UIColor.customDarkerBrown.cgColor : UIColor.gray.cgColor
         }
     }
     

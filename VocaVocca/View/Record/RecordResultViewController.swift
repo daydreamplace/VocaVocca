@@ -17,10 +17,10 @@ final class RecordResultViewController: UIViewController {
     private let incorrectWordsView = RecordResultView()
     private let disposeBag = DisposeBag()
     
-    let correctWords: Observable<[(String, String)]>
-    let incorrectWords: Observable<[(String, String)]>
+    let correctWords: Observable<[(String, String, String)]>
+    let incorrectWords: Observable<[(String, String, String)]>
     
-    init(correctWords: Observable<[(String, String)]>, incorrectWords: Observable<[(String, String)]>) {
+    init(correctWords: Observable<[(String, String, String)]>, incorrectWords: Observable<[(String, String, String)]>) {
         self.correctWords = correctWords
         self.incorrectWords = incorrectWords
         super.init(nibName: nil, bundle: nil)
@@ -75,10 +75,14 @@ final class RecordResultViewController: UIViewController {
         // CorrectWordsView 바인딩
         correctWords
             .bind(to: correctWordsView.tableView.rx.items(cellIdentifier: RecordResultViewCell.id, cellType: RecordResultViewCell.self)) { _, wordPair, cell in
-                let (word, meaning) = wordPair
+                let (word, meaning, lanaguage) = wordPair
                 cell.configureCell(isCorrect: true)
                 cell.cardView.wordLabel.text = word
                 cell.cardView.meanLabel.text = meaning
+                
+                let setlanguage = Language(rawValue: lanaguage) ?? .english
+                
+                cell.languageTag.setTagView(color: setlanguage.color, label: lanaguage)
                 cell.selectionStyle = .none
             }
             .disposed(by: disposeBag)
@@ -86,10 +90,13 @@ final class RecordResultViewController: UIViewController {
         // IncorrectWordsView 바인딩
         incorrectWords
             .bind(to: incorrectWordsView.tableView.rx.items(cellIdentifier: RecordResultViewCell.id, cellType: RecordResultViewCell.self)) { _, wordPair, cell in
-                let (word, meaning) = wordPair
+                let (word, meaning, lanaguage) = wordPair
                 cell.configureCell(isCorrect: false)
                 cell.cardView.wordLabel.text = word
                 cell.cardView.meanLabel.text = meaning
+                
+                let setlanguage = Language(rawValue: lanaguage) ?? .english
+                cell.languageTag.setTagView(color: setlanguage.color, label: lanaguage)
                 cell.selectionStyle = .none
             }
             .disposed(by: disposeBag)

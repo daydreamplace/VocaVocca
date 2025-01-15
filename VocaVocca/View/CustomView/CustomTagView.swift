@@ -13,7 +13,6 @@ final class CustomTagView: UIView {
     private let tagBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.borderWidth = 1
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         return view
@@ -21,8 +20,9 @@ final class CustomTagView: UIView {
     
     private let tagLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.font = .systemFont(ofSize: 12, weight: .bold)
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     
@@ -49,9 +49,8 @@ final class CustomTagView: UIView {
     }
     
     /// 컬러, 레이블 설정
-    func setTagView(layerColor: UIColor, label title: String, textColor: UIColor) {
-        tagBackgroundView.layer.borderColor = layerColor.cgColor
+    func setTagView(color: UIColor, label title: String) {
+        tagBackgroundView.backgroundColor = color
         tagLabel.text = title
-        tagLabel.textColor = textColor
     }
 }

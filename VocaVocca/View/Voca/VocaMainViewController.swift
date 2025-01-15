@@ -115,10 +115,10 @@ final class VocaMainViewController: UIViewController {
                 
                 //커스텀 태그
                 cell.customTag.subviews.first?.backgroundColor = .lightGray
-                
-                //TODO: EN 으로 표시되는중
-                let language = element.books?.language ?? "언어"
-                cell.customTag.setTagView(layerColor: .lightGray, label: language, textColor: .white)
+            
+                let languageCode = element.books?.language  ?? "언어"
+                let language = Language(rawValue: languageCode) ?? .english
+                cell.customTag.setTagView(color: language.color, label: language.title)
          
                 cell.removeButton.rx.tap.subscribe(onNext: { [weak self] in
                     self?.showDeleteAlert(for: element)
@@ -129,7 +129,12 @@ final class VocaMainViewController: UIViewController {
     
     
     private func changeName(_ vocaBook: VocaBookData) {
-        vocaMainView.vocaBookSelectButton.setTitle(vocaBook.title, for: .normal)
+        if let title = vocaBook.title {
+            let buttonTitle = "→ " + title
+            vocaMainView.vocaBookSelectButton.setTitle(buttonTitle, for: .normal)
+        } else {
+            vocaMainView.vocaBookSelectButton.setTitle(vocaBook.title, for: .normal)
+        }
     }
     
     private func closeView() {
