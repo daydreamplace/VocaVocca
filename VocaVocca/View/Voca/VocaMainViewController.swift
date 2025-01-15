@@ -129,7 +129,12 @@ final class VocaMainViewController: UIViewController {
     
     
     private func changeName(_ vocaBook: VocaBookData) {
-        vocaMainView.vocaBookSelectButton.setTitle(vocaBook.title, for: .normal)
+        if let title = vocaBook.title {
+            let buttonTitle = "→ " + title
+            vocaMainView.vocaBookSelectButton.setTitle(buttonTitle, for: .normal)
+        } else {
+            vocaMainView.vocaBookSelectButton.setTitle(vocaBook.title, for: .normal)
+        }
     }
     
     private func closeView() {
