@@ -11,10 +11,10 @@ import RxCocoa
 
 final class RecordResultViewModel {
     
-    let correctWords: Observable<[(String, String)]>
-    let incorrectWords: Observable<[(String, String)]>
+    let correctWords: Observable<[(String, String, String)]>
+    let incorrectWords: Observable<[(String, String, String)]>
     
-    init(correctWords: Observable<[(String, String)]>, incorrectWords: Observable<[(String, String)]>) {
+    init(correctWords: Observable<[(String, String, String)]>, incorrectWords: Observable<[(String, String, String)]>) {
         self.correctWords = correctWords
         self.incorrectWords = incorrectWords
     }
