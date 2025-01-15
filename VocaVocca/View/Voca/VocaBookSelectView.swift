@@ -24,12 +24,8 @@ final class VocaBookSelectView: UIView {
     }()
     
     let createButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("+", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 36)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .customDarkBrown
-        button.layer.cornerRadius = 25
+        let button = UIButton()
+        button.setImage(UIImage.button, for: .normal)
         return button
     }()
     
@@ -52,8 +48,8 @@ final class VocaBookSelectView: UIView {
         }
         
         createButton.snp.makeConstraints {
-            $0.trailing.equalTo(self.safeAreaLayoutGuide).inset(32)
-            $0.bottom.equalTo(self.safeAreaLayoutGuide).inset(10)
+            $0.trailing.equalTo(self.safeAreaLayoutGuide).inset(50)
+            $0.bottom.equalTo(self.safeAreaLayoutGuide).inset(60)
             $0.width.height.equalTo(50)
         }
     }
