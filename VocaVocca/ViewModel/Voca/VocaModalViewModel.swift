@@ -13,6 +13,7 @@ enum CreateVocaError {
     case noSelect
     case noWord
     case noMeaning
+    case noMatch
     
     var text: String {
         switch self {
@@ -22,6 +23,8 @@ enum CreateVocaError {
             return "단어를 입력해주세요."
         case .noMeaning:
             return "뜻을 입력해주세요."
+        case .noMatch:
+            return "일치하는 단어가 없습니다."
         }
     }
 }
@@ -99,9 +102,14 @@ class VocaModalViewModel {
                 return response.translations.first?.text ?? "번역 실패"
             }
             .subscribe(onNext: { [weak self] (translation: String) in
-                print("Translated Text: \(translation)")
-                self?.meaningValue = translation
-                self?.meaning.accept(translation)
+                if translation == self?.wordValue {
+                    self?.createVocaError.onNext(CreateVocaError.noMatch)
+                } else {
+                    print("Translated Text: \(translation)")
+                    self?.meaningValue = translation
+                    self?.meaning.accept(translation)
+                }
+
             })
             .disposed(by: disposeBag)
     }

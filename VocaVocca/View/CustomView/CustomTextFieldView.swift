@@ -8,6 +8,13 @@
 import UIKit
 import SnapKit
 
+class CustomTextField: UITextField {
+    // rightView의 위치와 크기를 커스터마이징
+    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        return CGRect(x: bounds.width - 35, y: 5, width: bounds.height - 10, height: bounds.height - 10)
+    }
+}
+
 class CustomTextFieldView: UIView {
     
     // MARK: - UI Components
@@ -19,8 +26,8 @@ class CustomTextFieldView: UIView {
         return label
     }()
     
-    let textField: UITextField = {
-        let field = UITextField()
+    let textField: CustomTextField = {
+        let field = CustomTextField()
         field.borderStyle = .roundedRect
         field.font = UIFont.systemFont(ofSize: 14)
         field.textColor = .black
@@ -81,11 +88,11 @@ class CustomTextFieldView: UIView {
             $0.bottom.equalToSuperview()
         }
         
-//        textField.rightView?.snp.makeConstraints {
-//            $0.trailing.equalToSuperview().inset(20)
-//        }
+        searchButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(20)
+        }
     }
-    
+
     // MARK: - Update Method
     
     func update(title: String, placeholder: String) {
@@ -112,4 +119,5 @@ extension CustomTextFieldView: UITextFieldDelegate {
             didEndEditing?(text)
         }
     }
+
 }

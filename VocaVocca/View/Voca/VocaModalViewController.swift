@@ -122,14 +122,19 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         
         // 검색 버튼 클릭 시 동작
         wordTextFieldView.searchButton.rx.tap
-            .subscribe(on: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .bind { [weak self] in
                 guard let self = self else { return }
                 let word = self.wordTextFieldView.textField.text ?? ""
                 self.viewModel.wordValue = word
 
-                guard let lang = viewModel.thisVocaBook?.language else { return }
-                guard let a =  Language(rawValue: lang) else { return }
+                guard let lang = viewModel.thisVocaBook?.language else {
+                    viewModel.createVocaError.onNext(CreateVocaError.noSelect)
+                    return }
+                guard let a =  Language(rawValue: lang) else {
+
+                    return
+                }
                 self.viewModel.fetchTranslation(for: word, language: a)
             }
             .disposed(by: disposeBag)
@@ -150,7 +155,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             .disposed(by: disposeBag)
         
         viewModel.createVocaError
-            .skip(3)
+            .observe(on: MainScheduler.instance)
             .bind { [weak self] status in
                 print(status)
                 self?.checkStatus(status)
@@ -227,6 +232,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         case .noSelect: showToastMessage(status.text)
         case .noWord: showToastMessage(status.text)
         case .noMeaning: showToastMessage(status.text)
+        case .noMatch: showToastMessage(status.text)
         }
     }
     
