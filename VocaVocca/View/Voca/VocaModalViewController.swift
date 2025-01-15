@@ -157,7 +157,6 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         viewModel.createVocaError
             .observe(on: MainScheduler.instance)
             .bind { [weak self] status in
-                print(status)
                 self?.checkStatus(status)
             }
             .disposed(by: disposeBag)
@@ -170,7 +169,6 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         // 선택된 VocaBook 값 확인용 구독 추가
         viewModel.selectedVocaBook
             .subscribe(onNext: { book in
-                print("Emitted book in ViewModel: \(book)")
             })
             .disposed(by: disposeBag)
     }

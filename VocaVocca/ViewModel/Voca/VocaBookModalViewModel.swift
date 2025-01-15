@@ -88,9 +88,6 @@ class VocaBookModalViewModel {
     
     // save edit
     func handleSaveOrEdit() {
-        print("test1")
-        //guard let language = selectedLanguage.value?.title, !vocaBookTitle.value.isEmpty else { return }
-        print("test2")
         if mode == .create {
             // Core Data 단어장 추가
             coreDataManager.createVocaBookData(title: vocaBookName, language: language)
@@ -128,16 +125,13 @@ class VocaBookModalViewModel {
     }
     
     func checkStatus() {
-        print("ddd")
         if vocaBookName == "" {
             createVocaBookError.onNext(CreateVocaBookError.noVocaBook)
-            print("단어장 이름없음")
             return
         }
         
         if language == "" {
             createVocaBookError.onNext(CreateVocaBookError.noLanguage)
-            print("언어 없음")
             return
         }
         

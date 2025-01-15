@@ -163,7 +163,6 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
-                print("tttt")
                 self?.viewModel.vocaBookName = self?.textFieldView.textField.text ?? ""
                 self?.viewModel.checkStatus()
                 //self?.viewModel.handleSaveOrEdit()
@@ -173,7 +172,6 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         
         viewModel.createVocaBookError
             .bind { [weak self] status in
-                print(status)
                 self?.viewModel.vocaBookName = self?.textFieldView.textField.text ?? ""
                 self?.checkStatus(status)
             }
@@ -181,7 +179,6 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         
         viewModel.saveCompleted
             .bind { [weak self] in
-                print("닫기")
                 self?.dismiss(animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
