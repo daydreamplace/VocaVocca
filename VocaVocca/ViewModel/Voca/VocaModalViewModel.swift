@@ -29,6 +29,8 @@ class VocaModalViewModel {
     private let networkManager = NetworkManager.shared
     private let disposeBag = DisposeBag()
     
+    var wordValue = ""
+    var meaningValue = ""
     var thisVocaBook: VocaBookData?
     var testData = [VocaBookData]()
     
@@ -49,6 +51,10 @@ class VocaModalViewModel {
         thisVocaBook = vocaBook
     }
     
+    func updateText() {
+        
+    }
+    
     // 네트워크 매니저
     func fetchTranslation(for word: String, language: Language) {
         networkManager
@@ -60,6 +66,7 @@ class VocaModalViewModel {
             }
             .subscribe(onNext: { [weak self] (translation: String) in
                 print("Translated Text: \(translation)")
+                self?.meaningValue = translation
                 self?.meaning.accept(translation)
             })
             .disposed(by: disposeBag)
@@ -82,9 +89,10 @@ class VocaModalViewModel {
             return
         }
         
-        let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
+        //let finalMeaning = meaning.value.isEmpty ? "" : meaning.value
         
-        coreDataManager.createVocaData(word: word.value, meaning: finalMeaning, book: thisVocaBook)
+        print("ddd",wordValue, meaningValue)
+        coreDataManager.createVocaData(word: wordValue, meaning: meaningValue, book: thisVocaBook)
             .subscribe(
                 onCompleted: {
                     print("단어가 성공적으로 추가되었습니다.")

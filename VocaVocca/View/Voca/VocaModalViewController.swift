@@ -72,6 +72,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
     private func bindViewModel() {
         // 단어 입력 텍스트 필드
         wordTextFieldView.didEndEditing = { [weak self] text in
+            self?.viewModel.wordValue = text
             self?.viewModel.word.accept(text)
         }
         
@@ -80,6 +81,7 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
             .orEmpty
             .distinctUntilChanged()
             .subscribe(onNext: { [weak self] text in
+                self?.viewModel.meaningValue = text
                 self?.viewModel.meaning.accept(text)
             })
             .disposed(by: disposeBag)
@@ -88,7 +90,8 @@ class VocaModalViewController: UIViewController, CustomModalViewDelegate {
         wordTextFieldView.didTapSearchButton = { [weak self] in
             guard let self = self else { return }
             let word = self.wordTextFieldView.textField.text ?? ""
-            
+            self.viewModel.wordValue = word
+
             guard let lang = viewModel.thisVocaBook?.language else { return }
             print("111111", lang)
             guard let a =  Language(rawValue: lang) else { return }
