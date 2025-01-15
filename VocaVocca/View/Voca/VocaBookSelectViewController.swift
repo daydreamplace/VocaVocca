@@ -21,7 +21,6 @@ final class VocaBookSelectViewController: UIViewController {
         self.view = vocaBookSelectView
     }
     
-    ///TODO - 데이터 넘겨받을 경우 생성자 수정
     init(viewModel: VocaBookSelectViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -91,7 +90,6 @@ final class VocaBookSelectViewController: UIViewController {
         self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.doneButtonTapped()
-                print("네비바")
             }).disposed(by: disposeBag)
     }
     
@@ -116,7 +114,6 @@ final class VocaBookSelectViewController: UIViewController {
         present(vocaBookModalVC, animated: true)
     }
     
-    /// TODO - 네비바버튼 관련 로직 : 데이터 넘기기
     private func doneButtonTapped() {
         self.viewModel.closeSubject.onNext(())
         guard self.viewModel.selectedVocaBook != nil else { return }
@@ -124,18 +121,13 @@ final class VocaBookSelectViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    /// TODO - 선택된 셀 로직
     private func selectedBook(book: VocaBookData) {
         viewModel.test(book)
         viewModel.selectedVocaBook.onNext(book)
-        //        viewModel.selectedVocaBook = book
-        //        print("\(book.title ?? "")")
     }
     
-    /// TODO - 꾹 누른 셀 아이템 관련 로직
     private func handleLongPress(at indexPath: IndexPath) {
         guard let item = try? viewModel.vocaBookSubject.value()[indexPath.row] else { return }
-        print("\(item.title ?? "")")
     }
     
     // 삭제 알럿

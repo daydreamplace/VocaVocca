@@ -45,6 +45,22 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         return stackView
     }()
     
+    let toastView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.7)
+        view.layer.cornerRadius = 15
+        view.isHidden = true
+        return view
+    }()
+
+    let toastLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.sizeToFit()
+        return label
+    }()
+    
     private let availableLanguages: [Language] = [.english, .chinese, .japanese, .german, .spanish]
     
     // MARK: - Initialization
@@ -73,6 +89,9 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
     private func setupView() {
         view.backgroundColor = UIColor(white: 0, alpha: 0.5)
         view.addSubview(modalView)
+        view.addSubview(toastView)
+        
+        toastView.addSubview(toastLabel)
         
         modalView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -81,6 +100,18 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         }
         
         languageContainerStackView.addArrangedSubviews(languageTitleLabel, languageStackView)
+        
+        toastView.snp.makeConstraints {
+            $0.width.equalTo(toastLabel.snp.width).multipliedBy(1.5)
+            $0.height.equalTo(toastLabel.snp.height).multipliedBy(2)
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(200)
+        }
+        
+        toastLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+        
         modalView.contentStackView.addArrangedSubviews(textFieldView, languageContainerStackView)
     }
     
@@ -122,18 +153,33 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
             .bind(to: modalView.confirmButton.rx.title(for: .normal))
             .disposed(by: disposeBag)
         
-        textFieldView.textField.rx.text.orEmpty
-            .bind(to: viewModel.vocaBookTitle)
-            .disposed(by: disposeBag)
-        
-        viewModel.isSaveEnabled
-            .bind(to: modalView.confirmButton.rx.isEnabled)
-            .disposed(by: disposeBag)
+//        textFieldView.textField.rx.text.orEmpty
+//            .bind(to: viewModel.vocaBookTitle)
+//            .disposed(by: disposeBag)
+//        
+//        viewModel.isSaveEnabled
+//            .bind(to: modalView.confirmButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
         
         modalView.confirmButton.rx.tap
             .bind { [weak self] in
-                self?.viewModel.handleSaveOrEdit()
-                self?.dismiss(animated: true)
+                self?.viewModel.vocaBookName = self?.textFieldView.textField.text ?? ""
+                self?.viewModel.checkStatus()
+                //self?.viewModel.handleSaveOrEdit()
+                //self?.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel.createVocaBookError
+            .bind { [weak self] status in
+                self?.viewModel.vocaBookName = self?.textFieldView.textField.text ?? ""
+                self?.checkStatus(status)
+            }
+            .disposed(by: disposeBag)
+        
+        viewModel.saveCompleted
+            .bind { [weak self] in
+                self?.dismiss(animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
     }
@@ -142,6 +188,7 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
         guard let language = Language(rawValue: sender.titleLabel!.text!) else { return }
         
         viewModel.selectedLanguage(language)
+        viewModel.language = language.title
         
         for button in languageStackView.arrangedSubviews.compactMap({ $0 as? UIButton }) {
             button.backgroundColor = .lightGray
@@ -153,5 +200,27 @@ class VocaBookModalViewController: UIViewController, CustomModalViewDelegate {
     
     func didTapCloseButton() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    // 선택 에러 상태 확인
+    private func checkStatus(_ status: CreateVocaBookError) {
+        switch status {
+        case .noVocaBook: showToastMessage(status.text)
+        case .noLanguage: showToastMessage(status.text)
+        }
+    }
+    
+    // 토스트 메세지 보여주기
+    private func showToastMessage(_ message: String) {
+        print(message)
+        UIView.animate(withDuration: 1.0, delay: 1.0, options: .curveEaseIn, animations: {
+            self.toastView.isHidden = false
+            self.toastView.alpha = 0.0
+            self.toastLabel.text = message
+        }) { _ in
+            self.toastView.isHidden = true
+            self.toastView.alpha = 1
+
+        }
     }
 }

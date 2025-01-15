@@ -25,7 +25,7 @@ final class VocaMainView: UIView {
         let label = UILabel()
         label.text = "보카볶아"
         label.font = .systemFont(ofSize: 32, weight: .heavy)
-        label.textColor = UIColor.customDarkBrown
+        label.textColor = UIColor.customDarkerBrown
         return label
     }()
     

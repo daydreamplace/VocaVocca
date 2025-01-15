@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+
 class VocaBookSelectViewModel {
     
     private let disposeBag = DisposeBag()
@@ -34,8 +35,6 @@ class VocaBookSelectViewModel {
     
     func test (_ vocaBookData: VocaBookData) {
         selectedVocaBook.onNext(vocaBookData)
-        print("단어장 변경 ")
-        print(vocaBookData)
     }
     
     func deleteVocaBook(_ vocaBook: VocaBookData) {

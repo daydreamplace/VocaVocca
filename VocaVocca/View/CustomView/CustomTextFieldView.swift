@@ -8,6 +8,13 @@
 import UIKit
 import SnapKit
 
+class CustomTextField: UITextField {
+    // rightView의 위치와 크기를 커스터마이징
+    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+        return CGRect(x: bounds.width - 35, y: 5, width: bounds.height - 10, height: bounds.height - 10)
+    }
+}
+
 class CustomTextFieldView: UIView {
     
     // MARK: - UI Components
@@ -19,8 +26,8 @@ class CustomTextFieldView: UIView {
         return label
     }()
     
-    let textField: UITextField = {
-        let field = UITextField()
+    let textField: CustomTextField = {
+        let field = CustomTextField()
         field.borderStyle = .roundedRect
         field.font = UIFont.systemFont(ofSize: 14)
         field.textColor = .black
@@ -31,14 +38,14 @@ class CustomTextFieldView: UIView {
         return field
     }()
     
-    private let searchButton: UIButton = {
+    let searchButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         button.tintColor = .customDarkBrown
         return button
     }()
     
-    var didTapSearchButton: (() -> Void)?
+    //var didTapSearchButton: (() -> Void)?
     var didEndEditing: ((String) -> Void)?
     
     // MARK: - Initialization
@@ -53,7 +60,6 @@ class CustomTextFieldView: UIView {
             textField.rightView = nil
         }
         textField.delegate = self
-        searchButton.addTarget(self, action: #selector(didTapSearchButtonAction), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -81,12 +87,12 @@ class CustomTextFieldView: UIView {
             $0.height.equalTo(40)
             $0.bottom.equalToSuperview()
         }
+        
+        searchButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(20)
+        }
     }
-    
-    @objc private func didTapSearchButtonAction() {
-        didTapSearchButton?()
-    }
-    
+
     // MARK: - Update Method
     
     func update(title: String, placeholder: String) {
@@ -113,4 +119,5 @@ extension CustomTextFieldView: UITextFieldDelegate {
             didEndEditing?(text)
         }
     }
+
 }

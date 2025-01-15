@@ -9,6 +9,21 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+enum CreateVocaBookError {
+    case noVocaBook
+    case noLanguage
+    
+    var text: String {
+        switch self {
+        case .noVocaBook:
+            return "단어장 이름을 입력해주세요."
+        case .noLanguage:
+            return "언어를 선택해주세요."
+        }
+    }
+}
+
+
 enum Mode {
     case create
     case edit
@@ -36,6 +51,12 @@ class VocaBookModalViewModel {
     let buttonTitle: Observable<String>
     
     let saveCompleted = PublishSubject<Void>()
+    
+    let createVocaBookError = PublishSubject<CreateVocaBookError>()
+    
+    var vocaBookName = ""
+    var language = ""
+
     
     // mode
     private let mode: Mode
@@ -67,11 +88,9 @@ class VocaBookModalViewModel {
     
     // save edit
     func handleSaveOrEdit() {
-        guard let language = selectedLanguage.value?.title, !vocaBookTitle.value.isEmpty else { return }
-        
         if mode == .create {
             // Core Data 단어장 추가
-            coreDataManager.createVocaBookData(title: vocaBookTitle.value, language: language)
+            coreDataManager.createVocaBookData(title: vocaBookName, language: language)
                 .subscribe(
                     onCompleted: {
                         self.saveCompleted.onNext(())
@@ -103,5 +122,19 @@ class VocaBookModalViewModel {
                     }
                 ).disposed(by: disposeBag)
         }
+    }
+    
+    func checkStatus() {
+        if vocaBookName == "" {
+            createVocaBookError.onNext(CreateVocaBookError.noVocaBook)
+            return
+        }
+        
+        if language == "" {
+            createVocaBookError.onNext(CreateVocaBookError.noLanguage)
+            return
+        }
+        
+        handleSaveOrEdit()
     }
 }
